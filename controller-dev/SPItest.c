@@ -54,19 +54,29 @@ int main(){
 		//this might increase true throughput by like 16, idk
 		
 		int fd0 = wiringPiSPISetup(0, SPI_SPEED);
-		printf("what is fd0? %d", fd0);
+		printf("what is fd0? %d \n", fd0);
 		int fd1 = wiringPiSPISetup(1, SPI_SPEED);
-		printf("what is fd1? %d", fd1);
+		printf("what is fd1? %d \n", fd1);
 		
 		//so now we need to figure out, like, what the hell is actually going on in terms of writing
 		//to write to a certain address, we need three bytes in an array
 		char* regCMD = malloc(sizeof(char)* 2);
-		//first, we make the control byte for MCP0
-		*(regCMD) = OPCODE |  ((0x0) << 1); //write operation to 000
-		*(regCMD + 1) = 0x12; //address for GPIOA register, the right side
-		*(regCMD + 2) = 0xAA; //easy to test
+		while(1){
+			//first, we make the control byte for MCP0
+			*(regCMD) = OPCODE |  ((0x0) << 1); //write operation to 000
+			*(regCMD + 1) = 0x12; //address for GPIOA register, the right side
+			*(regCMD + 2) = 0xAA; //easy to test
 		
-		wiringPiSPIODataRW(0,regCMD,3);
-		//this should work, no other setup necessary?
+			wiringPiSPIDataRW(0,regCMD,3);
+		
+			//then we run a clear through it
+			*(regCMD) = OPCODE |  ((0x0) << 1); //write operation to 000
+			*(regCMD + 1) = 0x12; //address for GPIOA register, the right side
+			*(regCMD + 2) = 0x00; //easy to test
+		
+			wiringPiSPIDataRW(0,regCMD,3);
+		]
+		
+		
 	}
 }
