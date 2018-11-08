@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 )
 
 func main() {
@@ -18,16 +19,34 @@ Game clock unaltered (-1) if unset.`
 
 	infString := `If the memory dumps should be every m frames instead of at frame m.`
 
+	isoString := `The location of the iso file.`
+	outString := `The location to write the output file to.`
+
 	frameFlag := flag.Int("f", 600, memString)
 	//flag.IntVar(frameFlag, "m", 600, memString)
 
 	clockFlag := flag.Int("c", -1, clockString)
 	//flag.IntVar(clockFlag, "c", -1, clockString)
 
-	infiniteFlag := flag.Bool("i", false, infString)
+	infiniteFlag := flag.Bool("inf", false, infString)
 	//flag.BoolVar(infiniteFlag, "i", false, infString)
+
+	isoFlag := flag.String("iso", "", isoString)
+
+	outputFlag := flag.String("out", "", outString)
+
+	if *isoFlag == "" {
+		fmt.Printf("Please enter a valid iso flag string")
+		os.Exit(1)
+	}
+
+	if *outputFlag == "" {
+		fmt.Printf("Please enter a valid output flag string")
+		os.Exit(1)
+	}
 
 	flag.Parse()
 
-	fmt.Printf("Memory flag value: %d\nClock Flag Value:%d\nInfinite Flag Value:%t\n", *frameFlag, *clockFlag, *infiniteFlag)
+	fmt.Printf("Memory flag value: %d\nClock Flag Value:%d\nInfinite Flag Value:%t\nRemaning Flags: %d\n", *frameFlag, *clockFlag, *infiniteFlag, flag.NArg())
+
 }

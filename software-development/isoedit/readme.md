@@ -21,13 +21,15 @@ isoedit [options] <FIle Location> [Output File Location]
 ```
 
 - `-f` The frame that the memory dump will trigger on. 
-   - If `-i` is set, the number of frames between memory dumps. 
+   - If `-inf` is set, the number of frames between memory dumps. 
    - Default value is 600 (10 seconds)
 - `-c` Sets the value for the game clock to return when checked. 
    - Recommended Default is 0.
    - Game clock unaltered if unset.
-- `-i` If the memory dumps should be every m frames. 
+- `-inf` If the memory dumps should be every m frames. 
    - Default value is false. 
+- `-iso` The input file location string. (Required)
+- `-out` The output file location String. (Required)
 
 
 Written in golang(go)
