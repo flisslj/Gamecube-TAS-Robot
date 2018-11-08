@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <wiringPi.h>
 #include <mcp23s17.h>
 
@@ -10,8 +11,6 @@
 
 #define SPI_SPEED 10000000 //10 MHZ
 
-#define usingMCPLIB 1
-
 static int STATE = 0;
 
 int main(){
@@ -19,35 +18,47 @@ int main(){
 	
 	wiringPiSetup();
 	
-	if(usingMCPLIB){
+	printf("MCPlib?\n");
+	
+	char str[5];
+	fgets(str, 5, stdin);
+	
+	
+	
+	if(str[0] == '1' || str[0] == 'Y' || str[0] == 'y'){
 		mcp23s17Setup(BASE_0, 0, 0);
-		mcp23s17Setup(BASE_1, 1, 1);
+		//mcp23s17Setup(BASE_1, 1, 1);
+		
 		//we'll have both chips output, as a test
 		for(int i = 0; i<16; i++){
 			pinMode(BASE_0 + i, OUTPUT);
-			pinMode(BASE_1 + i, OUTPUT);
+			//pinMode(BASE_1 + i, OUTPUT);
 		}
 	
 		//to test operation, we turn on the half of upper bank of both pins, half off
 		//honestly just to see wtf is actually going on
 		
+		/*
 		for(int i = 8; i < 16; i+=2){
 			digitalWrite(BASE_0 + i, 0);
 			digitalWrite(BASE_0 + i + 1, 1);
-			digitalWrite(BASE_1 + i, 1);
-			digitalWrite(BASE_1 + i + 1, 0);
+			//digitalWrite(BASE_1 + i, 1);
+			//digitalWrite(BASE_1 + i + 1, 0);
 		}
+		*/
 		
 		//flicker the rest
 		while(1){
 		
-			for(int i = 0; i < 8; i++){
+			for(int i = 0; i < 16; i++){
 				digitalWrite(BASE_0 + i, (i&1)^STATE);
-				digitalWrite(BASE_1 + i, (i&1)^STATE^1);
+				//digitalWrite(BASE_1 + i, (i&1)^STATE^1);
 			}
 		
 			STATE ^= 1;
 		}
+		
+		//this gives a testing mode which changes all of the 16 pins
 	}else{
 		
 		//we're going to do this by hand using wiringPI SPI instead
@@ -62,18 +73,25 @@ int main(){
 		//to write to a certain address, we need three bytes in an array
 		char* regCMD = malloc(sizeof(char)* 2);
 		while(1){
-			//first, we make the control byte for MCP0
 			*(regCMD) = OPCODE |  ((0x0) << 1); //write operation to 000
 			*(regCMD + 1) = 0x12; //address for GPIOA register, the right side
 			*(regCMD + 2) = 0xAA; //easy to test
-		
+			wiringPiSPIDataRW(0,regCMD,3);
+			
+			*(regCMD) = OPCODE |  ((0x0) << 1); //write operation to 000
+			*(regCMD + 1) = 0x13; //address for GPIOB register, the left side
+			*(regCMD + 2) = 0xAA; //easy to test
 			wiringPiSPIDataRW(0,regCMD,3);
 		
-			//then we run a clear through it
+			//then we flip the result
 			*(regCMD) = OPCODE |  ((0x0) << 1); //write operation to 000
 			*(regCMD + 1) = 0x12; //address for GPIOA register, the right side
-			*(regCMD + 2) = 0x00; //easy to test
-		
+			*(regCMD + 2) = 0x55; //easy to test
+			wiringPiSPIDataRW(0,regCMD,3);
+			
+			*(regCMD) = OPCODE |  ((0x0) << 1); //write operation to 000
+			*(regCMD + 1) = 0x13; //address for GPIOB register, the left side
+			*(regCMD + 2) = 0x55; //easy to test
 			wiringPiSPIDataRW(0,regCMD,3);
 		]
 		
