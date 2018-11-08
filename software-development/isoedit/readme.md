@@ -20,13 +20,13 @@ The goal of this specific software sub-project is to take in a Gamecube game .IS
 isoedit [options] <FIle Location> [Output File Location] 
 ```
 
-- `--memory, -m` The frame that the memory dump will trigger on. 
-   - If `--infinite` is set, the number of frames between memory dumps. 
+- `-f` The frame that the memory dump will trigger on. 
+   - If `-i` is set, the number of frames between memory dumps. 
    - Default value is 600 (10 seconds)
-- `--clock, -c` Sets the value for the game clock to return when checked. 
-   - Default is 0.
+- `-c` Sets the value for the game clock to return when checked. 
+   - Recommended Default is 0.
    - Game clock unaltered if unset.
-- `--infinite, -i` If the memory dumps should be every m frames. 
+- `-i` If the memory dumps should be every m frames. 
    - Default value is false. 
 
 
