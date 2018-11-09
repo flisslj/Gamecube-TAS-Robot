@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 )
 
@@ -31,22 +32,33 @@ Game clock unaltered (-1) if unset.`
 	infiniteFlag := flag.Bool("inf", false, infString)
 	//flag.BoolVar(infiniteFlag, "i", false, infString)
 
-	isoFlag := flag.String("iso", "", isoString)
+	isoFlag := flag.String("iso", ".", isoString)
 
 	outputFlag := flag.String("out", "", outString)
 
-	if *isoFlag == "" {
-		fmt.Printf("Please enter a valid iso flag string")
+	flag.Parse()
+
+	if *isoFlag == "." {
+		fmt.Printf("Please enter a valid iso flag string: '%s'", *isoFlag)
 		os.Exit(1)
 	}
 
 	if *outputFlag == "" {
-		fmt.Printf("Please enter a valid output flag string")
+		fmt.Printf("Please enter a valid output flag string: '%s'", *outputFlag)
 		os.Exit(1)
 	}
 
-	flag.Parse()
-
 	fmt.Printf("Memory flag value: %d\nClock Flag Value:%d\nInfinite Flag Value:%t\nRemaning Flags: %d\n", *frameFlag, *clockFlag, *infiniteFlag, flag.NArg())
+	StartManipulation(*frameFlag, *clockFlag, *infiniteFlag, *isoFlag, *outputFlag)
+}
+
+func StartManipulation(frames, clock int, infinite bool, iso, output string) {
+	dat, err := ioutil.ReadFile(iso)
+	if err != nil {
+		fmt.Printf("Error retreving iso file: %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	fmt.Printf("DataLength: %d\n", len(dat))
 
 }
