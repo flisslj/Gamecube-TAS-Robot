@@ -93,7 +93,7 @@ int main(){
 			*(regCMD + 1) = 0x13; //address for GPIOB register, the left side
 			*(regCMD + 2) = 0x55; //easy to test
 			wiringPiSPIDataRW(0,regCMD,3);
-		]
+		}
 		
 		
 	}
