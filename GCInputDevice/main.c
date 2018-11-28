@@ -16,50 +16,35 @@ void main()
 #define DataPin05 5
 #define DataPin06 6
 #define DataPin07 7
-#define DataPin08 8
-#define DataPin09 9
-#define DataPin10 10
-#define DataPin11 11
-#define DataPin12 12
-#define DataPin13 13
-#define DataPin14 14
-#define DataPin15 15
 
-#define CtrlIn1 16
-#define CtrlIn2 17
-#define CtrlIn3 18
-#define CtrlIn4 19
-#define CtrlOut1 20
-#define CtrlOut2 21
-#define CtrlOut3 22
-#define CtrlOut4 23
+#define CtrlIn1 8
+#define CtrlIn2 9
+#define CtrlIn3 10 
+#define CtrlIn4 11
+#define CtrlOut1 12
+#define CtrlOut2 13
+#define CtrlOut3 14
+#define CtrlOut4 15
 
-#define ResetPin 24
-#define ClockPin 25
-#define ResendPin 26
+#define ResetPin 16
+#define ClockPin 17
+#define SendPin 18
+#define ResendPin 19
 
-#define GCPowerPin 27
+#define GCPowerPin 20
 
 
 void initializePins()
 {
     //Inputs
-    SetGPIOFunc(DataPin00, FuncIn);
-    SetGPIOFunc(DataPin01, FuncIn);
-    SetGPIOFunc(DataPin02, FuncIn);
-    SetGPIOFunc(DataPin03, FuncIn);
-    SetGPIOFunc(DataPin04, FuncIn);
-    SetGPIOFunc(DataPin05, FuncIn);
-    SetGPIOFunc(DataPin06, FuncIn);
-    SetGPIOFunc(DataPin07, FuncIn);
-    SetGPIOFunc(DataPin08, FuncIn);
-    SetGPIOFunc(DataPin09, FuncIn);
-    SetGPIOFunc(DataPin10, FuncIn);
-    SetGPIOFunc(DataPin11, FuncIn);
-    SetGPIOFunc(DataPin12, FuncIn);
-    SetGPIOFunc(DataPin13, FuncIn);
-    SetGPIOFunc(DataPin14, FuncIn);
-    SetGPIOFunc(DataPin15, FuncIn);
+    SetGPIOFunc(DataPin00, FuncIn); //Data 0 Input
+    SetGPIOFunc(DataPin01, FuncIn); //Data 1 Input
+    SetGPIOFunc(DataPin02, FuncIn); //Data 2 Input
+    SetGPIOFunc(DataPin03, FuncIn); //Data 3 Input
+    SetGPIOFunc(DataPin04, FuncIn); //Data 4 Input
+    SetGPIOFunc(DataPin05, FuncIn); //Data 5 Input
+    SetGPIOFunc(DataPin06, FuncIn); //Data 6 Input
+    SetGPIOFunc(DataPin07, FuncIn); //Data 7 Input
 
     SetGPIOFunc(CtrlIn1, FuncOut); //ctrl 1 Out
     SetGPIOFunc(CtrlIn2, FuncOut); //ctrl 2 Out
@@ -71,9 +56,10 @@ void initializePins()
     SetGPIOFunc(CtrlOut4, FuncIn); //ctrl 4 In
 
     SetGPIOFunc(ResetPin, FuncIn);   //Reset
-    SetGPIOFunc(ClockPin, FuncIn);   //Clock/Send
-    SetGPIOFunc(ResendPin, FuncOut); //Resend
+    SetGPIOFunc(ClockPin, FuncIn);   //Clock
 
+    SetGPIOFunc(SendPin, FuncOut);   //Send
+    SetGPIOFunc(ResendPin, FuncOut); //Resend
     SetGPIOFunc(GCPowerPin, FuncOut); //GC Power
 
     //Enable the rising edge triggers and falling edge triggers.
@@ -88,6 +74,9 @@ void initializePins()
     setGPIORisingEdgeTrigger(CtrlIn4);
 
     setGPIORisingEdgeTrigger(ClockPin);
+    setGPIORisingEdgeTrigger(ResetPin); 
+    setGPIOFallingEdgeTrigger(ResetPin);
+    
 }
 
 
