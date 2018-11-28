@@ -27,15 +27,35 @@ func main() {
 
 	http.HandleFunc("/", defaultHandler)
 	http.HandleFunc("/api/", apiHandler)
-	http.HandleFunc("/api/upload/", upload)
+
+	http.HandleFunc("/api/Heartbeat/", Heartbeat)
+	http.HandleFunc("/api/GetAttachedHardware/", GetAttachedHardware)
+	http.HandleFunc("/api/GetSDSize/", GetSDSize)
+	http.HandleFunc("/api/OpenSpace/", OpenSpace)
+	http.HandleFunc("/api/GetFiles/", GetFiles)
+	http.HandleFunc("/api/GetISOs/", GetISOs)
+	http.HandleFunc("/api/GetTases/", GetTases)
+	http.HandleFunc("/api/CurrentISO/", CurrentISO)
+	http.HandleFunc("/api/CurrentTAS/", CurrentTAS)
+	http.HandleFunc("/api/SetTas/", SetTas)
+	http.HandleFunc("/api/SetISO/", SetISO)
+	http.HandleFunc("/api/LoadISO/", LoadISO)
+	http.HandleFunc("/api/LoadTAS/", LoadTAS)
+	http.HandleFunc("/api/Run/", Run)
+	http.HandleFunc("/api/Abort/", Abort)
+	http.HandleFunc("/api/GetMemoryDump/", GetMemoryDump)
+	http.HandleFunc("/api/GetMemoryDumpData/", GetMemoryDumpData)
+	http.HandleFunc("/api/ClearMemoryDump/", ClearMemoryDump)
+
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(Port), nil))
 
 }
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Default Response. You are talking to the pi. Congratulations")
+	http.Redirect(w, r, "/api", http.StatusTemporaryRedirect)
 }
 
+//todo turn into a basic help page.
 func apiHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hi there. THis is the api handeler., I love %s!", r.URL.Path[1:])
 
@@ -72,9 +92,10 @@ func confirmSecret(r *http.Request) bool {
 // upload logic taken from https://astaxie.gitbooks.io/build-web-application-with-golang/en/04.5.html
 func upload(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
-	fmt.Println("method:", r.Method)
+
 	if r.Method == "GET" {
 		fmt.Fprintf(w, "Valid Secret! Now do a Post request..")
 
@@ -94,5 +115,114 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		}
 		defer f.Close()
 		io.Copy(f, file)
+	}
+}
+
+func Heartbeat(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func GetAttachedHardware(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func GetSDSize(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func OpenSpace(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func GetFiles(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func GetISOs(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func GetTases(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func CurrentISO(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func CurrentTAS(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func SetTas(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func SetISO(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func LoadISO(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func LoadTAS(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func Run(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func Abort(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func GetMemoryDump(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func GetMemoryDumpData(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
+	}
+}
+func ClearMemoryDump(w http.ResponseWriter, r *http.Request) {
+	if !confirmSecret(r) {
+		fmt.Fprintf(w, "Invalid Secret.")
+		return
 	}
 }
