@@ -53,3 +53,6 @@ dkms.conf
 
 #ISO File
 *.iso
+
+#Node Modules
+node_modules/
