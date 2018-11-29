@@ -90,7 +90,7 @@ func confirmSecret(r *http.Request) bool {
 //http.HandleFunc("/upload", upload)
 
 // upload logic taken from https://astaxie.gitbooks.io/build-web-application-with-golang/en/04.5.html
-func upload(w http.ResponseWriter, r *http.Request) {
+func upload(w http.ResponseWriter, r *http.Request, filepath string) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
@@ -101,20 +101,19 @@ func upload(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		r.ParseMultipartForm(32 << 20)
-		file, handler, err := r.FormFile("uploadfile")
+		src, _, err := r.FormFile("file")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		defer file.Close()
-		fmt.Fprintf(w, "%v", handler.Header)
-		f, err := os.OpenFile("./test/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+		defer src.Close()
+		dest, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		defer f.Close()
-		io.Copy(f, file)
+		defer dest.Close()
+		io.Copy(dest, src)
 	}
 }
 
@@ -177,24 +176,84 @@ func SetTas(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	keys, ok := r.URL.Query()["tasPath"]
+
+	if !ok {
+		fmt.Fprintf(w, "Error: Not ok.")
+		return
+	}
+
+	if len(keys[0]) < 1 {
+		fmt.Fprintf(w, "Error: No Value.")
+		return
+	}
+
+	// Query()["key"] will return an array of items,
+	// we only want the single item.
+	tasPath := keys[0]
+	fmt.Println(tasPath)
 }
 func SetISO(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	keys, ok := r.URL.Query()["isoPath"]
+
+	if !ok {
+		fmt.Fprintf(w, "Error: Not ok.")
+		return
+	}
+
+	if len(keys[0]) < 1 {
+		fmt.Fprintf(w, "Error: No Value.")
+		return
+	}
+
+	// Query()["key"] will return an array of items,
+	// we only want the single item.
+	ISOPath := keys[0]
+	fmt.Println(ISOPath)
 }
 func LoadISO(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	keys, ok := r.URL.Query()["filepath"]
+
+	if !ok {
+		fmt.Fprintf(w, "Error: Not ok.")
+		return
+	}
+
+	if len(keys[0]) < 1 {
+		fmt.Fprintf(w, "Error: No Value.")
+		return
+	}
+
+	filepath := keys[0]
+	upload(w, r, filepath)
 }
 func LoadTAS(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	keys, ok := r.URL.Query()["filepath"]
+
+	if !ok {
+		fmt.Fprintf(w, "Error: Not ok.")
+		return
+	}
+
+	if len(keys[0]) < 1 {
+		fmt.Fprintf(w, "Error: No Value.")
+		return
+	}
+
+	filepath := keys[0]
+	upload(w, r, filepath)
 }
 func Run(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
