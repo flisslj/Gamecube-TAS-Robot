@@ -7,62 +7,141 @@
 * 
 * The operation of the controller component is theoretically simple
 * Since we're working without SPI, we're using a custom protocol.
-* We have four control pins - CLK, RST, TX, RX - and 8 bits of data through SPI.
-* The operation is theoretically simple.
-* 
-* To transmit data to the component, TX is turned on
-* Then, every falling edge of the CLK we control, data is the next trasmitted bit
-* This will happen in 40 byte chunks.
+* We have four control pins - CLK, RST, SND, RSND
+* The operation is theoretically simple
 *
-* To receive data, a command is sent and the RX line is watched.
-* We act as the slave for, at most, a 16 bit integer (i think)
+* When a frame is requested via the SND pin, we send bytes and wait on the SND signal
+* If RSND is sent, we resend starting from the last frame we sent
 */
 
 static uint8_t* cmd = malloc(sizeof(uint8_t)* 3)
 
-//TODO
-uint16_t getReplayInfo(){
+/**
+* Initialize the replay component part of the code
+*/
+void replayInit(){
+	//initialize the wiringpi interface
+	wiringPiSetup();
 	
-}
-
-void playInit(){
 	//initialize the SPI
 	int fd0 = wiringPiSPISetup(REPLAY_CHANNEL, SPI_SPEED);
+	
 	//setup the command
 	*(cmd + CMD_DEVICE_ADDRESS) = OPCODE |  (MCP_ADDRESS << 1);
 	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
+	
 	//set up the pins modes
-	pinMode(REPLAY_TX, OUTPUT);
-	pinMode(REPLAY_RX, INPUT);
+	pinMode(REPLAY_SND, INPUT);
+	pinMode(REPLAY_RSND, INPUT);
 	pinMode(REPLAY_CLK, OUTPUT);
 	pinMode(REPLAY_RST, OUTPUT);
+	
 	//set up the pulls as well
 	pullUpDnControl(REPLAY_RST, PUD_UP);
-	pullUpDnControl(REPLAY_CLK, PUD_DOWN);
+	pullUpDnControl(REPLAY_CLK, PUD_UP);
 }
 
-//TODO
-void playTransmit(uint32_t length, uint8_t* data){
+/**
+* Reset the component and grab the device information
+* The reset protocol is as follows
+*
+* We hold the component to reset, and then lift the reset signal
+* We then wait until the component is ready to transmit half the info
+* It signals as such by pulling send down, where we grab the data and ACK via a CLK pulse
+* We repeat on the rising edge of the send line and return the data at last
+*/
+uint16_t replayReset(){
+	//so, to do this properly, we reset the component, and then grab the data it gives us
+	//we need the chip to act as a temporary input to get the data, and then flip once done
+	*(cmd + CMD_REGISTER_ADDRESS) = MCP_IODIR_A;
+	*(cmd + CMD_REGISTER_DATA) = 0xFF; //turn it all on, for inputs
+	wiringPiSPIDataRW(REPLAY_CHANNEL,cmd,CMD_LENGTH);
+	
+	uint16_t info = 0;
+	*(cmd + CMD_DEVICE_ADDRESS) = OPCODE |  (MCP_ADDRESS << 1) | 1;
+	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
+	
+	//reset the device
+	digitalWrite(REPLAY_RST,0);
+	delay(5); //delay 5 ms because why not
+	digitalWrite(REPLAY_RST,1);
+	
+	//wait until send is low and read the mcp
+	while(digitalRead(REPLAY_SND)==1);
+	info |= (wiringPiSPIDataRW(REPLAY_CHANNEL,cmd,CMD_LENGTH-1)<<8);
+	digitalWrite(REPLAY_CLK,0);
+	delayMicroseconds(5); //delay 5 us because why not
+	digitalWrite(REPLAY_CLK,1);
+	
+	//wait until send is high again and read the mcp
+	while(digitalRead(REPLAY_SND)==0);
+	info |= (wiringPiSPIDataRW(REPLAY_CHANNEL,cmd,CMD_LENGTH-1)<<0);
+	digitalWrite(REPLAY_CLK,0);
+	delayMicroseconds(5); //delay 5 us because why not
+	digitalWrite(REPLAY_CLK,1);
+	
+	//reset the mcp
+	*(cmd + CMD_DEVICE_ADDRESS) = OPCODE |  (MCP_ADDRESS << 1);
+	*(cmd + CMD_REGISTER_ADDRESS) = MCP_IODIR_A;
+	*(cmd + CMD_REGISTER_DATA) = 0x00; //turn it all off, for outputs
+	wiringPiSPIDataRW(REPLAY_CHANNEL,cmd,CMD_LENGTH)
+	
+	//reset the command
+	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
+	
+	return info;
+}
+
+/** 
+* Transmits a byte array of defined length to the replay device
+* 
+* length - Length of array, in bytes
+* data - Pointer to array of data
+*
+* Returns an enum detailing the success or failure of the transmission
+* If the resend signal is never received, the transmission is a success
+* If the resend signal is sent at the very end of a transmission, we resend our current frame (CRC failure)
+* If the resend signal is sent mid-frame, we send the previous frame (delayed CRC, data noise)
+*/
+enum frame_state replayTransmit(uint32_t length, uint8_t* data){
 	for(int i = 0; i < length; i++){
+		if(digitalRead(REPLAY_RSND)==1){
+			return RESEND_PREVIOUS;
+		}
 		playByte(*(data+i));
+		//wait for the next send signal
+		while(digitalRead(REPLAY_SND)==1);
 	}
 	
-	return;
+	//some very short delay to wait for baremetal - less than the time to the next send signal
+	
+	if(digitalRead(REPLAY_RSND)==1){
+		return RESEND_CURRENT;
+	}
+	
+	return SUCCESS;
 }
 
-//TODO
-void playByte(uint8_t byte){
+
+/** 
+* Transmits a single byte over SPI to the chip on GPIO A
+* 
+* byte - the single byte to be sent to the MCP chip
+*
+*/
+void replayByte(uint8_t byte){
 	//this is honestly super simple
 	*(cmd + CMD_REGISTER_DATA) = byte; //cmd is set up
 	wiringPiSPIDataRW(REPLAY_CHANNEL,cmd,CMD_LENGTH);
 	//after this flip the clock down
 	digitalWrite(REPLAY_CLK, 0);
 	//wait the standard amount (except not really, interrupts eventually)
-	//TODO
+	delayMicroseconds(CMD_CLK_DELAY_US);
 	//flip clock again
 	digitalWrite(REPLAY_CLK, 1);
 	//wait again lmfao
-	//TODO
+	delayMicroseconds(CMD_CLK_DELAY_US);
 	
 	return;
 }
+

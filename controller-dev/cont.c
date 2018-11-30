@@ -9,7 +9,7 @@ bool heartbeat(){
 
 uint64_t getAttachedHardware(){
 	uint64_t contInfo = CONTROLLER_TYPE<<8 | CONTROLLER_VERSION;
-	uint64_t replayInfo = getReplayInfo();
+	uint64_t replayInfo = reset();
 	uint64_t SDinfo = getSDinfo();
 	
 	//SD is 32 bits, the others are 16.
