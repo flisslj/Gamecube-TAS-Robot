@@ -10,16 +10,7 @@ uint64_t getSDsize();
 
 uint64_t getSDEmptySpace();
 
-char* getSDFiles();
-
-char* getSDISOS();
-
-char* getSDTASes();
-
 uint64_t loadISO(char* filename, uint8_t[] data);
-
-uint64_t loadTAS(char* filename, uint8_t[] data);
-
 
 void SDtransmit(uint32_t length, uint8_t* data);
 

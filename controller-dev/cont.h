@@ -11,6 +11,7 @@
 #include "contSD.h"
 #include "contMem.h"
 #include "contReplay.h"
+#include "contFile.h"
 
 #define CONTROLLER_TYPE 0
 #define CONTROLLER_VERSION 1

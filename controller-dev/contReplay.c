@@ -6,9 +6,8 @@
 * 11/29/2018
 * 
 * The operation of the controller component is theoretically simple
-* Since we're working without SPI, we're using a custom protocol.
+* Since we're working without the wiringPi SPI, we're using a custom protocol.
 * We have four control pins - CLK, RST, SND, RSND
-* The operation is theoretically simple
 *
 * When a frame is requested via the SND pin, we send bytes and wait on the SND signal
 * If RSND is sent, we resend starting from the last frame we sent
@@ -18,16 +17,18 @@ static uint8_t* cmd = malloc(sizeof(uint8_t)* 3)
 
 /**
 * Initialize the replay component part of the code
+*
+* In particular, the wiringpi, SPI, cmd, and pins need setup
 */
 void replayInit(){
 	//initialize the wiringpi interface
 	wiringPiSetup();
 	
 	//initialize the SPI
-	int fd0 = wiringPiSPISetup(REPLAY_CHANNEL, SPI_SPEED);
+	int fd0 = wiringPiSPISetup(MCP_CHANNEL, MCP_SPEED);
 	
 	//setup the command
-	*(cmd + CMD_DEVICE_ADDRESS) = OPCODE |  (MCP_ADDRESS << 1);
+	*(cmd + CMD_DEVICE_ADDRESS) = MCP_OPCODE |  (MCP_ADDRESS << 1);
 	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
 	
 	//set up the pins modes
@@ -55,10 +56,10 @@ uint16_t replayReset(){
 	//we need the chip to act as a temporary input to get the data, and then flip once done
 	*(cmd + CMD_REGISTER_ADDRESS) = MCP_IODIR_A;
 	*(cmd + CMD_REGISTER_DATA) = 0xFF; //turn it all on, for inputs
-	wiringPiSPIDataRW(REPLAY_CHANNEL,cmd,CMD_LENGTH);
+	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
 	
 	uint16_t info = 0;
-	*(cmd + CMD_DEVICE_ADDRESS) = OPCODE |  (MCP_ADDRESS << 1) | 1;
+	*(cmd + CMD_DEVICE_ADDRESS) = MCP_OPCODE |  (MCP_ADDRESS << 1) | 1;
 	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
 	
 	//reset the device
@@ -68,23 +69,23 @@ uint16_t replayReset(){
 	
 	//wait until send is low and read the mcp
 	while(digitalRead(REPLAY_SND)==1);
-	info |= (wiringPiSPIDataRW(REPLAY_CHANNEL,cmd,CMD_LENGTH-1)<<8);
+	info |= (wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH-1)<<8);
 	digitalWrite(REPLAY_CLK,0);
 	delayMicroseconds(5); //delay 5 us because why not
 	digitalWrite(REPLAY_CLK,1);
 	
 	//wait until send is high again and read the mcp
 	while(digitalRead(REPLAY_SND)==0);
-	info |= (wiringPiSPIDataRW(REPLAY_CHANNEL,cmd,CMD_LENGTH-1)<<0);
+	info |= (wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH-1)<<0);
 	digitalWrite(REPLAY_CLK,0);
 	delayMicroseconds(5); //delay 5 us because why not
 	digitalWrite(REPLAY_CLK,1);
 	
 	//reset the mcp
-	*(cmd + CMD_DEVICE_ADDRESS) = OPCODE |  (MCP_ADDRESS << 1);
+	*(cmd + CMD_DEVICE_ADDRESS) = MCP_OPCODE |  (MCP_ADDRESS << 1);
 	*(cmd + CMD_REGISTER_ADDRESS) = MCP_IODIR_A;
 	*(cmd + CMD_REGISTER_DATA) = 0x00; //turn it all off, for outputs
-	wiringPiSPIDataRW(REPLAY_CHANNEL,cmd,CMD_LENGTH)
+	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH)
 	
 	//reset the command
 	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
@@ -132,7 +133,7 @@ enum frame_state replayTransmit(uint32_t length, uint8_t* data){
 void replayByte(uint8_t byte){
 	//this is honestly super simple
 	*(cmd + CMD_REGISTER_DATA) = byte; //cmd is set up
-	wiringPiSPIDataRW(REPLAY_CHANNEL,cmd,CMD_LENGTH);
+	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
 	//after this flip the clock down
 	digitalWrite(REPLAY_CLK, 0);
 	//wait the standard amount (except not really, interrupts eventually)
