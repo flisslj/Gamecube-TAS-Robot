@@ -10,7 +10,7 @@
 //TODO
 #define REPLAY_SND 29
 #define REPLAY_RSND 31
-#define REPLAY_RST 25
+#define REPLAY_RST 22
 #define REPLAY_CLK 33
 
 enum frame_state{SUCCESS, RESEND_CURRENT, RESEND_PREVIOUS}
