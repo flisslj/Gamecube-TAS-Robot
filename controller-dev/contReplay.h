@@ -8,10 +8,10 @@
 #define CMD_CLK_DELAY_US 10
 
 //TODO
-#define REPLAY_SND
-#define REPLAY_RSND
-#define REPLAY_RST
-#define REPLAY_CLK
+#define REPLAY_SND 29
+#define REPLAY_RSND 31
+#define REPLAY_RST 25
+#define REPLAY_CLK 33
 
 enum frame_state{SUCCESS, RESEND_CURRENT, RESEND_PREVIOUS}
 
