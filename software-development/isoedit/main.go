@@ -95,6 +95,12 @@ func flagParse() {
 
 func StartManipulation(frames, clock int, infinite bool, iso, output, witLoc string) {
 
+	//extract the files from the iso to a directory.
+	runWit(witLoc, "EXTRACT", iso, "./tmp")
+
+	//recombine the files into a proper structure?
+	runWit(witLoc, "COPY", "./tmp", output)
+
 }
 
 func witTest(witLoc string) {
