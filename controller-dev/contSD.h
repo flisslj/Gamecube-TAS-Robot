@@ -10,7 +10,7 @@ uint64_t getSDsize();
 
 uint64_t getSDEmptySpace();
 
-uint64_t loadISO(char* filename, uint8_t[] data);
+uint64_t loadISO(char* filename);
 
 void SDtransmit(uint32_t length, uint8_t* data);
 

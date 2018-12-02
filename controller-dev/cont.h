@@ -21,8 +21,6 @@
 #define MAX_FILENAME_LENGTH 512
 
 
-bool heartbeat();
-
 uint64_t getAttachedHardware();
 
 char* getCurrentISO();
@@ -32,6 +30,8 @@ char* getCurrentTAS();
 bool setISO(char* isoPath);
 
 bool setTas(char* tasPath);
+
+bool loadTas(char* tasPath);
 
 bool run();
 

@@ -3,10 +3,6 @@
 static char* currentISO = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
 static char* currentTAS = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
 
-bool heartbeat(){
-	return true; //wait lmao
-}
-
 uint64_t getAttachedHardware(){
 	uint64_t contInfo = CONTROLLER_TYPE<<8 | CONTROLLER_VERSION;
 	uint64_t replayInfo = reset();
@@ -29,13 +25,15 @@ bool setISO(char* isoPath){
 	//???//
 	//if so, we can cut off the filename
 	strcpy(currentTAS, basename(isoPath));
+	return true;
 }
 
 bool setTas(char* tasPath){
-	//find out whether the SD component has the tas path
+	//find out whether we have the tas path
 	//???//
 	//if so, we can cut off the filename
 	strcpy(currentTAS, basename(tasPath));
+	return true;
 }
 
 //TODO
