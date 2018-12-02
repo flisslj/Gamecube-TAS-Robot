@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"io"
@@ -51,16 +52,6 @@ func main() {
 
 }
 
-func defaultHandler(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/api", http.StatusTemporaryRedirect)
-}
-
-//todo turn into a basic help page.
-func apiHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi there. THis is the api handeler., I love %s!", r.URL.Path[1:])
-
-}
-
 func confirmSecret(r *http.Request) bool {
 	keys, ok := r.URL.Query()["secret"]
 
@@ -103,13 +94,13 @@ func upload(w http.ResponseWriter, r *http.Request, filepath string) {
 		r.ParseMultipartForm(32 << 20)
 		src, _, err := r.FormFile("file")
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(w, err)
 			return
 		}
 		defer src.Close()
 		dest, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(w, err)
 			return
 		}
 		defer dest.Close()
@@ -117,59 +108,88 @@ func upload(w http.ResponseWriter, r *http.Request, filepath string) {
 	}
 }
 
+func runCommand(command string) (response string) {
+	fmt.Println(command)
+	reader := bufio.NewReader(os.Stdin)
+	text, err := reader.ReadString('\n')
+	if err != nil {
+		return err.Error()
+	}
+	return text
+}
+
+func defaultHandler(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/api", http.StatusTemporaryRedirect)
+}
+
+//todo turn into a basic help page.
+func apiHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hi there. THis is the api handeler., I love %s!", r.URL.Path[1:])
+
+}
+
 func Heartbeat(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("heartbeet:3735936751"))
 }
 func GetAttachedHardware(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("hardware"))
 }
 func GetSDSize(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("sdsize"))
 }
 func OpenSpace(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("sdopen"))
 }
 func GetFiles(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("getfiles"))
 }
 func GetISOs(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("getisos"))
 }
 func GetTases(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("gettases"))
 }
 func CurrentISO(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("getcurrentiso"))
 }
 func CurrentTAS(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("getcurrenttas"))
 }
 func SetTas(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
@@ -191,7 +211,8 @@ func SetTas(w http.ResponseWriter, r *http.Request) {
 	// Query()["key"] will return an array of items,
 	// we only want the single item.
 	tasPath := keys[0]
-	fmt.Println(tasPath)
+	fmt.Fprintf(w, "%s", runCommand("settas:"+tasPath))
+
 }
 func SetISO(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
@@ -213,7 +234,8 @@ func SetISO(w http.ResponseWriter, r *http.Request) {
 	// Query()["key"] will return an array of items,
 	// we only want the single item.
 	ISOPath := keys[0]
-	fmt.Println(ISOPath)
+	fmt.Fprintf(w, "%s", runCommand("setiso:"+ISOPath))
+
 }
 func LoadISO(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
@@ -234,6 +256,8 @@ func LoadISO(w http.ResponseWriter, r *http.Request) {
 
 	filepath := keys[0]
 	upload(w, r, filepath)
+	fmt.Fprintf(w, "%s", runCommand("loadiso:"+filepath))
+
 }
 func LoadTAS(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
@@ -254,34 +278,41 @@ func LoadTAS(w http.ResponseWriter, r *http.Request) {
 
 	filepath := keys[0]
 	upload(w, r, filepath)
+	fmt.Fprintf(w, "%s", runCommand("loadtas:"+filepath))
+
 }
 func Run(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("run"))
 }
 func Abort(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("abort"))
 }
 func GetMemoryDump(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("getmemorydump"))
 }
 func GetMemoryDumpData(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("getmemorydumpdata"))
 }
 func ClearMemoryDump(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
+	fmt.Fprintf(w, "%s", runCommand("clearmemorydump"))
 }
