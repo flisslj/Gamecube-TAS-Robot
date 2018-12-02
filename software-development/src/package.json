@@ -1,0 +1,11 @@
+{
+  "name": "gamecube-tas-robot-application",
+  "version": "1.0.0",
+  "description": "this program will run the gamecube tas robot along with proving debugging tools to runners",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Luke Fliss",
+  "license": "ISC"
+}
