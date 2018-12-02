@@ -102,3 +102,78 @@ void ControllerPollInterupt()
     clearGPIOEventDetect(CtrlIn4) // temporary
 }
 
+
+uint8_t controller1Data[64];
+uint8_t controller2Data[64];
+uint8_t controller3Data[64];
+uint8_t controller4Data[64];
+
+uint8_t controller1Bit;
+uint8_t controller2Bit;
+uint8_t controller3Bit;
+uint8_t controller4Bit;
+
+void controllerOutput2(){
+    //Start low. 
+    clearGPIO(CtrlOut2)
+
+    //dealy for X time. 
+
+    //if 1, raise
+    if controller1Data[controller1Bit++] {
+        setGPIO(CtrlOut2)
+    }else{
+        clearGPIO(CtrlOut2)
+    }
+    //delay for XX time
+
+    //raise final bit
+    setGPIO(CtrlOut2)
+    //delay for X time.
+}
+
+
+void controllerOutput3(){
+    //Start low. 
+    clearGPIO(CtrlOut3)
+
+    //dealy for X time. 
+
+    //if 1, raise
+    if controller1Data[controller1Bit++] {
+        setGPIO(CtrlOut3)
+    }else{
+        clearGPIO(CtrlOut3)
+    }
+    //delay for XX time
+
+    //raise final bit
+    setGPIO(CtrlOut3)
+    //delay for X time.
+}
+
+
+void controllerOutput4(){
+    //Start low. 
+    clearGPIO(CtrlOut4)
+
+    //dealy for X time. 
+
+    //if 1, raise
+    if controller1Data[controller1Bit++] {
+        setGPIO(CtrlOut4)
+    }else{
+        clearGPIO(CtrlOut4)
+    }
+    //delay for XX time
+
+    //raise final bit
+    setGPIO(CtrlOut4)
+    //delay for X time.
+}
+
+
+
+
+
+
