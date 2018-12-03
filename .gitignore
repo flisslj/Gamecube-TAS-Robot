@@ -50,3 +50,17 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+
+# eclipse project settigns. 
+.cproject
+.project
+.settings/
+
+#ISO File
+*.iso
+
+#Node Modules
+node_modules/
+wit/
+
