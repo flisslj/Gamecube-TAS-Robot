@@ -109,6 +109,10 @@ func upload(w http.ResponseWriter, r *http.Request, filepath string) {
 }
 
 func runCommand(command string) (response string) {
+	//if statement to make the program return a
+	if false {
+		return command
+	}
 	fmt.Println(command)
 	reader := bufio.NewReader(os.Stdin)
 	text, err := reader.ReadString('\n')
