@@ -1,0 +1,24 @@
+/* side bar for iso name, tas file name, and logging area */
+
+.side_bar {
+    margin-top: 4%;
+    height: 100%;
+    width: 15%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 5px;
+    padding-top: 1%;
+    border: 1px solid black;
+
+}
+
+.replay_editor{
+    margin-left: 15%;
+    padding: 10px;
+    border: 1px solid blue;
+}
+
+.buttons{
+    border: 1px solid red;
+}
