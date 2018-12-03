@@ -2,8 +2,10 @@
 #define MAIN_H
 
 #include "cont.h"
+#include "contBase64.h"
 #include <stdio.h>
 #include <string.h>
+
 
 #define MAX_STDIN_CMD_LENGTH 200
 

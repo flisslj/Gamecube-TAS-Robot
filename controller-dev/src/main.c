@@ -33,20 +33,34 @@ int main(int argc, char *argv[]){
 		if(strcmp(command,"hardware")==0){
 			uint64_t ret = getAttachedHardware();
 			//encode ret into base 64
-			//TODO
+			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
+			longToBase64(ret,returnString);
 			//then return it
+			fprintf(stdout,returnString);
+			//and free memory
+			free(returnString);
 		}else if(strncmp(command,"heartbeat:",10)==0){
 			//we then grab the variable and then determine whether to return error or confirmation
+			//TODO
 		}else if(strcmp(command,"sdsize")==0){
 			uint64_t ret = getSDsize();
 			//encode ret into base 64
-			//TODO
+			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
+			longToBase64(ret,returnString);
 			//then return it
+			fprintf(stdout,returnString);
+			//and free memory
+			free(returnString);
 		}else if(strcmp(command,"sdopen")==0){
 			uint64_t ret = getSDEmptySpace();
 			//encode ret into base 64
-			//TODO
+			//encode ret into base 64
+			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
+			longToBase64(ret,returnString);
 			//then return it
+			fprintf(stdout,returnString);
+			//and free memory
+			free(returnString);
 		}else if(strcmp(command,"getfiles")==0){
 			fprintf(stdout,getFiles(/*TODO basepath*/));
 		}else if(strcmp(command,"getisos")==0){
@@ -98,9 +112,17 @@ int main(int argc, char *argv[]){
 				fprintf(stdout, "FALSE");
 			}
 		}else if(strcmp(command,"getmemorydump")==0){
-			fprintf(getMemoryDump());
+			//TODO 
+			//fprintf(stdout, getMemoryDump());
 		}else if(strcmp(command,"getmemorydumpdata")==0){
-			fprintf(getMemoryDumpData());
+			uint64_t ret = getMemoryDumpData();
+			//encode ret into base 64
+			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
+			longToBase64(ret,returnString);
+			//then return it
+			fprintf(stdout,returnString);
+			//and free memory
+			free(returnString);
 		}else if(strcmp(command,"clearmemorydump")==0){
 			if(clearMemoryDump()){
 				fprintf(stdout, "TRUE");
@@ -110,5 +132,5 @@ int main(int argc, char *argv[]){
 		}
 	}
 	
-	//return 0;
+	return 0;
 }
