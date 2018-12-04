@@ -3,130 +3,159 @@
  */
 
  function HardwareInterface (){
-     var http = require('http');
+     var http = require('http'),
+         fs = require('fs');
      let url = "http://" + "localhost:";
      let port = "80"
      let secret = "&secret=" + "password1234";
-     let request;
+     let request = "";
      
      let heartBeat = function(){
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/Heartbeat";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
 
      let getAttachedHardware = function() {
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
-
+        request = "/api/GetAttachedHardware";
+        http.get(url+port+request+secret, (resp)=>{
+            
         })
      }
 
      let getSDSize = function() {
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/GetSDSize";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
 
      let openSpace = function() {
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/OpenSpace";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
 
      let getFiles = function() {
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/GetFiles";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
 
      let getISOs = function() {
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/GetISOs";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
 
      let getTASes = function() {
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/GetTASes";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
 
      let currentISO = function() {
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/CurrentIso";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
 
      let currentTAS = function() {
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/CurrentTAS";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
     
-     let setTas = function(){
-        request = "";
-        //these need to be post requests
+     let setTas = function(filePath){
+        request = "/api/SetTas";
+        const options = {
+           hostname: url,
+           port: port,
+           path: request+secret,
+           method: 'POST',
+           headers: {
+              'Content-Type': 'TAS-file',
+              'Content-Length': ''
+           }
+        }
+        const req = http.request(options, (res) => {
+
+        })
+        req.write(fs.readFileSync(filePath));
+        req.end()
      }
 
-     let setISO = function(){
-        request = "";
-        //these need to be post requests
+     let setISO = function(filePath){
+        request = "/api/SetISO";
+        const options = {
+           hostname: url,
+           port: port,
+           path: request+secret,
+           method: 'POST',
+           headers: {
+              'Content-Type': 'ISO',
+              'Content-Length': ''
+           }
+        }
+        const req = http.request(options, (res) => {
+
+        })
+        req.write(fs.readFileSync(filePath))
+        req.end();
      }
 
-     let loadISO = function(){
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+     let loadISO = function(filePath, data){
+        request = "/api/LoadISO";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
 
-     let loadTAS = function(){
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+     let loadTAS = function(filePath, data){
+        request = "/api/LoadTAS";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
 
      let run = function(){
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/Run";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
 
      let abort = function(){
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/Abort";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
      
      let getMemoryDump = function(){
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/GetMemoryDump";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
     
      let getMemoryDumpData = function(){
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/GetMemoryDumpData";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
     
      let clearMemoryDump = function(){
-        request = "";
-        http.get(url+port+request+parameters+secret, (resp)=>{
+        request = "/api/ClearMemoryDump";
+        http.get(url+port+request+secret, (resp)=>{
 
         })
      }
