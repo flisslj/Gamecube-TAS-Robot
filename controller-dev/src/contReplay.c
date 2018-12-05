@@ -25,7 +25,7 @@ void replayInit(){
 	wiringPiSetup();
 	
 	//initialize the SPI
-	int fd0 = wiringPiSPISetup(MCP_CHANNEL, MCP_SPEED);
+	wiringPiSPISetup(MCP_CHANNEL, MCP_SPI_SPEED);
 	
 	//setup the command
 	*(cmd + CMD_DEVICE_ADDRESS) = MCP_OPCODE |  (MCP_ADDRESS << 1);
@@ -69,14 +69,14 @@ uint16_t replayReset(){
 	
 	//wait until send is low and read the mcp
 	while(digitalRead(REPLAY_SND)==1);
-	info |= (wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH-1)<<8);
+	info |= (wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH)<<8);
 	digitalWrite(REPLAY_CLK,0);
 	delayMicroseconds(5); //delay 5 us because why not
 	digitalWrite(REPLAY_CLK,1);
 	
 	//wait until send is high again and read the mcp
 	while(digitalRead(REPLAY_SND)==0);
-	info |= (wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH-1)<<0);
+	info |= (wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH)<<0);
 	digitalWrite(REPLAY_CLK,0);
 	delayMicroseconds(5); //delay 5 us because why not
 	digitalWrite(REPLAY_CLK,1);
