@@ -4,17 +4,15 @@
 
 //     Function Select
 
-void SetGPIOFunc(uint32_t gpio, GPIOFunc function)
+void SetGPIOFunc(int gpio, GPIOFunc function)
 {
 
     //divide the gpio by ten to get the bank. then switch case to the
-    uint32_t Register = gpio / 10;
-    uint32_t row = gpio % 10;
-    uint32_t *Address;
+    int Register = gpio / 10;
+    int row = gpio % 10;
 
     //calculate the register that needs to be set.
-    switch (Register)
-    {
+    switch (Register){
     case 0:
         *GPFSEL0 = (function << (row * 3));
         break;
@@ -35,11 +33,10 @@ void SetGPIOFunc(uint32_t gpio, GPIOFunc function)
         break;
     }
 
-    //set the value at address to the function where the row times three is the lowest byte location.
-    *Address = (function << (row * 3));
+
 }
 
-void setGPIOFallingEdgeTrigger(uint32_t gpio)
+void setGPIOFallingEdgeTrigger(int gpio)
 {
     if (gpio >= 0 && gpio <= 31)
     {
@@ -52,7 +49,7 @@ void setGPIOFallingEdgeTrigger(uint32_t gpio)
     }
 }
 
-void clearGPIOFallingEdgeTrigger(uint32_t gpio)
+void clearGPIOFallingEdgeTrigger(int gpio)
 {
     if (gpio >= 0 && gpio <= 31)
     {
@@ -65,7 +62,7 @@ void clearGPIOFallingEdgeTrigger(uint32_t gpio)
     }
 }
 
-void setGPIORisingEdgeTrigger(uint32_t gpio)
+void setGPIORisingEdgeTrigger(int gpio)
 {
     if (gpio >= 0 && gpio <= 31)
     {
@@ -78,7 +75,7 @@ void setGPIORisingEdgeTrigger(uint32_t gpio)
     }
 }
 
-void clearGPIORisingEdgeTrigger(uint32_t gpio)
+void clearGPIORisingEdgeTrigger(int gpio)
 {
     if (gpio >= 0 && gpio <= 31)
     {
@@ -91,7 +88,7 @@ void clearGPIORisingEdgeTrigger(uint32_t gpio)
     }
 }
 
-void setGPIOLowSignalTrigger(uint32_t gpio)
+void setGPIOLowSignalTrigger(int gpio)
 {
     if (gpio >= 0 && gpio <= 31)
     {
@@ -103,7 +100,7 @@ void setGPIOLowSignalTrigger(uint32_t gpio)
         *GPLEN1 = (*GPLEN1) | 1 << (gpio - 32);
     }
 }
-void clearGPIOLowSignalTrigger(uint32_t gpio)
+void clearGPIOLowSignalTrigger(int gpio)
 {
     if (gpio >= 0 && gpio <= 31)
     {
@@ -116,7 +113,7 @@ void clearGPIOLowSignalTrigger(uint32_t gpio)
     }
 }
 
-void setGPIOHighSignalTrigger(uint32_t gpio)
+void setGPIOHighSignalTrigger(int gpio)
 {
     if (gpio >= 0 && gpio <= 31)
     {
@@ -128,7 +125,7 @@ void setGPIOHighSignalTrigger(uint32_t gpio)
         *GPHEN1 = (*GPHEN1) | 1 << (gpio - 32);
     }
 }
-void clearGPIOHighSignalTrigger(uint32_t gpio)
+void clearGPIOHighSignalTrigger(int gpio)
 {
     if (gpio >= 0 && gpio <= 31)
     {
@@ -141,7 +138,7 @@ void clearGPIOHighSignalTrigger(uint32_t gpio)
     }
 }
 
-int checkGPIOEventDetect(uint32_t gpio)
+int checkGPIOEventDetect(int gpio)
 {
 
     int v = 0;
@@ -160,7 +157,7 @@ int checkGPIOEventDetect(uint32_t gpio)
     }
     return 0;
 }
-void clearGPIOEventDetect(uint32_t gpio)
+void clearGPIOEventDetect(int gpio)
 {
     if (gpio >= 0 && gpio <= 31)
     {
@@ -174,7 +171,7 @@ void clearGPIOEventDetect(uint32_t gpio)
 }
 
 //given a gpio pin, set that pin to 1.
-void setGPIO(uint32_t gpio)
+void setGPIO(int gpio)
 {
     if (gpio >= 0 && gpio <= 31)
     {
@@ -188,7 +185,7 @@ void setGPIO(uint32_t gpio)
 }
 
 //given a gpio pin, set that pin to 0;
-void clearGPIO(uint32_t gpio)
+void clearGPIO(int gpio)
 {
     if (gpio >= 0 && gpio <= 31)
     {
@@ -202,18 +199,18 @@ void clearGPIO(uint32_t gpio)
 }
 
 //get the values for the gpio 0-31
-uint32_t getLowGPIO()
+int getLowGPIO()
 {
     return *GPLEV0;
 }
 
 //get the values for the gpio 32-53
-uint32_t getHighGPIO()
+int getHighGPIO()
 {
     return *GPLEV1;
 }
 
-int getGPIOValue(uint32_t gpio)
+int getGPIOValue(int gpio)
 {
     int v = 0;
     if (gpio >= 0 && gpio <= 31)
