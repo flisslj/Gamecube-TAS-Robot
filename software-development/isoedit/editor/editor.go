@@ -5,6 +5,14 @@ import (
 	"io/ioutil"
 )
 
+type command struct {
+	next    *command
+	cmdType string
+	asBytes uint32
+	branch  *command
+	addr    uint32
+}
+
 func EditFile(location string, frames, clock int, infinite bool) {
 	replaceFile(location, toBytes(alter(toInts(loadFile(location)), frames, clock, infinite)))
 }
@@ -51,5 +59,60 @@ func toBytes(data []uint32) []byte {
 //Function Responsible for the majority of the alterations made to the
 func alter(data []uint32, frames, clock int, infinite bool) []uint32 {
 
-	return nil
+	commands := toCommands(data)
+	head := makeGraph(commands)
+
+	head = magic(head, frames, infinite)
+
+	alteredCommands := makeArray(head)
+	return assemble(alteredCommands)
+
+}
+
+//Convert the integers into command
+func toCommands(data []uint32) []command {
+	out := make([]command, len(data))
+	for i, v := range data {
+		out[i] = disassembleInt(v)
+	}
+	return out
+}
+
+//take the commands and convert them into a graph vs a list.
+func makeGraph(commands []command) command {
+
+	return commands[0]
+}
+
+//this is where the magic happens, and the magic commands are inserted.
+func magic(head command, frames int, inf bool) command {
+
+	return head
+}
+
+//reconvert the commands back into an array.
+func makeArray(head command) []command {
+
+	out := make([]command, 0)
+
+	next := head
+	value := head.addr
+	for next.next != nil {
+		out = append(out, next)
+		next = *next.next
+		value = value + 4
+		next.addr = value
+	}
+	out = append(out, next)
+	return out
+}
+
+//assemble the commands into a series of integers again.
+func assemble(commands []command) []uint32 {
+
+	out := make([]uint32, len(commands))
+	for i, v := range commands {
+		out[i] = assembleCommand(v)
+	}
+	return out
 }
