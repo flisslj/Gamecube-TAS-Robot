@@ -16,6 +16,7 @@
 #include <string.h>
 #include <wiringPi.h>
 #include <wiringSerial.h>
+#include <unistd.h>
 
 #define UART_BAUD 				9600 //baud rate for the uart connection
 

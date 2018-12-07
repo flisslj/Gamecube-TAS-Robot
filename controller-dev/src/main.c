@@ -34,6 +34,7 @@ int main(int argc, char *argv[]){
 	char* basePath = argv[3];
 	
 	char* command = malloc(sizeof(char)*MAX_STDIN_CMD_LENGTH);
+	command = "abort"; //this is a default in case command goes wrong
 	
 	wiringPiSetup();
 	
@@ -48,11 +49,12 @@ int main(int argc, char *argv[]){
 		//this means functions like run should be interrupt-driven
 		//unless we can slap interrupts on this in which case nvm
 		
-		if(*(argv[2])=='1'){
-			
+		if(type=='1'){
+			while(fgets(command,MAX_STDIN_CMD_LENGTH,stdin)==NULL);
+		}else if(type=='0'){
+			while(serialDataAvail(fileDesc)==0 || serialDataAvail(fileDesc)==-1);
+			read(fileDesc,command);
 		}
-		while(fgets(command,MAX_STDIN_CMD_LENGTH,stdin)==NULL);
-		
 		//we now have a command, let's parse it
 		if(strcmp(command,"hardware")==0){
 			uint64_t ret = getAttachedHardware();
