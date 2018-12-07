@@ -15,18 +15,42 @@
 * The port onboard the gamecube for memory dump retrieval
 */
 
+static int fileDesc == 0;
+
 /**
-* running main has some format TBD
+* running main has some format
+* first flag - UART or ethernet (1 if using ethernet)
+* second flag - base filepath
 */
 int main(int argc, char *argv[]){
 	
+	//first, we make sure we have enough arguments
+	if(argc<3){
+		printf("Not enough arguments! Need UART/Ethernet and base filepath.\n");
+		return 0;
+	}
+	
+	char type = *(argv[2]);
+	char* basePath = argv[3];
+	
 	char* command = malloc(sizeof(char)*MAX_STDIN_CMD_LENGTH);
 	
+	wiringPiSetup();
+	
 	//handles grabbing and returns commands through stdin
+	if(type=='0'){
+		//UART setup is surprisingly simple
+		fileDesc = serialOpen("/dev/ttyAMA0", UART_BAUD);
+	}
+	
 	while(1){
 		//spinlock until we get a command
 		//this means functions like run should be interrupt-driven
 		//unless we can slap interrupts on this in which case nvm
+		
+		if(*(argv[2])=='1'){
+			
+		}
 		while(fgets(command,MAX_STDIN_CMD_LENGTH,stdin)==NULL);
 		
 		//we now have a command, let's parse it
@@ -36,7 +60,7 @@ int main(int argc, char *argv[]){
 			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
 			longToBase64(ret,returnString);
 			//then return it
-			fprintf(stdout,returnString);
+			generalPrint(type,returnString);
 			//and free memory
 			free(returnString);
 		}else if(strncmp(command,"heartbeat:",10)==0){
@@ -48,7 +72,7 @@ int main(int argc, char *argv[]){
 			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
 			longToBase64(ret,returnString);
 			//then return it
-			fprintf(stdout,returnString);
+			generalPrint(type,returnString);
 			//and free memory
 			free(returnString);
 		}else if(strcmp(command,"sdopen")==0){
@@ -58,79 +82,87 @@ int main(int argc, char *argv[]){
 			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
 			longToBase64(ret,returnString);
 			//then return it
-			fprintf(stdout,returnString);
+			generalPrint(type,returnString);
 			//and free memory
 			free(returnString);
 		}else if(strcmp(command,"getfiles")==0){
-			fprintf(stdout,getFiles(/*TODO basepath*/));
+			generalPrint(type,getFiles(basePath));
 		}else if(strcmp(command,"getisos")==0){
-			fprintf(stdout,getISOs(/*TODO basepath*/));
+			generalPrint(type,getISOs(basePath));
 		}else if(strcmp(command,"gettases")==0){
-			fprintf(stdout,getTASes(/*TODO basepath*/));
+			generalPrint(type,getTASes(basePath));
 		}else if(strcmp(command,"getcurrentiso")==0){
-			fprintf(stdout,getCurrentISO(/*TODO basepath*/));
+			generalPrint(type,getCurrentISO(basePath));
 		}else if(strcmp(command,"getcurrenttas")==0){
-			fprintf(stdout,getCurrentTAS(/*TODO basepath*/));
+			generalPrint(type,getCurrentTAS(basePath));
 		}else if(strncmp(command,"settas:",7)==0){
 			//move the pointer over 7
 			if(setTAS(command + 7)){
-				fprintf(stdout, "TRUE");
+				generalPrint(type, "TRUE");
 			}else{
-				fprintf(stdout, "FALSE");
+				generalPrint(type, "FALSE");
 			}
 		}else if(strcmp(command,"setiso:",7)==0){
 			//move the pointer over 7
 			if(setISO(command + 7)){
-				fprintf(stdout, "TRUE");
+				generalPrint(type, "TRUE");
 			}else{
-				fprintf(stdout, "FALSE");
+				generalPrint(type, "FALSE");
 			}
 		}else if(strcmp(command,"loadiso:",8)==0){
 			//move the pointer over 8
 			if(loadISO(command + 8)){
-				fprintf(stdout, "TRUE");
+				generalPrint(type, "TRUE");
 			}else{
-				fprintf(stdout, "FALSE");
+				generalPrint(type, "FALSE");
 			}
 		}else if(strcmp(command,"loadtas:",8)==0){
 			//move the pointer over 8
 			if(loadTAS(command + 8)){
-				fprintf(stdout, "TRUE");
+				generalPrint(type, "TRUE");
 			}else{
-				fprintf(stdout, "FALSE");
+				generalPrint(type, "FALSE");
 			}
 		}else if(strcmp(command,"run")==0){
 			if(run()){
-				fprintf(stdout, "TRUE");
+				generalPrint(type, "TRUE");
 			}else{
-				fprintf(stdout, "FALSE");
+				generalPrint(type, "FALSE");
 			}
 		}else if(strcmp(command,"abort")==0){
-			if(run()){
-				fprintf(stdout, "TRUE");
+			if(abort()){
+				generalPrint(type, "TRUE");
 			}else{
-				fprintf(stdout, "FALSE");
+				generalPrint(type, "FALSE");
 			}
 		}else if(strcmp(command,"getmemorydump")==0){
 			//TODO 
-			//fprintf(stdout, getMemoryDump());
+			//generalPrint(type, getMemoryDump());
 		}else if(strcmp(command,"getmemorydumpdata")==0){
 			uint64_t ret = getMemoryDumpData();
 			//encode ret into base 64
 			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
 			longToBase64(ret,returnString);
 			//then return it
-			fprintf(stdout,returnString);
+			generalPrint(type,returnString);
 			//and free memory
 			free(returnString);
 		}else if(strcmp(command,"clearmemorydump")==0){
 			if(clearMemoryDump()){
-				fprintf(stdout, "TRUE");
+				generalPrint(type, "TRUE");
 			}else{
-				fprintf(stdout, "FALSE");
+				generalPrint(type, "FALSE");
 			}
 		}
 	}
 	
 	return 0;
+}
+
+void generalPrint(char type, char* message){
+	if(type=='1'){
+		fprintf(stdout,message);
+	}else if(type=='0'){
+		serialPrintf(fileDesc,message);
+	}
 }
