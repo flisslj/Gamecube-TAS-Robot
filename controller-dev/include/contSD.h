@@ -20,8 +20,8 @@
 #define SD_SPI_SPEED 		10000000 //10 MHZ
 #define SD_CHANNEL 			0 //reserved for the SD, 1 is for the mcp chip
 
-#define SD_SND
-#define SD_RSND
+#define SD_SND				16
+#define SD_RSND				18
 
 #include <stdint.h>
 #include <string.h>

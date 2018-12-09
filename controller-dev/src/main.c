@@ -36,7 +36,7 @@ int main(int argc, char *argv[]){
 	char* command = malloc(sizeof(char)*MAX_STDIN_CMD_LENGTH);
 	command = "abort"; //this is a default in case command goes wrong
 	
-	wiringPiSetup();
+	contInit();
 	
 	//handles grabbing and returns commands through stdin
 	if(type=='0'){

@@ -21,9 +21,6 @@ static uint8_t* cmd = malloc(sizeof(uint8_t)* 3)
 * In particular, the wiringpi, SPI, cmd, and pins need setup
 */
 void replayInit(){
-	//initialize the wiringpi interface
-	wiringPiSetup();
-	
 	//initialize the SPI
 	wiringPiSPISetup(MCP_CHANNEL, MCP_SPI_SPEED);
 	

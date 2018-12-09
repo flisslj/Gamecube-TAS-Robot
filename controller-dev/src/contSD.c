@@ -3,9 +3,6 @@
 static uint8_t* sdCmd= malloc(sizeof(uint8_t)*2);
 
 void SDinit(){
-	//initialize the wiringpi interface
-	wiringPiSetup();
-	
 	//set up the second channel
 	wiringPiSPISetup(SD_CHANNEL, SD_SPI_SPEED);
 	

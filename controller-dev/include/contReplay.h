@@ -21,7 +21,7 @@
 #define REPLAY_SND 		29 // the send line for replay
 #define REPLAY_RSND 	31 // the resend line for replay
 #define REPLAY_RST 		22 // the reset line (in general)
-#define REPLAY_CLK 		33 // the clock line for transmissions
+#define REPLAY_CLK 		32 // the clock line for transmissions
 
 enum frame_state{SUCCESS, RESEND_CURRENT, RESEND_PREVIOUS}
 
