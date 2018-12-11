@@ -6,11 +6,12 @@ import (
 )
 
 type command struct {
-	next    *command
-	cmdType string
-	asBytes uint32
-	branch  *command
-	addr    uint32
+	next      *command
+	cmdName   string // "mulhwux"
+	cmdString string // "31:D:A:B:0:9:RC"
+	asBytes   uint32
+	branch    *command
+	addr      uint32
 }
 
 func EditFile(location string, frames, clock int, infinite bool) {
@@ -76,6 +77,7 @@ func toCommands(data []uint32) []command {
 		out[i] = disassembleInt(v)
 	}
 	return out
+
 }
 
 //take the commands and convert them into a graph vs a list.

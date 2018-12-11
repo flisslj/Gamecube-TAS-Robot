@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/flisslj/Gamecube-TAS-Robot/software-development/isoedit/editor"
+	"Gamecube-TAS-Robot/software-development/isoedit/editor"
 )
 
 func main() {
