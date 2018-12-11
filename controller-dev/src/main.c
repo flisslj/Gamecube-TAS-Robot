@@ -15,7 +15,7 @@
 * The port onboard the gamecube for memory dump retrieval
 */
 
-static int fileDesc == 0;
+static int fileDesc = -1;
 
 /**
 * running main has some format
