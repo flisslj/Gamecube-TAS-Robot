@@ -7,8 +7,8 @@ import (
 
 type command struct {
 	next      *command
-	cmdName   string
-	cmdString string
+	cmdName   string // "mulhwux"
+	cmdString string // "31:D:A:B:0:9:RC"
 	asBytes   uint32
 	branch    *command
 	addr      uint32
