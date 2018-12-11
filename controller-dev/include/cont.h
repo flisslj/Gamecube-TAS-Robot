@@ -29,6 +29,7 @@
 
 #define MAX_FILENAME_LENGTH 	512 //arbitrary, can be expanded
 
+void contInit();
 
 uint64_t getAttachedHardware();
 
