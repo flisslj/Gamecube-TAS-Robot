@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Gamecube-TAS-Robot/software-development/isoedit/editor"
 	"flag"
 	"fmt"
 	"os"
@@ -8,11 +9,10 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-
-	"Gamecube-TAS-Robot/software-development/isoedit/editor"
 )
 
 func main() {
+
 	flagParse()
 }
 
