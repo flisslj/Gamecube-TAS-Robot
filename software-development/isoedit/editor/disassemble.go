@@ -31,7 +31,7 @@ func assembleCommand(cmd command) uint32 {
 	return 0
 }
 
-func getBits(low, high uint32, command uint32) uint32 {
+func getBits(low, high uint32, command uint32) int {
 
 	width := high - low + 1
 	// shifted over.
@@ -41,5 +41,5 @@ func getBits(low, high uint32, command uint32) uint32 {
 
 	//clear upto the high bits.
 
-	return base & mask
+	return int(base & mask)
 }

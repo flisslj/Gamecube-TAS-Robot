@@ -8,7 +8,8 @@ import (
 type command struct {
 	next      *command
 	cmdName   string // "mulhwux"
-	cmdString string // "31:D:A:B:0:9:RC"
+	cmdString string
+	cmdSimple string // "31:D:A:B:0:9:RC"
 	asBytes   uint32
 	branch    *command
 	addr      uint32
@@ -75,6 +76,7 @@ func toCommands(data []uint32) []command {
 	out := make([]command, len(data))
 	for i, v := range data {
 		out[i] = disassembleInt(v)
+		out[i].addr = uint32(i * 4)
 	}
 	return out
 

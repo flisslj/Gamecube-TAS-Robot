@@ -1,7 +1,24 @@
 package editor
 
+import "strconv"
+
 func dis3Start(num uint32, comm command) (uint32, command) {
 	//Grab bits from 6-20, 11-15 adn 16-31 and place them in the command
 	//Add twl to the command name
-	return 0, command{}
+
+	if num == 0 {
+
+		return 0, comm
+	}
+	TO := getBits(6, 10, num)
+	A := getBits(11, 15, num)
+	SIMM := getBits(16, 31, num)
+	c := command{
+		cmdName:   "TWI",
+		cmdString: "TWI\t" + strconv.Itoa(TO) + ", R" + strconv.Itoa(A) + ", " + strconv.Itoa(SIMM),
+		cmdSimple: "3:" + strconv.Itoa(TO) + ":" + strconv.Itoa(A) + ":" + strconv.Itoa(SIMM),
+		asBytes:   num,
+	}
+
+	return num, c
 }
