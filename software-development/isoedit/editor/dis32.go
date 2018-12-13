@@ -16,7 +16,7 @@ func dis32Start(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LWZ",
 		cmdString: "LWZ\tR" + strconv.Itoa(D) + ", " + strconv.Itoa(d) + " (R" + strconv.Itoa(A) + ")",
-		cmdSimple: []int{23, D, A, d},
+		cmdSimple: []int{32, D, A, d},
 		asBytes:   num,
 	}
 

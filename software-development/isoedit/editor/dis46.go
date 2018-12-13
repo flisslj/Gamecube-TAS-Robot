@@ -16,7 +16,7 @@ func dis46Start(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LMW",
 		cmdString: "LMW\tR" + strconv.Itoa(D) + ", " + strconv.Itoa(d) + " (R" + strconv.Itoa(A) + ")",
-		cmdSimple: []int{41, D, A, d},
+		cmdSimple: []int{46, D, A, d},
 		asBytes:   num,
 	}
 
