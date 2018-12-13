@@ -1,22 +1,25 @@
 #include "cont.h"
 
-static char* currentISO = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
-static char* currentTAS = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
+char* currentISO;
+char* currentTAS;
 
 void contInit(void){
 	wiringPiSetup();
 	memInit();
 	replayInit();
 	SDinit();
+	currentISO = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
+	currentTAS = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
+	return;
 }
 
 uint64_t getAttachedHardware(){
 	uint64_t contInfo = CONTROLLER_TYPE<<8 | CONTROLLER_VERSION;
-	uint64_t replayInfo = reset();
+	uint64_t replayInfo = replayReset();
 	uint64_t SDinfo = getSDinfo();
 	
 	//SD is 32 bits, the others are 16.
-	return (contInfo<<48) | (replayInfo)<<32) | (SDinfo<<0);
+	return (contInfo<<48) | (replayInfo<<32) | (SDinfo<<0);
 }
 
 char* getCurrentISO(){
@@ -44,13 +47,13 @@ bool setTas(char* tasPath){
 }
 
 //TODO
-bool run(){
+bool contRun(){
 	
 	return false;
 }
 
 //TODO
-bool abort(){
+bool contAbort(){
 	
 	return false;
 }

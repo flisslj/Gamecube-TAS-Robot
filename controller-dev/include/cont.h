@@ -43,8 +43,8 @@ bool setTas(char* tasPath);
 
 bool loadTas(char* tasPath);
 
-bool run();
+bool contRun();
 
-bool abort();
+bool contAbort();
 
 #endif

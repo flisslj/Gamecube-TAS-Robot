@@ -15,7 +15,7 @@
 * The port onboard the gamecube for memory dump retrieval
 */
 
-static int fileDesc = -1;
+int fileDesc;
 
 /**
 * running main has some format
@@ -30,10 +30,10 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 	
-	char type = *(argv[2]);
-	char* basePath = argv[3];
-	
+	char type = *(argv[1]);
+	char* basePath = argv[2];
 	char* command = malloc(sizeof(char)*MAX_STDIN_CMD_LENGTH);
+	size_t len = 0;
 	command = "abort"; //this is a default in case command goes wrong
 	
 	contInit();
@@ -50,17 +50,20 @@ int main(int argc, char *argv[]){
 		//unless we can slap interrupts on this in which case nvm
 		
 		if(type=='1'){
-			while(fgets(command,MAX_STDIN_CMD_LENGTH,stdin)==NULL);
+			getline(&command,&len,stdin);
 		}else if(type=='0'){
 			while(serialDataAvail(fileDesc)==0 || serialDataAvail(fileDesc)==-1);
-			read(fileDesc,command);
+			read(fileDesc,command, MAX_STDIN_CMD_LENGTH);
+		}else{
+			printf("%c",type);
 		}
 		//we now have a command, let's parse it
-		if(strcmp(command,"hardware")==0){
+		if(strcmp(command,"hardware\n")==0){
 			uint64_t ret = getAttachedHardware();
 			//encode ret into base 64
-			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
+			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH+1);
 			longToBase64(ret,returnString);
+			*(returnString + LONG_TO_BASE64_LENGTH) = '\n';
 			//then return it
 			generalPrint(type,returnString);
 			//and free memory
@@ -68,93 +71,98 @@ int main(int argc, char *argv[]){
 		}else if(strncmp(command,"heartbeat:",10)==0){
 			//we then grab the variable and then determine whether to return error or confirmation
 			//TODO
-		}else if(strcmp(command,"sdsize")==0){
+		}else if(strcmp(command,"sdsize\n")==0){
 			uint64_t ret = getSDsize();
 			//encode ret into base 64
-			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
+			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH+1);
 			longToBase64(ret,returnString);
+			*(returnString + LONG_TO_BASE64_LENGTH) = '\n';
 			//then return it
 			generalPrint(type,returnString);
 			//and free memory
 			free(returnString);
-		}else if(strcmp(command,"sdopen")==0){
+		}else if(strcmp(command,"sdopen\n")==0){
 			uint64_t ret = getSDEmptySpace();
 			//encode ret into base 64
 			//encode ret into base 64
-			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
+			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH+1);
 			longToBase64(ret,returnString);
+			*(returnString + LONG_TO_BASE64_LENGTH) = '\n';
 			//then return it
 			generalPrint(type,returnString);
 			//and free memory
 			free(returnString);
-		}else if(strcmp(command,"getfiles")==0){
+		}else if(strcmp(command,"getfiles\n")==0){
 			generalPrint(type,getFiles(basePath));
-		}else if(strcmp(command,"getisos")==0){
+		}else if(strcmp(command,"getisos\n")==0){
 			generalPrint(type,getISOs(basePath));
-		}else if(strcmp(command,"gettases")==0){
+		}else if(strcmp(command,"gettases\n")==0){
 			generalPrint(type,getTASes(basePath));
-		}else if(strcmp(command,"getcurrentiso")==0){
+		}else if(strcmp(command,"getcurrentiso\n")==0){
 			generalPrint(type,getCurrentISO(basePath));
-		}else if(strcmp(command,"getcurrenttas")==0){
+		}else if(strcmp(command,"getcurrenttas\n")==0){
 			generalPrint(type,getCurrentTAS(basePath));
 		}else if(strncmp(command,"settas:",7)==0){
 			//move the pointer over 7
 			if(setTAS(command + 7)){
-				generalPrint(type, "TRUE");
+				generalPrint(type, "TRUE\n");
 			}else{
-				generalPrint(type, "FALSE");
+				generalPrint(type, "FALSE\n");
 			}
-		}else if(strcmp(command,"setiso:",7)==0){
+		}else if(strncmp(command,"setiso:",7)==0){
 			//move the pointer over 7
 			if(setISO(command + 7)){
-				generalPrint(type, "TRUE");
+				generalPrint(type, "TRUE\n");
 			}else{
-				generalPrint(type, "FALSE");
+				generalPrint(type, "FALSE\n");
 			}
-		}else if(strcmp(command,"loadiso:",8)==0){
+		}else if(strncmp(command,"loadiso:",8)==0){
 			//move the pointer over 8
 			if(loadISO(command + 8)){
-				generalPrint(type, "TRUE");
+				generalPrint(type, "TRUE\n");
 			}else{
-				generalPrint(type, "FALSE");
+				generalPrint(type, "FALSE\n");
 			}
-		}else if(strcmp(command,"loadtas:",8)==0){
+		}else if(strncmp(command,"loadtas:",8)==0){
 			//move the pointer over 8
 			if(loadTAS(command + 8)){
-				generalPrint(type, "TRUE");
+				generalPrint(type, "TRUE\n");
 			}else{
-				generalPrint(type, "FALSE");
+				generalPrint(type, "FALSE\n");
 			}
-		}else if(strcmp(command,"run")==0){
-			if(run()){
-				generalPrint(type, "TRUE");
+		}else if(strcmp(command,"run\n")==0){
+			if(contRun()){
+				generalPrint(type, "TRUE\n");
 			}else{
-				generalPrint(type, "FALSE");
+				generalPrint(type, "FALSE\n");
 			}
-		}else if(strcmp(command,"abort")==0){
-			if(abort()){
-				generalPrint(type, "TRUE");
+		}else if(strcmp(command,"abort\n")==0){
+			if(contAbort()){
+				generalPrint(type, "TRUE\n");
 			}else{
-				generalPrint(type, "FALSE");
+				generalPrint(type, "FALSE\n");
 			}
-		}else if(strcmp(command,"getmemorydump")==0){
+		}else if(strcmp(command,"getmemorydump\n")==0){
 			//TODO 
 			//generalPrint(type, getMemoryDump());
-		}else if(strcmp(command,"getmemorydumpdata")==0){
+		}else if(strcmp(command,"getmemorydumpdata\n")==0){
 			uint64_t ret = getMemoryDumpData();
 			//encode ret into base 64
-			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH);
+			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH+1);
 			longToBase64(ret,returnString);
+			*(returnString + LONG_TO_BASE64_LENGTH) = '\n';
 			//then return it
 			generalPrint(type,returnString);
 			//and free memory
 			free(returnString);
-		}else if(strcmp(command,"clearmemorydump")==0){
+		}else if(strcmp(command,"clearmemorydump\n")==0){
 			if(clearMemoryDump()){
-				generalPrint(type, "TRUE");
+				generalPrint(type, "TRUE\n");
 			}else{
-				generalPrint(type, "FALSE");
+				generalPrint(type, "FALSE\n");
 			}
+		}else{
+			generalPrint(type, "incorrect command\n");
 		}
 	}
 	

@@ -10,6 +10,8 @@
 #ifndef CONTROLLER_REPLAY_INTERFACE_H
 #define CONTROLLER_REPLAY_INTERFACE_H
 
+#include <stdlib.h>
+#include <unistd.h>			//for reading from the SPI buffer
 #include <stdint.h>			//for standard int types on devices
 #include <wiringPi.h>		//for SPI interraction, pin setting and reading
 #include <wiringPiSPI.h>	//especially for SPI
@@ -23,7 +25,7 @@
 #define REPLAY_RST 		22 // the reset line (in general)
 #define REPLAY_CLK 		32 // the clock line for transmissions
 
-enum frame_state{SUCCESS, RESEND_CURRENT, RESEND_PREVIOUS}
+enum frame_state{SUCCESS, RESEND_CURRENT, RESEND_PREVIOUS};
 
 uint16_t replayReset();
 

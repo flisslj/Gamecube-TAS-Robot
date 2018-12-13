@@ -13,13 +13,13 @@
 * If RSND is sent, we resend starting from the last frame we sent
 */
 
-static uint8_t* cmd = malloc(sizeof(uint8_t)* 3)
-static int REP_BUFFER = -1;
+uint8_t* cmd;
+int REP_BUFFER;
 
 //the reading buffer for the component
 //literally just two best friend bytes
 //it's because we can only read 8 bits at a time from the mcp
-static char* readBuffer = malloc(sizeof(char)*2);
+char* readBuffer;
 
 /**
 * Initialize the replay component part of the code
@@ -30,6 +30,8 @@ void replayInit(){
 	//initialize the SPI
 	REP_BUFFER = wiringPiSPISetup(MCP_CHANNEL, MCP_SPI_SPEED);
 	
+	cmd = malloc(sizeof(uint8_t)* 3);
+	readBuffer = malloc(sizeof(char)*2);
 	//setup the command
 	*(cmd + CMD_DEVICE_ADDRESS) = MCP_OPCODE |  (MCP_ADDRESS << 1);
 	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
@@ -90,7 +92,7 @@ uint16_t replayReset(){
 	*(cmd + CMD_DEVICE_ADDRESS) = MCP_OPCODE |  (MCP_ADDRESS << 1);
 	*(cmd + CMD_REGISTER_ADDRESS) = MCP_IODIR_A;
 	*(cmd + CMD_REGISTER_DATA) = 0x00; //turn it all off, for outputs
-	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH)
+	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
 	
 	//reset the command
 	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
@@ -125,7 +127,7 @@ enum frame_state replayTransmit(uint32_t length, uint8_t* data){
 		if(digitalRead(REPLAY_RSND)==1){
 			return RESEND_PREVIOUS;
 		}
-		playByte(*(data+i));
+		replayByte(*(data+i));
 		//wait for the next send signal
 		while(digitalRead(REPLAY_SND)==1);
 	}
