@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Gamecube-TAS-Robot/software-development/isoedit/editor"
 	"flag"
 	"fmt"
 	"os"
@@ -11,6 +12,7 @@ import (
 )
 
 func main() {
+
 	flagParse()
 }
 
@@ -97,6 +99,8 @@ func StartManipulation(frames, clock int, infinite bool, iso, output, witLoc str
 
 	//extract the files from the iso to a directory.
 	runWit(witLoc, "EXTRACT", iso, "./tmp")
+
+	editor.EditFile("./tmp", frames, clock, infinite)
 
 	//recombine the files into a proper structure?
 	runWit(witLoc, "COPY", "./tmp", output)

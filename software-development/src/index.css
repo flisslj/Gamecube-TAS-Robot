@@ -22,3 +22,51 @@
 .buttons{
     border: 1px solid red;
 }
+
+table.ButtonTable {
+    font-family: "Courier New", Courier, monospace;
+    border: 2px solid #000000;
+    background-color: #DADADA;
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+  }
+  table.ButtonTable td, table.ButtonTable th {
+    border: 3px solid #000000;
+    padding: 3px 2px;
+  }
+  table.ButtonTable tbody td {
+    font-size: 13px;
+    font-weight: bold;
+    color: #000000;
+  }
+  table.ButtonTable tr:nth-child(even) {
+    background: #A2A2A2;
+  }
+  table.ButtonTable thead {
+    background: #424242;
+  }
+  table.ButtonTable thead th {
+    font-size: 22px;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-align: center;
+    border-left: 2px solid #000000;
+  }
+  table.ButtonTable thead th:first-child {
+    border-left: none;
+  }
+  
+  table.ButtonTable tfoot td {
+    font-size: 13px;
+  }
+  table.ButtonTable tfoot .links {
+    text-align: right;
+  }
+  table.ButtonTable tfoot .links a{
+    display: inline-block;
+    background: #FFFFFF;
+    color: #A40808;
+    padding: 2px 8px;
+    border-radius: 5px;
+  }
