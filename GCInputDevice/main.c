@@ -1,7 +1,28 @@
 
 #include "gpio.h"
 
-void main()
+void mainA()
+{
+    while (1)
+    {
+    }
+}
+
+void mainB()
+{
+    while (1)
+    {
+    }
+}
+
+void mainC()
+{
+    while (1)
+    {
+    }
+}
+
+void mainD()
 {
     while (1)
     {
