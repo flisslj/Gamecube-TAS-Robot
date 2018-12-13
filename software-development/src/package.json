@@ -9,6 +9,7 @@
   "author": "Luke Fliss",
   "license": "ISC",
   "devDependencies": {
+    "request": "^2.88.0",
     "serialport": "^7.1.0"
   }
 }
