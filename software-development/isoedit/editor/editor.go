@@ -9,7 +9,7 @@ type command struct {
 	next      *command
 	cmdName   string // "mulhwux"
 	cmdString string
-	cmdSimple string // "31:D:A:B:0:9:RC"
+	cmdSimple []int // "31:D:A:B:0:9:RC"
 	asBytes   uint32
 	branch    *command
 	addr      uint32
