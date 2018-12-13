@@ -33,13 +33,7 @@ func assembleCommand(cmd command) uint32 {
 
 func getBits(low, high uint32, command uint32) int {
 
-	width := high - low + 1
-	// shifted over.
-	base := command >> low
-
-	mask := uint32((1 << width) - 1)
-
 	//clear upto the high bits.
 
-	return int(base & mask)
+	return int((command >> low) & ((1 << (high - low + 1)) - 1))
 }
