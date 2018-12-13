@@ -17,7 +17,7 @@ func dis25Start(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "ORIS",
 		cmdString: "ORIS\tR" + strconv.Itoa(S) + ", R" + strconv.Itoa(A) + ", " + strconv.Itoa(UIMM),
-		cmdSimple: []int{23, S, A, UIMM},
+		cmdSimple: []int{25, S, A, UIMM},
 		asBytes:   num,
 	}
 

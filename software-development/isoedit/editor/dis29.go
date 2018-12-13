@@ -17,7 +17,7 @@ func dis29Start(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "ANDIS.",
 		cmdString: "ANDIS.\tR" + strconv.Itoa(S) + ", R" + strconv.Itoa(A) + ", " + strconv.Itoa(UIMM),
-		cmdSimple: []int{23, S, A, UIMM},
+		cmdSimple: []int{29, S, A, UIMM},
 		asBytes:   num,
 	}
 

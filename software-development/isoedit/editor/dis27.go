@@ -17,7 +17,7 @@ func dis27Start(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "XORIS",
 		cmdString: "XORIS\tR" + strconv.Itoa(S) + ", R" + strconv.Itoa(A) + ", " + strconv.Itoa(UIMM),
-		cmdSimple: []int{23, S, A, UIMM},
+		cmdSimple: []int{27, S, A, UIMM},
 		asBytes:   num,
 	}
 

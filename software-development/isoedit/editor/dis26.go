@@ -17,7 +17,7 @@ func dis26Start(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "XORI",
 		cmdString: "XORI\tR" + strconv.Itoa(S) + ", R" + strconv.Itoa(A) + ", " + strconv.Itoa(UIMM),
-		cmdSimple: []int{23, S, A, UIMM},
+		cmdSimple: []int{26, S, A, UIMM},
 		asBytes:   num,
 	}
 
