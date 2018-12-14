@@ -9,6 +9,7 @@ func dis19Start(num uint32, comm command) (uint32, command) {
 
 		return output, comm
 	}
+
 	TYPE := getBits(21, 30, num)
 	NAME := ""
 	switch TYPE {
