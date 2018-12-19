@@ -142,6 +142,7 @@ int main(int argc, char *argv[]){
 			}else{
 				generalPrint(type, "FALSE\n");
 			}
+			return 0;
 		}else if(strcmp(command,"getmemorydump\n")==0){
 			//TODO 
 			//generalPrint(type, getMemoryDump());
