@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>GameCube TAS Robot Assistance</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
-</head>
-
-<body>
-    <div class="buttons" id="buttons">
-        <button id="new">new</button>
-        <button id="open">open</button>
-        <button id="save">save</button>
-        <button id="play">play</button>
-        <button id="pause">pause</button>
-        <button id="stop">stop</button>
-        <button id="auto_debug">auto_debug</button>
-        <button id="man_debug">man_debug</button>
-    </div>
-    <div class="side_bar" id="side_bar">
-        <div id="iso_name">iso goes here</div>
-        <div id="tas_name">tas file goes here</div>
-        <div id="log_section">log goes here</div>
-    </div>
-    <div class="replay_editor" id="replay_editor">
-        <table id="replay_table" class="ButtonTable">
+    <head>
+        <meta charset="UTF-8">
+        <title>GameCube TAS Robot Assistance</title>
+        <link rel="stylesheet" type="text/css" href="index.css">
+        <script src="javascript/hardwareinterface.js" type="text/javascript"></script> 
+        <script src="javascript/controller.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <div class="buttons" id="buttons">
+            <button id="new" onclick="doHeartBeat()">test hardware</button>
+            <button id="open">open</button>
+            <button id="save">save</button>
+            <button id="play">play</button>
+            <button id="pause">pause</button>
+            <button id="stop">stop</button>
+            <button id="auto_debug">auto_debug</button>
+            <button id="man_debug">man_debug</button>
+        </div>
+        <div class="side_bar" id="side_bar">
+            <div id="iso_name">iso goes here</div>
+            <div id="tas_name">tas file goes here</div>
+            <div id="log_section">log goes here</div>
+        </div>
+        <div class="replay_editor" id="replay_editor">
+            <table class="ButtonTable" id="replay_table">
             <thead>
                 <tr>
                     <th>frame #</th>
-                    <th>A</th>
-                    <th>B</th>
-                    <th>Y</th>
-                    <th>X</th>
-                    <th>L</th>
-                    <th>R</th>
-                    <th>Z</th>
-                    <th>S</th>
-                    <th>^</th>
-                    <th>v</th>
-                    <th>&lt;</th>
-                    <th>&gt;</th>
-                    <th>O</th>
-                    <th>c</th>
+                    <th><img src="images/ButtonIcon-GCN-A.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-B.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-Y.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-X.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-L.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-R.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-Z.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-Start-Pause.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-D-Pad-U.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-D-Pad-D.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-D-Pad-L.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-D-Pad-R.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-Control_Stick.png" width="20" height="20"></th>
+                    <th><img src="images/ButtonIcon-GCN-C-Stick.png" width="20" height="20"></th>
                     <th>%</th>
                 </tr>
             </thead>

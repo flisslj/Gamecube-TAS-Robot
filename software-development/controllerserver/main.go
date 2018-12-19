@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bufio"
+	//"bufio"
 	"flag"
 	"fmt"
 	"io"
@@ -118,12 +118,12 @@ func runCommand(command string) (response string) {
 		return command
 	}
 	fmt.Println(command)
-	reader := bufio.NewReader(os.Stdin)
+	/*reader := bufio.NewReader(os.Stdin)
 	text, err := reader.ReadString('\n')
 	if err != nil {
 		return err.Error()
-	}
-	return text
+	}*/
+	return "THis was a successfull test. "
 }
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
