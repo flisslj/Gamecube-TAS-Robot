@@ -10,78 +10,88 @@ var fs = require('fs'),
      let secret = "?secret=" + "password1234";
      let api = "";
      
-     this.heartBeat = function(){
+     this.heartBeat = function(callback){
          api= "/api/Heartbeat";
          var heartbeat;
          request(url+port+api+secret, function(err, res, body){
             heartbeat = body;
+            console.log(heartbeat);
+            callback(heartbeat);
+
          });
-         return heartbeat;
      }
 
-     this.getAttachedHardware = function(){
+     this.getAttachedHardware = function(callback){
         api="api/GetAttachedHardware";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
         });
-        return response;
+        
      }
-     this.getSDSize = function(){
+     this.getSDSize = function(callback){
         api="api/GetSDSize";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
         });
-        return response;
+        
      }
-     this.openSpace = function(){
+     this.openSpace = function(callback){
         api="api/OpenSpace";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
         });
-        return response;
+        
      }
-     this.getFiles = function(){
+     this.getFiles = function(callback){
         api="api/GetFiles";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
         });
-        return response;
+        
      }
-     this.getISOs = function(){
+     this.getISOs = function(callback){
         api="api/GetISOs";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
         });
-        return response;
+        
      }
-     this.getTases = function(){
+     this.getTases = function(callback){
         api="api/GetTases";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
         });
-        return response;
+        
      }
-     this.currentISO = function(){
+     this.currentISO = function(callback){
         api="api/CurrentISO";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
         });
-        return response;
+        
      }
-   this.currentTAS = function(){
+   this.currentTAS = function(callback){
       api="api/CurrentTAS";
       var response;
       request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
       });
-      return response;
+      
    }    
    /** post requests needs work
      this.setTAS = function(tasPath){
@@ -110,44 +120,49 @@ var fs = require('fs'),
      }
 
      **/
-     this.run = function(){
+     this.run = function(callback){
         api="api/Run";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
         });
-        return response;
+        
      }
-     this.abort = function(){
+     this.abort = function(callback){
         api="api/Abort";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
         });
-        return response;
+        
      }
-     this.getMemoryDump = function(){
+     this.getMemoryDump = function(callback){
         api="api/GetMemoryDump";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
         });
-        return response;
+        
      }
-     this.getMemoryDumpData = function(){
+     this.getMemoryDumpData = function(callback){
         api="api/GetMemoryDumpData";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
         });
-        return response;
+        
      }
-   this.clearMemoryDump = function(){
+   this.clearMemoryDump = function(callback){
       api="api/clearMemorydump";
       var response;
       request(url+port+api+secret , function(err, res, body){
             response = body;
+            callback(response)
       });
-      return response;
+      
    }     
  }
