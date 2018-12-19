@@ -28,126 +28,28 @@
 .global _start
 
 _start:
-    //********************************************************************************************************
-    mrs     x1, mpidr_el1 // read cpu id, stop slave cores
-    sub     x1, x1, #0 //and all core numbers with 0b11
-    cbnz     x1, 5f //if zero, branch forward to 2:, otherwise continue to 1:
+    // read cpu id, stop slave cores
+    mrs     x1, mpidr_el1
+    and     x1, x1, #3
+    cbz     x1, 2f
+    // cpu id > 0, stop
+1:  wfe
+    b       1b
+2:  // cpu id == 0
 
-
-2:  // cpu id == 0 
     // set stack before our code
-    ldr     x1, =_start //load stack loaction into x1
-    mov     sp, x1 //load x1(stack location) into stack pointer
+    ldr     x1, =_start
+    mov     sp, x1
 
     // clear bss
-    ldr     x1, =__bss_start //load bss_start location into x1
-    ldr     w2, =__bss_size //load bss_size location into w2
-    
-3:  
-    cbz     w2, 4f //if w2 is zero, jump to 4. 
+    ldr     x1, =__bss_start
+    ldr     w2, =__bss_size
+3:  cbz     w2, 4f
     str     xzr, [x1], #8
-    sub     w2, w2, #1 //subtract 1 from w2
-    cbnz    w2, 3b //if not zero, branch back to 3. 
+    sub     w2, w2, #1
+    cbnz    w2, 3b
 
-
-4:  // jump to C code, should not return
-    bl      mainA
+    // jump to C code, should not return
+4:  bl      mainA
     // for failsafe, halt this core too
-
-1:  wfe //wait for event
-    b       1b //branch backwards and continue loop
-
-
-    //********************************************************************************************************
-5:
-    mrs     x1, mpidr_el1 // read cpu id, stop slave cores
-    sub     x1, x1, #1 //and all core numbers with 0b11
-    cbnz     x1, 5f //if zero, branch forward to 2:, otherwise continue to 1:
-
-
-2:  // cpu id == 0 
-    // set stack before our code
-    ldr     x1, =_start //load stack loaction into x1
-    mov     sp, x1 //load x1(stack location) into stack pointer
-
-    // clear bss
-    ldr     x1, =__bss_start //load bss_start location into x1
-    ldr     w2, =__bss_size //load bss_size location into w2
-    
-3:  
-    cbz     w2, 4f //if w2 is zero, jump to 4. 
-    str     xzr, [x1], #8
-    sub     w2, w2, #1 //subtract 1 from w2
-    cbnz    w2, 3b //if not zero, branch back to 3. 
-
-
-4:  // jump to C code, should not return
-    bl      mainB
-    // for failsafe, halt this core too
-
-1:  wfe //wait for event
-    b       1b //branch backwards and continue loop
-
-    //********************************************************************************************************
-
-    mrs     x1, mpidr_el1 // read cpu id, stop slave cores
-    sub     x1, x1, #2 //and all core numbers with 0b11
-    cbnz     x1, 5f //if zero, branch forward to 2:, otherwise continue to 1:
-
-
-2:  // cpu id == 0 
-    // set stack before our code
-    ldr     x1, =_start //load stack loaction into x1
-    mov     sp, x1 //load x1(stack location) into stack pointer
-
-    // clear bss
-    ldr     x1, =__bss_start //load bss_start location into x1
-    ldr     w2, =__bss_size //load bss_size location into w2
-    
-3:  
-    cbz     w2, 4f //if w2 is zero, jump to 4. 
-    str     xzr, [x1], #8
-    sub     w2, w2, #1 //subtract 1 from w2
-    cbnz    w2, 3b //if not zero, branch back to 3. 
-
-
-4:  // jump to C code, should not return
-    bl      mainC
-    // for failsafe, halt this core too
-
-1:  wfe //wait for event
-    b       1b //branch backwards and continue loop
-
-    //********************************************************************************************************
-    mrs     x1, mpidr_el1 // read cpu id, stop slave cores
-    sub     x1, x1, #3 //and all core numbers with 0b11
-    cbnz     x1, 5f //if zero, branch forward to 2:, otherwise continue to 1:
-
-
-2:  // cpu id == 0 
-    // set stack before our code
-    ldr     x1, =_start //load stack loaction into x1
-    mov     sp, x1 //load x1(stack location) into stack pointer
-
-    // clear bss
-    ldr     x1, =__bss_start //load bss_start location into x1
-    ldr     w2, =__bss_size //load bss_size location into w2
-    
-3:  
-    cbz     w2, 4f //if w2 is zero, jump to 4. 
-    str     xzr, [x1], #8
-    sub     w2, w2, #1 //subtract 1 from w2
-    cbnz    w2, 3b //if not zero, branch back to 3. 
-
-
-4:  // jump to C code, should not return
-    bl      mainD
-    // for failsafe, halt this core too
-
-1:  
-    wfe //wait for event
-    b       1b //branch backwards and continue loop
-
-5:  //Should not run. 
-    wfe //wait for event
-    b       5b //branch backwards and continue loop
+    b       1b
