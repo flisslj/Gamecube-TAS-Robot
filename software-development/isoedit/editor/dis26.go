@@ -2,7 +2,7 @@ package editor
 
 import "strconv"
 
-func dis24Start(num uint32, comm command) (uint32, command) {
+func dis26Start(num uint32, comm command) (uint32, command) {
 	if num == 0 {
 
 		output := uint32((comm.cmdSimple[0]) + (comm.cmdSimple[1] << 6) + (comm.cmdSimple[2] << 11) + (comm.cmdSimple[3] << 16))
@@ -15,9 +15,9 @@ func dis24Start(num uint32, comm command) (uint32, command) {
 	UIMM := getBits(16, 31, num)
 
 	c := command{
-		cmdName:   "ORI",
-		cmdString: "ORI\tR" + strconv.Itoa(S) + ", R" + strconv.Itoa(A) + ", " + strconv.Itoa(UIMM),
-		cmdSimple: []int{24, S, A, UIMM},
+		cmdName:   "XORI",
+		cmdString: "XORI\tR" + strconv.Itoa(S) + ", R" + strconv.Itoa(A) + ", " + strconv.Itoa(UIMM),
+		cmdSimple: []int{26, S, A, UIMM},
 		asBytes:   num,
 	}
 
