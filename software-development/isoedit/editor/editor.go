@@ -1,8 +1,11 @@
 package editor
 
 import (
+	"bufio"
 	"encoding/binary"
+	"fmt"
 	"io/ioutil"
+	"os"
 )
 
 type command struct {
@@ -15,15 +18,22 @@ type command struct {
 	addr      uint32
 }
 
+func Test() {
+	fmt.Printf("%v", disassembleInt(1761661280))
+}
+
 func EditFile(location string, frames, clock int, infinite bool) {
+
+	//loadFile(location)
 	replaceFile(location, toBytes(alter(toInts(loadFile(location)), frames, clock, infinite)))
 }
 
 //This function grabs the data from the main.dol file and loads it.
 func loadFile(location string) []byte {
 
-	dat, err := ioutil.ReadFile(location + "/src/main.dol")
+	dat, err := ioutil.ReadFile(location)
 
+	fmt.Printf("Loaded File of size %d\n", len(dat))
 	if err != nil {
 		panic(err)
 	}
@@ -74,10 +84,23 @@ func alter(data []uint32, frames, clock int, infinite bool) []uint32 {
 //Convert the integers into command
 func toCommands(data []uint32) []command {
 	out := make([]command, len(data))
+	_ = os.Remove("./output.dol")
+	f, _ := os.Create("./output.dol")
+	w := bufio.NewWriter(f)
+
+	w.Flush()
 	for i, v := range data {
 		out[i] = disassembleInt(v)
 		out[i].addr = uint32(i * 4)
+		if out[i].asBytes == 0 {
+			fmt.Fprintf(w, "%08x:\t%08x\n", out[i].addr, v)
+
+		} else {
+			fmt.Fprintf(w, "%08x:\t%08x\t%s\n", out[i].addr, v, out[i].cmdString)
+		}
 	}
+
+	w.Flush()
 	return out
 
 }
@@ -85,6 +108,8 @@ func toCommands(data []uint32) []command {
 //take the commands and convert them into a graph vs a list.
 func makeGraph(commands []command) command {
 
+	fmt.Printf("Exiting Process, \n")
+	os.Exit(0)
 	return commands[0]
 }
 
