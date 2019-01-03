@@ -175,6 +175,7 @@ func dis59Start(num uint32, comm command) (uint32, command) {
 			asBytes:   num,
 		}
 		return num, c
+	//Case FNMSUBS and FNMSUBS.
 	case 60:
 		D := getBits(6, 10, num)
 		A := getBits(11, 15, num)
@@ -199,6 +200,7 @@ func dis59Start(num uint32, comm command) (uint32, command) {
 			asBytes:   num,
 		}
 		return num, c
+	//Case FNMADDS and FNMADDS.
 	case 62:
 		D := getBits(6, 10, num)
 		A := getBits(11, 15, num)
