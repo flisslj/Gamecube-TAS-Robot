@@ -10,12 +10,15 @@
 #ifndef CONTROLLER_REPLAY_INTERFACE_H
 #define CONTROLLER_REPLAY_INTERFACE_H
 
+#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>			//for reading from the SPI buffer
 #include <stdint.h>			//for standard int types on devices
 #include <wiringPi.h>		//for SPI interraction, pin setting and reading
 #include <wiringPiSPI.h>	//especially for SPI
 #include "mcp.h"			//for various mcp23s17 information
+#include <mcp23s17.h>
 
 #define CMD_CLK_DELAY_US 10 //arbitrary value, to be measured and changed
 

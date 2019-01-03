@@ -58,13 +58,24 @@ int main(int argc, char *argv[]){
 			printf("%c",type);
 		}
 		//we now have a command, let's parse it
-		if(strcmp(command,"hardware\n")==0){
+		if(strcmp(command,"help\n")==0){
+			generalPrint(type,"List of commands:\n");
+			generalPrint(type,"heartbeat, hardware\n");
+			generalPrint(type,"sdsize, sdopen, loadiso\n");
+			generalPrint(type,"getfiles, getisos, gettases\n");
+			generalPrint(type,"getcurrenttas, getcurrentiso\n");
+			generalPrint(type,"loadtas, settas, setiso\n");
+			generalPrint(type,"run, abort, and help, ya silly\n");
+		}else if(strcmp(command,"hardware\n")==0){
 			uint64_t ret = getAttachedHardware();
 			//encode ret into base 64
-			char* returnString = malloc(sizeof(char)*LONG_TO_BASE64_LENGTH+1);
+			char* returnString = malloc(sizeof(char)*17);
+			//sprintf(returnString,"%"PRIx64"\n",ret);
+			
 			longToBase64(ret,returnString);
 			*(returnString + LONG_TO_BASE64_LENGTH) = '\n';
 			//then return it
+			
 			generalPrint(type,returnString);
 			//and free memory
 			free(returnString);

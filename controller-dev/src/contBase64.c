@@ -2,12 +2,12 @@
 static char contBase64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 void longToBase64(uint64_t source, char* dest){
-	for(int i = 0; i < LONG_TO_BASE64_LENGTH; i++){
+	for(int i = 0; i < LONG_TO_BASE64_LENGTH-1; i++){
 		//to grab the big endian digit, you first shift all the irrelevant digits
 		//then, you mod 64 to cut off the higher digits
-		*(dest+i) = contBase64_table[(source>>(60-6*i))%64];
+		*(dest+i) = contBase64_table[(source>>(58-6*i))%64];
 	}
-	
+	*(dest+10) = contBase64_table[(source%32)<<2]; //because base64 padding is stupid
 	return;
 }
 
