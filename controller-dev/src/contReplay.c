@@ -13,14 +13,12 @@
 * If RSND is sent, we resend starting from the last frame we sent
 */
 
-static uint8_t* cmd = malloc(sizeof(uint8_t)* 3)
-static int REP_BUFFER = -1;
+uint8_t* cmd, baseCmd;
 
 //the reading buffer for the component
 //literally just two best friend bytes
 //it's because we can only read 8 bits at a time from the mcp
-static char* readBuffer = malloc(sizeof(char)*2);
-
+char* readBuffer;
 /**
 * Initialize the replay component part of the code
 *
@@ -28,11 +26,11 @@ static char* readBuffer = malloc(sizeof(char)*2);
 */
 void replayInit(){
 	//initialize the SPI
-	REP_BUFFER = wiringPiSPISetup(MCP_CHANNEL, MCP_SPI_SPEED);
+	wiringPiSPISetup(MCP_CHANNEL, MCP_SPI_SPEED);
 	
 	//setup the command
-	*(cmd + CMD_DEVICE_ADDRESS) = MCP_OPCODE |  (MCP_ADDRESS << 1);
-	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
+	*(baseCmd + CMD_DEVICE_ADDRESS) = MCP_OPCODE |  (MCP_ADDRESS << 1);
+	*(baseCmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
 	
 	//set up the pins modes
 	pinMode(REPLAY_SND, INPUT);
@@ -57,14 +55,15 @@ void replayInit(){
 uint16_t replayReset(){
 	//so, to do this properly, we reset the component, and then grab the data it gives us
 	//we need the chip to act as a temporary input to get the data, and then flip once done
-	*(cmd + CMD_REGISTER_ADDRESS) = MCP_IODIR_A;
-	*(cmd + CMD_REGISTER_DATA) = 0xFF; //turn it all on, for inputs
+	*(baseCmd + CMD_REGISTER_ADDRESS) = MCP_IODIR_A;
+	*(baseCmd + CMD_REGISTER_DATA) = 0xFF; //turn it all on, for inputs
+	memcpy(cmd,baseCmd,3);
 	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
 	
 	uint16_t info = 0;
-	*(cmd + CMD_DEVICE_ADDRESS) = MCP_OPCODE |  (MCP_ADDRESS << 1) | 1;
-	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
-	
+	*(baseCmd + CMD_DEVICE_ADDRESS) = MCP_OPCODE |  (MCP_ADDRESS << 1) | 1;
+	*(baseCmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
+	memcpy(cmd,baseCmd,3);
 	//reset the device
 	digitalWrite(REPLAY_RST,0);
 	delay(5); //delay 5 ms because why not
@@ -73,7 +72,8 @@ uint16_t replayReset(){
 	//wait until send is low and read the mcp
 	while(digitalRead(REPLAY_SND)==1);
 	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
-	read(REP_BUFFER,readBuffer,1);
+	*(readBuffer) = *(cmd+2);
+	memcpy(cmd,baseCmd,3);
 	digitalWrite(REPLAY_CLK,0);
 	delayMicroseconds(5); //delay 5 us because why not
 	digitalWrite(REPLAY_CLK,1);
@@ -81,7 +81,7 @@ uint16_t replayReset(){
 	//wait until send is high again and read the mcp
 	while(digitalRead(REPLAY_SND)==0);
 	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
-	read(REP_BUFFER,readBuffer+1,1);
+	*(readBuffer+1) = *(cmd+2);
 	digitalWrite(REPLAY_CLK,0);
 	delayMicroseconds(5); //delay 5 us because why not
 	digitalWrite(REPLAY_CLK,1);
@@ -93,9 +93,11 @@ uint16_t replayReset(){
 	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH)
 	
 	//reset the command
-	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
+	*(baseCmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
 	
-	info = *(readBuffer)<<8 + *(readBuffer+1);
+	info = *(readBuffer);
+	info <<= 8;
+	info += *(readBuffer+1);
 	
 	return info;
 }
