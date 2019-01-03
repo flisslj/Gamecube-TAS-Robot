@@ -10,15 +10,18 @@
 #ifndef CONTROLLER_MEMDUMP_INTERFACE_H
 #define CONTROLLER_MEMDUMP_INTERFACE_H
 
+#include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <wiringPi.h>		//for SPI interraction, pin setting and reading
+#include <wiringPiSPI.h>	//especially for SPI
 #include "mcp.h"
 
 void memInit();
 
 char* getMemoryDump();
 
-char* getMemoryDumpData();
+uint64_t getMemoryDumpData();
 
 bool clearMemoryDump();
 

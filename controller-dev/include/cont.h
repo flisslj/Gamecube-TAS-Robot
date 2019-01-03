@@ -16,13 +16,13 @@
 #include <stdbool.h>
 #include <wiringPi.h>
 #include <libgen.h>
-
+#include <inttypes.h>
 #include "contSD.h"
 #include "contMem.h"
 #include "contReplay.h"
 #include "contFile.h"
 
-#define CONTROLLER_TYPE 		0 //arbitrary value, we'll call RasPi as "0"
+#define CONTROLLER_TYPE 		1 //arbitrary value, we'll call RasPi as "0"
 #define CONTROLLER_VERSION 		1 //arbitrary value, standard version is 1
 
 #define HEARTBEAT_CONFIRM 		0xDEADDEEF //agreed upon value
@@ -43,8 +43,8 @@ bool setTas(char* tasPath);
 
 bool loadTas(char* tasPath);
 
-bool run();
+bool contRun();
 
-bool abort();
+bool contAbort();
 
 #endif
