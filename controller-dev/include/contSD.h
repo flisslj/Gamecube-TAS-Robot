@@ -56,6 +56,6 @@ uint64_t getSDEmptySpace();
 bool loadISO(char* filename);
 
 void SDtransmit(uint32_t length, uint8_t* data);
-void SDsendCMD(uint16_t cmd);
+uint16_t SDsendCMD(uint16_t cmd);
 
 #endif

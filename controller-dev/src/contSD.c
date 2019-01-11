@@ -78,8 +78,7 @@ uint64_t getSDsize(){
 	//Wait for an indication
 	for(int i = 0; i < sizeof(uint64_t)/sizeof(uint16_t); i++){
 		while(digitalRead(SD_SND)==1);
-		SDsendCMD(SD_NULL);
-		read(SD_SPI_BUFFER,(readBuffer+i),1);
+		*(readBuffer+i) = SDsendCMD(SD_NULL);
 	}
 	
 	//convert the short array into a long long
@@ -224,10 +223,13 @@ void SDtransmit(uint32_t length, uint8_t* data){
 *
 * It converts the 16 bit integer to a byte array, then uses the wiringpi library
 */
-void SDsendCMD(uint16_t cmd){
+uint16_t SDsendCMD(uint16_t cmd){
 	
 	*(sdCmd) = cmd>>8;
 	*(sdCmd+1) = cmd%(1<<8);
 	wiringPiSPIDataRW(SD_SPI_CHANNEL,sdCmd,2);
-	return;
+	uint16_t retVal = *(sdCmd);
+	retVal <<= 8;
+	retVal += *(sdCmd+1);
+	return retVal;
 }
