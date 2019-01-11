@@ -5,8 +5,7 @@
 *
 *Purpose is to allow for the gathering of files to run and complete tases
 */
-#include <stdio.h> 
-#include <dirent.h> 
+#include "contFile.h"
 
 char* getFiles(char* basePath){
 	char* files=malloc(300*sizeof(char));
@@ -32,7 +31,7 @@ char* getFiles(char* basePath){
     	return files; 
 }
 
-char* getISOS(char* basePath){
+char* getISOs(char* basePath){
 	char* files=malloc(300*sizeof(char));
 	struct dirent *de;  // Pointer for directory entry 
   
@@ -80,5 +79,12 @@ char* getTASes(char* basePath){
     	return files; 
 }
 
-uint64_t loadTAS(char* filename, uint8_t[] data){
+uint64_t loadTAS(char* filename){
+
+	return 0;
+}
+
+bool setTAS(char* filename){
+
+	return false;
 }

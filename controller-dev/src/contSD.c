@@ -4,15 +4,15 @@
 //the onboard spi component only takes chars
 //even though we send 16 bits at a time, we need two bytes
 //honestly you could shoot me in the knee and i wouldn't even feel it
-static char* sdCmd= malloc(sizeof(char)*2);
+char* sdCmd;
 
 //file descriptor for the spi buffer
-static int SD_SPI_BUFFER = -1;
+int SD_SPI_BUFFER;
 
 //the reading buffer for the component
 //the largest number the SD card returns is a 64 bit int
 //we get it in 16 bit chunks, so 4*16 = 64
-static uint16_t* readBuffer = malloc(sizeof(uint16_t)*4);
+uint16_t* readBuffer;
 
 /**
 * Initializes the SD function
@@ -21,8 +21,11 @@ static uint16_t* readBuffer = malloc(sizeof(uint16_t)*4);
 */
 void SDinit(){
 	//set up the second channel
-	SPI_BUFFER = wiringPiSPISetup(SD_CHANNEL, SD_SPI_SPEED);
+	SD_SPI_BUFFER = wiringPiSPISetup(SD_SPI_CHANNEL, SD_SPI_SPEED);
 	
+	sdCmd= malloc(sizeof(char)*2);
+	readBuffer = malloc(sizeof(uint16_t)*4);
+
 	//both snd and rsnd are controlled by the board
 	//we pull up anyway, for posterity
 	pinMode(SD_SND, INPUT);
@@ -81,10 +84,17 @@ uint64_t getSDsize(){
 	
 	//convert the short array into a long long
 	uint64_t returnValue = 0;
-	returnValue += *(readBuffer)<<48;
-	returnValue += *(readBuffer+1)<<32;
-	returnValue += *(readBuffer+2)<<16;
-	returnValue += *(readBuffer+3)<<0;
+
+	//this value exists due to typecasting
+	//it's a pain
+	uint64_t tempVal = 0;
+	tempVal = *(readBuffer);
+	returnValue += tempVal<<48;
+	tempVal = *(readBuffer+1);
+	returnValue += tempVal<<32;
+	tempVal = *(readBuffer+2);
+	returnValue += tempVal<<16;
+	returnValue += *(readBuffer+3);
 	
 	return returnValue;
 }
@@ -106,10 +116,16 @@ uint64_t getSDEmptySpace(){
 	
 	//convert the short array into a long long
 	uint64_t returnValue = 0;
-	returnValue += *(readBuffer)<<48;
-	returnValue += *(readBuffer+1)<<32;
-	returnValue += *(readBuffer+2)<<16;
-	returnValue += *(readBuffer+3)<<0;
+	//this value exists due to typecasting
+	//it's a pain
+	uint64_t tempVal = 0;
+	tempVal = *(readBuffer);
+	returnValue += tempVal<<48;
+	tempVal = *(readBuffer+1);
+	returnValue += tempVal<<32;
+	tempVal = *(readBuffer+2);
+	returnValue += tempVal<<16;
+	returnValue += *(readBuffer+3);
 	
 	return returnValue;
 }
@@ -212,5 +228,6 @@ void SDsendCMD(uint16_t cmd){
 	
 	*(sdCmd) = cmd>>8;
 	*(sdCmd+1) = cmd%(1<<8);
-	return wiringPiSPIDataRW(SD_SPI_CHANNEL,sdCmd,2);
+	wiringPiSPIDataRW(SD_SPI_CHANNEL,sdCmd,2);
+	return;
 }

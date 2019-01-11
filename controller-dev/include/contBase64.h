@@ -14,8 +14,6 @@
 
 #include <stdint.h>
 
-const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
 void longToBase64(uint64_t source, char* dest);
 
 uint64_t base64Len(uint64_t arrLength);
