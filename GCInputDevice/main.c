@@ -31,6 +31,14 @@ void main()
 #define SendPin 18
 #define ResendPin 19
 
+#define frameSize 40
+
+#define testReset if(digitalRead(ResetPin)){return;};
+#define outputDelay asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");
+
+#define frameValueSize
+#define frameBuffer 10
+int ctrl1Frames[frameBuffer][frameValueSize]
 //reset board to inital state.
 void reset()
 {
@@ -136,9 +144,81 @@ uint8_t inputOnDataPins()
 //begin main playback loop to read data from the controller and output to the gamecube. 
 void playBack()
 {
-
     //temporary 
-    while (digitalRead(ResetPin)){
-
+    while (1){
+        testReset
+        getFrame();
+        testReset
+        outputFrame();
     }
 }
+
+
+
+
+
+//poll for the next frame. Every time, check for the reset pin. 
+void getFrame(){
+    int frame[frameSize];
+    //read in the freame, checking for reset every time. 
+    for (int i = 0; i < frameSize; i++){
+        //check for reset. 
+        testReset
+        while(!digitalRead(clockPin) && digitalRead(ResetPin));// wait for clock pin high (or reset). 
+        frame[i] = inputOnDataPins();//read in data
+        digitalWrite(SendPin, 1); write send high
+        while(digitalRead(clockPin) && digitalRead(ResetPin)); //wait for clock low (or reset)
+        digitalWrite(SendPin, 0); //set send pin low. 
+    }
+
+
+
+}
+
+//poll for the controller data from the gamecube that signifies "next frame", than begin the 
+void outputFrame(){
+
+    //read for controller input 1. if there isint one, test for reset. if reset, return. 
+    while(digitalRead(CtrlIn1)){
+        testReset
+    }
+
+    int startSequence[96] = {
+        0,0,0,1, 0,1,1,1, 0,0,0,1, 0,0,0,1, // 0 1 0 0 
+        0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, // 0 0 0 0
+        0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, // 0 0 0 0 
+        0,0,0,1, 0,0,0,1, 0,1,1,1, 0,1,1,1, // 0 0 1 1 
+        0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, // 0 0 0 0
+        0,0,0,1, 0,0,0,1, 0,1,1,1, 0,0,0,1  // 0 0 1 0
+    };
+    
+    int tracker = 0; //value used to track the differences between the input and the expected. 
+    
+    //read every us~ and store that data. 
+    for(int i = 0; i < 96; i++){
+        if (startSequence[i] != digitalRead(CtrlIn1)){
+            tracker++;
+        }
+         //read controller in. 
+        asm("nop"); // the number of nops may need to be increased or decreased to properly match the timings of things. 
+    }
+
+    //arbitrary 10 % difference. if there are more than 10 errors, return.  
+    if (tracker >= 10){
+        return
+    }
+
+    for(int i = 0; i < 64; i++){ //output the values read in. 
+        digitalWrite(CtrlOut1,0);
+        outputDelay
+        digitalWrite(CtrlOut1,ctrl1Frames[0][i]); //for now, no circle buffer
+        outputDelay
+        digitalWrite(CtrlOut1,ctrl1Frames[0][i]); // for now, no circle buffer.
+        outputDelay
+        digitalWrite(CtrlOut1,1);
+        outputDelay
+    }
+}
+
+
+
