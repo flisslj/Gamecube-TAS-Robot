@@ -183,20 +183,19 @@ void getFrame()
     for (int i = 0; i < frameSize; i++)
     {
         //check for reset.
-        testReset while (!digitalRead(clockPin) && digitalRead(ResetPin)); // wait for clock pin high (or reset).
+        testReset while (!digitalRead(ClockPin) && digitalRead(ResetPin)); // wait for clock pin high (or reset).
         frame[i] = inputOnDataPins();                                      //read in data
         digitalWrite(SendPin, 1);
         //write send high
-        while (digitalRead(clockPin) && digitalRead(ResetPin))
+        while (digitalRead(ClockPin) && digitalRead(ResetPin))
             ;                     //wait for clock low (or reset)
         digitalWrite(SendPin, 0); //set send pin low.
     }
 }
 
 //poll for the controller data from the gamecube that signifies "next frame", than begin the
-void outputFrame()
+void outputFrame(
 {
-
     //read for controller input 1. if there isint one, test for reset. if reset, return.
     while (digitalRead(CtrlIn1))
     {
