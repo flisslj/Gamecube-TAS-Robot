@@ -183,8 +183,11 @@ void getFrame()
     for (int i = 0; i < frameSize; i++)
     {
         //check for reset.
-        testReset while (!digitalRead(ClockPin) && digitalRead(ResetPin)); // wait for clock pin high (or reset).
-        frame[i] = inputOnDataPins();                                      //read in data
+        testReset;
+
+        while (!digitalRead(ClockPin) && digitalRead(ResetPin))
+            ;                         // wait for clock pin high (or reset).
+        frame[i] = inputOnDataPins(); //read in data
         digitalWrite(SendPin, 1);
         //write send high
         while (digitalRead(ClockPin) && digitalRead(ResetPin))
