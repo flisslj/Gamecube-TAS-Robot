@@ -197,7 +197,7 @@ void getFrame()
 }
 
 //poll for the controller data from the gamecube that signifies "next frame", than begin the
-void outputFrame(
+void outputFrame()
 {
     //read for controller input 1. if there isint one, test for reset. if reset, return.
     while (digitalRead(CtrlIn1))
