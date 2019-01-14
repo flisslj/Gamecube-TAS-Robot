@@ -6,7 +6,7 @@ void reset();
 void main();
 void outputOnDataPins(uint8_t num);
 uint8_t inputOnDataPins();
-void playBack();
+void playback();
 void getFrame();
 void outputFrame();
 
@@ -58,13 +58,13 @@ void main()
     asm("nop");     \
     asm("nop");
 
-#define frameValueSize
+#define frameValueSize 40
 #define frameBuffer 10
 int ctrl1Frames[frameBuffer][frameValueSize];
 //reset board to inital state.
 void reset()
 {
-    while (true)
+    while (1)
     {
         printf("RESETTING\n");
         //set up the datapins to use the GPIO.
@@ -101,12 +101,12 @@ void reset()
         digitalWrite(SendPin, 0);
 
         //wait for clock pulse
-        while (digitalRead(clockPin))
+        while (digitalRead(ClockPin))
         {
         }
 
         //wait for end of clock pulse low.
-        while (!digitalRead(clockPin))
+        while (!digitalRead(ClockPin))
         {
         }
 
@@ -117,7 +117,7 @@ void reset()
         digitalWrite(SendPin, 1);
 
         //wait for clock to go low again.
-        while (digitalRead(clockPin))
+        while (digitalRead(ClockPin))
         {
         }
 
@@ -163,7 +163,7 @@ uint8_t inputOnDataPins()
 }
 
 //begin main playback loop to read data from the controller and output to the gamecube.
-void playBack()
+void playback()
 {
     //temporary
     while (1)
@@ -186,8 +186,10 @@ void getFrame()
         testReset while (!digitalRead(clockPin) && digitalRead(ResetPin)); // wait for clock pin high (or reset).
         frame[i] = inputOnDataPins();                                      //read in data
         digitalWrite(SendPin, 1);
-        write send high while (digitalRead(clockPin) && digitalRead(ResetPin)); //wait for clock low (or reset)
-        digitalWrite(SendPin, 0);                                               //set send pin low.
+        //write send high
+        while (digitalRead(clockPin) && digitalRead(ResetPin))
+            ;                     //wait for clock low (or reset)
+        digitalWrite(SendPin, 0); //set send pin low.
     }
 }
 
@@ -226,7 +228,8 @@ void outputFrame()
     //arbitrary 10 % difference. if there are more than 10 errors, return.
     if (tracker >= 10)
     {
-        return
+
+        return;
     }
 
     for (int i = 0; i < 64; i++)
