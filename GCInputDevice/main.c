@@ -9,11 +9,13 @@ uint8_t inputOnDataPins();
 void playback();
 void getFrame();
 void outputFrame();
+void testOutput();
 
 void main()
 {
-    printf("Hello World\n");
-    reset();
+    //printf("Hello World\n");
+    //reset();
+    testOutput()
 }
 
 #define InputDeviceType 1
@@ -237,12 +239,37 @@ void outputFrame()
     for (int i = 0; i < 64; i++)
     { //output the values read in.
         digitalWrite(CtrlOut1, 0);
-        outputDelay
+        outputDelay;
+        digitalWrite(CtrlOut1, ctrl1Frames[0][i]); //for now, no circle buffer
+        outputDelay;
+        digitalWrite(CtrlOut1, ctrl1Frames[0][i]); // for now, no circle buffer.
+        outputDelay;
+        digitalWrite(CtrlOut1, 1);
+        outputDelay;
+    }
+}
+
+void testOutput()
+{
+
+    for (int i = 0; i < 64; i++)
+    { //output the values read in.
+        ctrl1Frames[0][i] = 1;
+    }
+
+    while (1)
+    {
+        for (int i = 0; i < 64; i++)
+        { //output the values read in.
+            digitalWrite(CtrlOut1, 0);
+            outputDelay;
             digitalWrite(CtrlOut1, ctrl1Frames[0][i]); //for now, no circle buffer
-        outputDelay
+            outputDelay;
             digitalWrite(CtrlOut1, ctrl1Frames[0][i]); // for now, no circle buffer.
-        outputDelay
+            outputDelay;
             digitalWrite(CtrlOut1, 1);
-        outputDelay
+            outputDelay;
+        }
+        sleep(1);
     }
 }

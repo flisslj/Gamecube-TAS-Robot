@@ -27,11 +27,10 @@ SRCS = $(wildcard *.c)
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -Wall -O2 -ffreestanding -nostdlib -nostartfiles
 
-all: clean main
+all: clean playback
 
-playback: 
-	gcc main.c -lwiringPi
+playback:
+        gcc main.c -lwiringPi
 
 clean:
-	rm *.out playback *.o  >/dev/null 2>/dev/null || true
-
+        rm *.out playback *.o  >/dev/null 2>/dev/null || true
