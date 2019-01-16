@@ -30,7 +30,7 @@ CFLAGS = -Wall -O2 -ffreestanding -nostdlib -nostartfiles
 all: clean playback
 
 playback:
-        gcc main.c -lwiringPi
+	gcc main.c -lwiringPi
 
 clean:
-        rm *.out playback *.o  >/dev/null 2>/dev/null || true
+	rm *.out playback *.o  >/dev/null 2>/dev/null || true

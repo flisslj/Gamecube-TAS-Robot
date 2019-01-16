@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <wiringPi.h>
+#include <unistd.h>
 
 void reset();
 void main();
@@ -15,7 +16,7 @@ void main()
 {
     //printf("Hello World\n");
     //reset();
-    testOutput()
+    testOutput();
 }
 
 #define InputDeviceType 1
