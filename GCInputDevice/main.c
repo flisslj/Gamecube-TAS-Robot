@@ -21,26 +21,26 @@ void main()
 
 #define InputDeviceType 1
 #define InputDeviceVersion 1
-#define DataPin00 0
-#define DataPin01 1
-#define DataPin02 2
-#define DataPin03 3
-#define DataPin04 4
-#define DataPin05 5
-#define DataPin06 6
-#define DataPin07 7
-#define CtrlIn1 8
-#define CtrlIn2 9
-#define CtrlIn3 10
-#define CtrlIn4 11
-#define CtrlOut1 12
-#define CtrlOut2 13
-#define CtrlOut3 14
-#define CtrlOut4 15
-#define ResetPin 16
-#define ClockPin 17
-#define SendPin 18
-#define ResendPin 19
+#define DataPin00 2
+#define DataPin01 3
+#define DataPin02 4
+#define DataPin03 5
+#define DataPin04 6
+#define DataPin05 7
+#define DataPin06 8
+#define DataPin07 9
+#define CtrlIn1 10
+#define CtrlIn2 11
+#define CtrlIn3 12
+#define CtrlIn4 13
+#define CtrlOut1 14
+#define CtrlOut2 15
+#define CtrlOut3 16
+#define CtrlOut4 17
+#define ResetPin 18
+#define ClockPin 19
+#define SendPin 20
+#define ResendPin 21
 
 #define frameSize 40
 
