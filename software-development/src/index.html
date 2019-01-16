@@ -5,20 +5,23 @@
         <title>GameCube TAS Robot Assistance</title>
         <link rel="stylesheet" type="text/css" href="index.css">
         <script src="javascript/hardwareinterface.js" type="text/javascript"></script> 
+        <script src="javascript/fileconverter.js" type="text/javascript"></script>
         <script src="javascript/controller.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="buttons" id="buttons">
-            <button id="new" onclick="doHeartBeat()">test hardware</button>
-            <button id="open">open</button>
-            <button id="save">save</button>
-            <button id="play">play</button>
-            <button id="pause">pause</button>
-            <button id="stop">stop</button>
+            <button id="new" onclick="newProject()">new</button>
+            <button id="open" onclick="openProject()">open</button>
+            <button id="save" onclick="saveProject()">save</button>
+            <button id="load_tas" onclick="loadProject()">load tas</button>
+            <button id="play" onclick="runTAS()">play</button>
+            <button id="stop" onclick="stopTAS()">stop</button>
             <button id="auto_debug">auto_debug</button>
             <button id="man_debug">man_debug</button>
+            <button id="test_connection" onclick="doHeartBeat()">test_connection</button>
         </div>
         <div class="side_bar" id="side_bar">
+            <div id="project_name">project file goes here</div>
             <div id="iso_name">iso goes here</div>
             <div id="tas_name">tas file goes here</div>
             <div id="log_section">log goes here</div>

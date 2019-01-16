@@ -1,13 +1,15 @@
 var fs = require('fs'),
    request = require('request');
+
 /**
  * this class is used for communicating between the application and the hardware
  * over ethernet / wifi
  */
 
  function HardwareInterface(){
-     let url = "http://localhost:";
-     let port = "80"
+     //let url = "http://192.168.2.112:";
+     let url = "http://localhost:"
+     let port = "8080"
      let secret = "?secret=" + "password1234";
      let api = "";
      
@@ -20,7 +22,7 @@ var fs = require('fs'),
          var heartbeat;
          request(url+port+api+secret, function(err, res, body){
             heartbeat = body;
-            console.log(heartbeat);
+            //console.log(heartbeat);
             callback(heartbeat);
 
          });
@@ -128,33 +130,38 @@ var fs = require('fs'),
       });
       
    }    
-   /** post requests needs work
-     this.setTAS = function(tasPath){
+
+     this.setTAS = function(tasPath, callback){
         api="/api/SetTAS";
-        request(url+port+api+secret , function(err, res, body){
-
+        path = "&tasPath=" + tasPath;
+        request.post(url+port+api+secret+path , function(err, res, body){
+            callback(body)
         })
      }
-     this.setISO = function(tasPath){
+
+     this.setISO = function(isoPath, callback){
         api="/api/SetISO";
-        request(url+port+api+secret , function(err, res, body){
-
+        path = "&isoPath=" + isoPath;
+        request(url+port+api+secret+path , function(err, res, body){
+            callback(body)
         })
      }
-     this.loadISO = function(filePath, data){
-        api="/api/";
-        request(url+port+api+secret , function(err, res, body){
-
-        })
+     this.loadISO = function(filePath, callback){
+        api="/api/LoadISO";
+        path="&filePath=" + filePath;
+        let filestream = fs.createReadStream(filePath).pipe(
+        request.post(url+port+api+secret+path , function(err, res, body){
+            callback(body);
+        }));
      }
-     this.loadTAS = function(filePath, data){
-        api="/api/";
-        request(url+port+api+secret , function(err, res, body){
-
-        })
+     this.loadTAS = function(filePath, callback){
+        api="/api/LoadTAS";
+        path="&filePath=" + filePath;
+        let filestream = fs.createReadStream(filePath).pipe(
+         request.post(url+port+api+secret+path , function(err, res, body){
+             callback(body);
+         }));
      }
-
-     **/
 
      /**
       * run a replay using the currently loaded replay file and 
