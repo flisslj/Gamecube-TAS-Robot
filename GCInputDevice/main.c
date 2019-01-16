@@ -14,9 +14,9 @@ void testOutput();
 
 void main()
 {
-    //printf("Hello World\n");
-    //reset();
-    testOutput();
+    printf("Hello World\n");
+    reset();
+    //testOutput();
 }
 
 #define InputDeviceType 1
@@ -272,5 +272,6 @@ void testOutput()
             outputDelay;
         }
         sleep(1);
+        printf("Sending The output. \n");
     }
 }
