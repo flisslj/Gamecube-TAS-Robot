@@ -7,8 +7,8 @@ var fs = require('fs'),
  */
 
  function HardwareInterface(){
-     //let url = "http://192.168.2.112:";
-     let url = "http://localhost:"
+     let url = "http://192.168.2.112:";
+     //let url = "http://localhost:"
      let port = "8080"
      let secret = "?secret=" + "password1234";
      let api = "";
@@ -18,7 +18,7 @@ var fs = require('fs'),
       * @param callback function for handeling returned data
       */
      this.heartBeat = function(callback){
-         api= "/api/Heartbeat";
+         api= "/api/Heartbeat/";
          var heartbeat;
          request(url+port+api+secret, function(err, res, body){
             heartbeat = body;
@@ -32,7 +32,7 @@ var fs = require('fs'),
       * gives version numbers and size of sd card if attached
       */
      this.getAttachedHardware = function(callback){
-        api="/api/GetAttachedHardware";
+        api="/api/GetAttachedHardware/";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -43,7 +43,7 @@ var fs = require('fs'),
       * check the current size of the sd card
       */
      this.getSDSize = function(callback){
-        api="/api/GetSDSize";
+        api="/api/GetSDSize/";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -55,7 +55,7 @@ var fs = require('fs'),
       * checks how much space is open on the sd card
       */
      this.openSpace = function(callback){
-        api="/api/OpenSpace";
+        api="/api/OpenSpace/";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -69,7 +69,7 @@ var fs = require('fs'),
       * including both replay files and isos
       */
      this.getFiles = function(callback){
-        api="/api/GetFiles";
+        api="/api/GetFiles/";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -82,7 +82,7 @@ var fs = require('fs'),
       * find out what isos are currently loaded onto the sd card
       */
      this.getISOs = function(callback){
-        api="/api/GetISOs";
+        api="/api/GetISOs/";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -95,7 +95,7 @@ var fs = require('fs'),
       * find out which replay files are loaded onto the sd card
       */
      this.getTases = function(callback){
-        api="/api/GetTases";
+        api="/api/GetTases/";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -109,7 +109,7 @@ var fs = require('fs'),
       * when a replay is run
       */
      this.currentISO = function(callback){
-        api="/api/CurrentISO";
+        api="/api/CurrentISO/";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -122,7 +122,7 @@ var fs = require('fs'),
       * launched
       */
    this.currentTAS = function(callback){
-      api="/api/CurrentTAS";
+      api="/api/CurrentTAS/";
       var response;
       request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -140,14 +140,14 @@ var fs = require('fs'),
      }
 
      this.setISO = function(isoPath, callback){
-        api="/api/SetISO";
+        api="/api/SetISO/";
         path = "&isoPath=" + isoPath;
         request(url+port+api+secret+path , function(err, res, body){
             callback(body)
         })
      }
      this.loadISO = function(filePath, callback){
-        api="/api/LoadISO";
+        api="/api/LoadISO/";
         path="&filePath=" + filePath;
         let filestream = fs.createReadStream(filePath).pipe(
         request.post(url+port+api+secret+path , function(err, res, body){
@@ -155,7 +155,7 @@ var fs = require('fs'),
         }));
      }
      this.loadTAS = function(filePath, callback){
-        api="/api/LoadTAS";
+        api="/api/LoadTAS/";
         path="&filePath=" + filePath;
         let filestream = fs.createReadStream(filePath).pipe(
          request.post(url+port+api+secret+path , function(err, res, body){
@@ -168,7 +168,7 @@ var fs = require('fs'),
       * iso
       */
      this.run = function(callback){
-        api="/api/Run";
+        api="/api/Run/";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -181,7 +181,7 @@ var fs = require('fs'),
       * interrupt a currently running replay
       */
      this.abort = function(callback){
-        api="/api/Abort";
+        api="/api/Abort/";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -193,7 +193,7 @@ var fs = require('fs'),
       * get the next memory dump to be loaded from the gamecube 
       */
      this.getMemoryDump = function(callback){
-        api="/api/GetMemoryDump";
+        api="/api/GetMemoryDump/";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -206,7 +206,7 @@ var fs = require('fs'),
       * get technical information on the next memory dump to be loaded
       */
      this.getMemoryDumpData = function(callback){
-        api="/api/GetMemoryDumpData";
+        api="/api/GetMemoryDumpData/";
         var response;
         request(url+port+api+secret , function(err, res, body){
             response = body;
@@ -219,7 +219,7 @@ var fs = require('fs'),
       * clear all memory dumps waited to be recieved
       */
    this.clearMemoryDump = function(callback){
-      api="/api/clearMemorydump";
+      api="/api/clearMemorydump/";
       var response;
       request(url+port+api+secret , function(err, res, body){
             response = body;
