@@ -21,33 +21,36 @@ void main()
 
 #define InputDeviceType 1
 #define InputDeviceVersion 1
-#define DataPin00 2
-#define DataPin01 3
-#define DataPin02 4
-#define DataPin03 5
-#define DataPin04 6
-#define DataPin05 7
-#define DataPin06 8
-#define DataPin07 9
-#define CtrlIn1 10
-#define CtrlIn2 11
-#define CtrlIn3 12
-#define CtrlIn4 13
-#define CtrlOut1 14
-#define CtrlOut2 15
-#define CtrlOut3 16
-#define CtrlOut4 17
-#define ResetPin 18
-#define ClockPin 19
-#define SendPin 20
-#define ResendPin 21
+
+#define DataPin00 2   // physical pins 3
+#define DataPin01 3   // physical pins 5
+#define DataPin02 4   // physical pins 7
+#define DataPin03 5   // physical pins 29
+#define DataPin04 6   // physical pins 31
+#define DataPin05 7   // physical pins 26
+#define DataPin06 8   // physical pins 24
+#define DataPin07 9   // physical pins 21
+#define CtrlIn1 10    // physical pins 19
+#define CtrlIn2 11    // physical pins 23
+#define CtrlIn3 12    // physical pins 32
+#define CtrlIn4 13    // physical pins 33
+#define CtrlOut1 14   // physical pins 8
+#define CtrlOut2 15   // physical pins 10
+#define CtrlOut3 16   // physical pins 36
+#define CtrlOut4 17   // physical pins 11
+#define ResetPin 18   // physical pins 12
+#define ClockPin 19   // physical pins 35
+#define SendPin 20    // physical pins 38
+#define ResendPin 21  // physical pins 40
+#define GCResetPin 22 // Physical pins 15
+#define GCPowerPin 23 // physical pins 16
 
 #define frameSize 40
 
-#define testReset              \
-    if (digitalRead(ResetPin)) \
-    {                          \
-        return;                \
+#define testReset               \
+    if (!digitalRead(ResetPin)) \
+    {                           \
+        return;                 \
     };
 #define outputDelay \
     asm("nop");     \
@@ -94,6 +97,8 @@ void reset()
         pinMode(ClockPin, INPUT);
         pinMode(SendPin, OUTPUT);
         pinMode(ResendPin, OUTPUT);
+        pinMode(GCPowerPin, OUTPUT);
+        pinMode(GCResetPin, OUTPUT);
         digitalWrite(SendPin, 1);
         digitalWrite(ResendPin, 1);
 
