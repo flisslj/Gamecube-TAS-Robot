@@ -14,9 +14,9 @@ void testOutput();
 
 void main()
 {
-    printf("Hello World\n");
-    reset();
-    //testOutput();
+    //printf("Hello World\n");
+    //reset();
+    testOutput();
 }
 
 #define InputDeviceType 1
@@ -53,6 +53,18 @@ void main()
         return;                 \
     };
 #define outputDelay \
+    asm("nop");     \
+    asm("nop");     \
+    asm("nop");     \
+    asm("nop");     \
+    asm("nop");     \
+    asm("nop");     \
+    asm("nop");     \
+    asm("nop");     \
+    asm("nop");     \
+    asm("nop");     \
+    asm("nop");     \
+    asm("nop");     \
     asm("nop");     \
     asm("nop");     \
     asm("nop");     \
@@ -245,22 +257,22 @@ void outputFrame()
     for (int i = 0; i < 64; i++)
     { //output the values read in.
         digitalWrite(CtrlOut1, 0);
-        outputDelay;
+        delayMicroseconds(1);
         digitalWrite(CtrlOut1, ctrl1Frames[0][i]); //for now, no circle buffer
-        outputDelay;
+        delayMicroseconds(1);
         digitalWrite(CtrlOut1, ctrl1Frames[0][i]); // for now, no circle buffer.
-        outputDelay;
+        delayMicroseconds(1);
         digitalWrite(CtrlOut1, 1);
-        outputDelay;
+        delayMicroseconds(1);
     }
 }
-
 void testOutput()
 {
-
+    wiringPiSetupGpio();
+    pinMode(CtrlOut1, OUTPUT);
     for (int i = 0; i < 64; i++)
     { //output the values read in.
-        ctrl1Frames[0][i] = 1;
+        ctrl1Frames[0][i] = i%2;
     }
 
     while (1)
@@ -268,13 +280,13 @@ void testOutput()
         for (int i = 0; i < 64; i++)
         { //output the values read in.
             digitalWrite(CtrlOut1, 0);
-            outputDelay;
+	    delayMicroseconds(1);
             digitalWrite(CtrlOut1, ctrl1Frames[0][i]); //for now, no circle buffer
-            outputDelay;
+            delayMicroseconds(1);
             digitalWrite(CtrlOut1, ctrl1Frames[0][i]); // for now, no circle buffer.
-            outputDelay;
+            delayMicroseconds(1);
             digitalWrite(CtrlOut1, 1);
-            outputDelay;
+            delayMicroseconds(1);
         }
         sleep(1);
         printf("Sending The output. \n");
