@@ -30,7 +30,7 @@ char* readBuffer;
 void replayInit(){
 	//initialize the SPI
 	//REP_BUFFER = wiringPiSPISetup(MCP_CHANNEL, MCP_SPI_SPEED);
-	//printf("The file desc is %d\n", REP_BUFFER);
+	printf("The file desc is %d\n", REP_BUFFER);
 	baseCmd = malloc(sizeof(uint8_t)* 3);
 	cmd = malloc(sizeof(uint8_t)* 3);
 	readBuffer = malloc(sizeof(char)*2);
@@ -76,23 +76,19 @@ uint16_t replayReset(){
 	digitalWrite(REPLAY_RST,0);
 	delay(50); //delay 5 ms because why not
 	digitalWrite(REPLAY_RST,1);
-	//printf("reset pin\n");
 
 	//wait until send is low and read the mcp
 	while(digitalRead(REPLAY_SND)!=0);
 	memcpy(cmd,baseCmd,3);
 	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
+	//wiringPiSPIDataRW(MCP_CHANNEL,cmd+2,1);
 	*(readBuffer) = *(cmd+2);
-	//printf("read thng, %d\n", *(readBuffer));
 	digitalWrite(REPLAY_CLK,0);
 	delayMicroseconds(5); //delay 5 us because why not
 	digitalWrite(REPLAY_CLK,1);
-	//printf("clk pulsed\n");
 
 	//wait until send is high again and read the mcp
-	while(digitalRead(REPLAY_SND)!=1);
-	//printf("send\n");
-
+	while(digitalRead(REPLAY_SND));
 	memcpy(cmd,baseCmd,3);
 	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
 	//wiringPiSPIDataRW(MCP_CHANNEL,cmd+2,1);

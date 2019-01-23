@@ -30,6 +30,7 @@ void SDinit(){
 	//we pull up anyway, for posterity
 	pinMode(SD_SND, INPUT);
 	pinMode(SD_RSND, INPUT);
+	pinMode(SD_CMD, OUTPUT);
 	pullUpDnControl(SD_SND, PUD_UP);
 	pullUpDnControl(SD_RSND, PUD_UP);
 }
@@ -46,9 +47,13 @@ void SDinit(){
 uint32_t getSDinfo(){
 	//Here's the general process in order to grab stuff from the spi
 	//This is used for most of the commands here
-	
+
 	//Send the command magic number to the SPI
 	SDsendCMD(SD_GET_INFO);
+	//pulsing cmd
+	digitalWrite(SD_CMD,1);
+	delay(5);
+	digitalWrite(SD_CMD,0);
 	for(int i = 0; i < sizeof(uint32_t)/sizeof(uint16_t); i++){
 		//Wait for an indication 
 		while(digitalRead(SD_SND)==1);
@@ -57,8 +62,11 @@ uint32_t getSDinfo(){
 		SDsendCMD(SD_NULL);
 		//Read the data from the SPI buffer
 		read(SD_SPI_BUFFER,readBuffer+i,1);
+		digitalWrite(SD_CMD,1);
+        	delay(5);
+        	digitalWrite(SD_CMD,0);
 	}
-	
+
 	//now that we have the data, we just convert it to uint32_t
 	//this assumes big endian
 	return (((uint32_t)(*readBuffer))<<16 + *(readBuffer+1));
