@@ -23,7 +23,8 @@ void contInit(void){
 uint64_t getAttachedHardware(){
 	uint64_t contInfo = CONTROLLER_TYPE<<8 | CONTROLLER_VERSION;
 	uint64_t replayInfo = replayReset();
-	uint64_t SDinfo=0x02010000; //getSDinfo();
+	uint64_t SDinfo=0x02010000; 
+	getSDinfo();
 	//SD is 32 bits, the others are 16.
 	uint64_t returnValue = (contInfo<<48) + (replayInfo<<32) + (SDinfo<<0);
 	return returnValue;

@@ -33,6 +33,7 @@ up with the expected uncorrupted can be tossed */
 #define SD_SPI_CHANNEL 			0 //reserved for the SD, 1 is for the mcp chip
 #define SD_FRAME_SIZE		128
 
+#define SD_CMD				15		//pin number for the cmd 
 #define SD_SND				16 		//pin number for send pin
 #define SD_RSND				18		//pin number for resend pin
 #define SD_CMD				15		//pin number for indicator

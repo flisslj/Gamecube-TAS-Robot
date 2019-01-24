@@ -30,7 +30,7 @@ char* readBuffer;
 void replayInit(){
 	//initialize the SPI
 	//REP_BUFFER = wiringPiSPISetup(MCP_CHANNEL, MCP_SPI_SPEED);
-	//printf("The file desc is %d\n", REP_BUFFER);
+	printf("The file desc is %d\n", REP_BUFFER);
 	baseCmd = malloc(sizeof(uint8_t)* 3);
 	cmd = malloc(sizeof(uint8_t)* 3);
 	readBuffer = malloc(sizeof(char)*2);
@@ -76,23 +76,19 @@ uint16_t replayReset(){
 	digitalWrite(REPLAY_RST,0);
 	delay(50); //delay 5 ms because why not
 	digitalWrite(REPLAY_RST,1);
-	//printf("reset pin\n");
 
 	//wait until send is low and read the mcp
 	while(digitalRead(REPLAY_SND)!=0);
 	memcpy(cmd,baseCmd,3);
 	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
+	//wiringPiSPIDataRW(MCP_CHANNEL,cmd+2,1);
 	*(readBuffer) = *(cmd+2);
-	//printf("read thng, %d\n", *(readBuffer));
 	digitalWrite(REPLAY_CLK,0);
 	delayMicroseconds(5); //delay 5 us because why not
 	digitalWrite(REPLAY_CLK,1);
-	//printf("clk pulsed\n");
 
 	//wait until send is high again and read the mcp
-	while(digitalRead(REPLAY_SND)!=1);
-	//printf("send\n");
-
+	while(digitalRead(REPLAY_SND));
 	memcpy(cmd,baseCmd,3);
 	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
 	//wiringPiSPIDataRW(MCP_CHANNEL,cmd+2,1);
@@ -117,6 +113,15 @@ uint16_t replayReset(){
 	return info;
 }
 
+/**
+* Runs the replay device until interrupted
+* TODO STOP HAVING ANXIETY I GUESS
+*/
+
+void replayRun(){
+	return;
+}
+
 /** 
 * Transmits a byte array of defined length to the replay device
 * 
@@ -130,17 +135,12 @@ uint16_t replayReset(){
 */
 enum frame_state replayTransmit(uint32_t length, uint8_t* data){
 	for(int i = 0; i < length; i++){
-		if(digitalRead(REPLAY_RSND)==0){
-			digitalWrite(REPLAY_CLK, 0);
-			//wait the standard amount (except not really, interrupts eventually)
-			delayMicroseconds(CMD_CLK_DELAY_US);
-			//flip clock again
-			digitalWrite(REPLAY_CLK, 1);
+		if(digitalRead(REPLAY_RSND)==1){
 			return RESEND_PREVIOUS;
 		}
 		replayByte(*(data+i));
-		//don't wait for the next send signal
-		//while(digitalRead(REPLAY_SND)==1);
+		//wait for the next send signal
+		while(digitalRead(REPLAY_SND)==1);
 	}
 	
 	//some very short delay to wait for baremetal - less than the time to the next send signal
@@ -166,13 +166,11 @@ void replayByte(uint8_t byte){
 	//after this flip the clock down
 	digitalWrite(REPLAY_CLK, 0);
 	//wait the standard amount (except not really, interrupts eventually)
-	//delayMicroseconds(CMD_CLK_DELAY_US);
-	while(digitalRead(REPLAY_SND)==0);
+	delayMicroseconds(CMD_CLK_DELAY_US);
 	//flip clock again
 	digitalWrite(REPLAY_CLK, 1);
 	//wait again lmfao
-	//delayMicroseconds(CMD_CLK_DELAY_US);
-	while(digitalRead(REPLAY_SND)==1);
+	delayMicroseconds(CMD_CLK_DELAY_US);
 	
 	return;
 }
