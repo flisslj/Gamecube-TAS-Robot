@@ -1,0 +1,199 @@
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\cckHjHkp.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f7xx_hal_msp.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_MspInit,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_MspInit
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv5-sp-d16
+  25              	HAL_MspInit:
+  26              	.LFB136:
+  27              		.file 1 "Src/stm32f7xx_hal_msp.c"
+   1:Src/stm32f7xx_hal_msp.c **** /* USER CODE BEGIN Header */
+   2:Src/stm32f7xx_hal_msp.c **** /**
+   3:Src/stm32f7xx_hal_msp.c ****   ******************************************************************************
+   4:Src/stm32f7xx_hal_msp.c ****   * File Name          : stm32f7xx_hal_msp.c
+   5:Src/stm32f7xx_hal_msp.c ****   * Description        : This file provides code for the MSP Initialization 
+   6:Src/stm32f7xx_hal_msp.c ****   *                      and de-Initialization codes.
+   7:Src/stm32f7xx_hal_msp.c ****   ******************************************************************************
+   8:Src/stm32f7xx_hal_msp.c ****   ** This notice applies to any and all portions of this file
+   9:Src/stm32f7xx_hal_msp.c ****   * that are not between comment pairs USER CODE BEGIN and
+  10:Src/stm32f7xx_hal_msp.c ****   * USER CODE END. Other portions of this file, whether 
+  11:Src/stm32f7xx_hal_msp.c ****   * inserted by the user or by software development tools
+  12:Src/stm32f7xx_hal_msp.c ****   * are owned by their respective copyright owners.
+  13:Src/stm32f7xx_hal_msp.c ****   *
+  14:Src/stm32f7xx_hal_msp.c ****   * COPYRIGHT(c) 2018 STMicroelectronics
+  15:Src/stm32f7xx_hal_msp.c ****   *
+  16:Src/stm32f7xx_hal_msp.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  17:Src/stm32f7xx_hal_msp.c ****   * are permitted provided that the following conditions are met:
+  18:Src/stm32f7xx_hal_msp.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  19:Src/stm32f7xx_hal_msp.c ****   *      this list of conditions and the following disclaimer.
+  20:Src/stm32f7xx_hal_msp.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  21:Src/stm32f7xx_hal_msp.c ****   *      this list of conditions and the following disclaimer in the documentation
+  22:Src/stm32f7xx_hal_msp.c ****   *      and/or other materials provided with the distribution.
+  23:Src/stm32f7xx_hal_msp.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  24:Src/stm32f7xx_hal_msp.c ****   *      may be used to endorse or promote products derived from this software
+  25:Src/stm32f7xx_hal_msp.c ****   *      without specific prior written permission.
+  26:Src/stm32f7xx_hal_msp.c ****   *
+  27:Src/stm32f7xx_hal_msp.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  28:Src/stm32f7xx_hal_msp.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  29:Src/stm32f7xx_hal_msp.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  30:Src/stm32f7xx_hal_msp.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  31:Src/stm32f7xx_hal_msp.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\cckHjHkp.s 			page 2
+
+
+  32:Src/stm32f7xx_hal_msp.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  33:Src/stm32f7xx_hal_msp.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  34:Src/stm32f7xx_hal_msp.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  35:Src/stm32f7xx_hal_msp.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  36:Src/stm32f7xx_hal_msp.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  37:Src/stm32f7xx_hal_msp.c ****   *
+  38:Src/stm32f7xx_hal_msp.c ****   ******************************************************************************
+  39:Src/stm32f7xx_hal_msp.c ****   */
+  40:Src/stm32f7xx_hal_msp.c **** /* USER CODE END Header */
+  41:Src/stm32f7xx_hal_msp.c **** 
+  42:Src/stm32f7xx_hal_msp.c **** /* Includes ------------------------------------------------------------------*/
+  43:Src/stm32f7xx_hal_msp.c **** #include "main.h"
+  44:Src/stm32f7xx_hal_msp.c **** /* USER CODE BEGIN Includes */
+  45:Src/stm32f7xx_hal_msp.c **** 
+  46:Src/stm32f7xx_hal_msp.c **** /* USER CODE END Includes */
+  47:Src/stm32f7xx_hal_msp.c **** 
+  48:Src/stm32f7xx_hal_msp.c **** /* Private typedef -----------------------------------------------------------*/
+  49:Src/stm32f7xx_hal_msp.c **** /* USER CODE BEGIN TD */
+  50:Src/stm32f7xx_hal_msp.c **** 
+  51:Src/stm32f7xx_hal_msp.c **** /* USER CODE END TD */
+  52:Src/stm32f7xx_hal_msp.c **** 
+  53:Src/stm32f7xx_hal_msp.c **** /* Private define ------------------------------------------------------------*/
+  54:Src/stm32f7xx_hal_msp.c **** /* USER CODE BEGIN Define */
+  55:Src/stm32f7xx_hal_msp.c ****  
+  56:Src/stm32f7xx_hal_msp.c **** /* USER CODE END Define */
+  57:Src/stm32f7xx_hal_msp.c **** 
+  58:Src/stm32f7xx_hal_msp.c **** /* Private macro -------------------------------------------------------------*/
+  59:Src/stm32f7xx_hal_msp.c **** /* USER CODE BEGIN Macro */
+  60:Src/stm32f7xx_hal_msp.c **** 
+  61:Src/stm32f7xx_hal_msp.c **** /* USER CODE END Macro */
+  62:Src/stm32f7xx_hal_msp.c **** 
+  63:Src/stm32f7xx_hal_msp.c **** /* Private variables ---------------------------------------------------------*/
+  64:Src/stm32f7xx_hal_msp.c **** /* USER CODE BEGIN PV */
+  65:Src/stm32f7xx_hal_msp.c **** 
+  66:Src/stm32f7xx_hal_msp.c **** /* USER CODE END PV */
+  67:Src/stm32f7xx_hal_msp.c **** 
+  68:Src/stm32f7xx_hal_msp.c **** /* Private function prototypes -----------------------------------------------*/
+  69:Src/stm32f7xx_hal_msp.c **** /* USER CODE BEGIN PFP */
+  70:Src/stm32f7xx_hal_msp.c **** 
+  71:Src/stm32f7xx_hal_msp.c **** /* USER CODE END PFP */
+  72:Src/stm32f7xx_hal_msp.c **** 
+  73:Src/stm32f7xx_hal_msp.c **** /* External functions --------------------------------------------------------*/
+  74:Src/stm32f7xx_hal_msp.c **** /* USER CODE BEGIN ExternalFunctions */
+  75:Src/stm32f7xx_hal_msp.c **** 
+  76:Src/stm32f7xx_hal_msp.c **** /* USER CODE END ExternalFunctions */
+  77:Src/stm32f7xx_hal_msp.c **** 
+  78:Src/stm32f7xx_hal_msp.c **** /* USER CODE BEGIN 0 */
+  79:Src/stm32f7xx_hal_msp.c **** 
+  80:Src/stm32f7xx_hal_msp.c **** /* USER CODE END 0 */
+  81:Src/stm32f7xx_hal_msp.c **** /**
+  82:Src/stm32f7xx_hal_msp.c ****   * Initializes the Global MSP.
+  83:Src/stm32f7xx_hal_msp.c ****   */
+  84:Src/stm32f7xx_hal_msp.c **** void HAL_MspInit(void)
+  85:Src/stm32f7xx_hal_msp.c **** {
+  28              		.loc 1 85 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\cckHjHkp.s 			page 3
+
+
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33 0000 82B0     		sub	sp, sp, #8
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              	.LBB2:
+  86:Src/stm32f7xx_hal_msp.c ****   /* USER CODE BEGIN MspInit 0 */
+  87:Src/stm32f7xx_hal_msp.c **** 
+  88:Src/stm32f7xx_hal_msp.c ****   /* USER CODE END MspInit 0 */
+  89:Src/stm32f7xx_hal_msp.c **** 
+  90:Src/stm32f7xx_hal_msp.c ****   __HAL_RCC_PWR_CLK_ENABLE();
+  37              		.loc 1 90 0
+  38 0002 0A4B     		ldr	r3, .L3
+  39 0004 1A6C     		ldr	r2, [r3, #64]
+  40 0006 42F08052 		orr	r2, r2, #268435456
+  41 000a 1A64     		str	r2, [r3, #64]
+  42 000c 1A6C     		ldr	r2, [r3, #64]
+  43 000e 02F08052 		and	r2, r2, #268435456
+  44 0012 0092     		str	r2, [sp]
+  45 0014 009A     		ldr	r2, [sp]
+  46              	.LBE2:
+  47              	.LBB3:
+  91:Src/stm32f7xx_hal_msp.c ****   __HAL_RCC_SYSCFG_CLK_ENABLE();
+  48              		.loc 1 91 0
+  49 0016 5A6C     		ldr	r2, [r3, #68]
+  50 0018 42F48042 		orr	r2, r2, #16384
+  51 001c 5A64     		str	r2, [r3, #68]
+  52 001e 5B6C     		ldr	r3, [r3, #68]
+  53 0020 03F48043 		and	r3, r3, #16384
+  54 0024 0193     		str	r3, [sp, #4]
+  55 0026 019B     		ldr	r3, [sp, #4]
+  56              	.LBE3:
+  92:Src/stm32f7xx_hal_msp.c **** 
+  93:Src/stm32f7xx_hal_msp.c ****   /* System interrupt init*/
+  94:Src/stm32f7xx_hal_msp.c **** 
+  95:Src/stm32f7xx_hal_msp.c ****   /* USER CODE BEGIN MspInit 1 */
+  96:Src/stm32f7xx_hal_msp.c **** 
+  97:Src/stm32f7xx_hal_msp.c ****   /* USER CODE END MspInit 1 */
+  98:Src/stm32f7xx_hal_msp.c **** }
+  57              		.loc 1 98 0
+  58 0028 02B0     		add	sp, sp, #8
+  59              	.LCFI1:
+  60              		.cfi_def_cfa_offset 0
+  61              		@ sp needed
+  62 002a 7047     		bx	lr
+  63              	.L4:
+  64              		.align	2
+  65              	.L3:
+  66 002c 00380240 		.word	1073887232
+  67              		.cfi_endproc
+  68              	.LFE136:
+  70              		.text
+  71              	.Letext0:
+  72              		.file 2 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+  73              		.file 3 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+  74              		.file 4 "Drivers/CMSIS/Include/core_cm7.h"
+  75              		.file 5 "Drivers/CMSIS/Device/ST/STM32F7xx/Include/system_stm32f7xx.h"
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\cckHjHkp.s 			page 4
+
+
+  76              		.file 6 "Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f746xx.h"
+  77              		.file 7 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+  78              		.file 8 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+  79              		.file 9 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+  80              		.file 10 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\cckHjHkp.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_msp.c
+C:\Users\ROUTHE~1\AppData\Local\Temp\cckHjHkp.s:18     .text.HAL_MspInit:00000000 $t
+C:\Users\ROUTHE~1\AppData\Local\Temp\cckHjHkp.s:25     .text.HAL_MspInit:00000000 HAL_MspInit
+C:\Users\ROUTHE~1\AppData\Local\Temp\cckHjHkp.s:66     .text.HAL_MspInit:0000002c $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

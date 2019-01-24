@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Gamecube-TAS-Robot/software-development/isoedit/editor"
 	"flag"
 	"fmt"
 	"os"
@@ -11,6 +12,8 @@ import (
 )
 
 func main() {
+
+	//editor.Test()
 	flagParse()
 }
 
@@ -27,7 +30,7 @@ func flagParse() {
 
 	isoString := `The location of the iso file.`
 	outString := `The location to write the output file to.`
-	compString := `The location of wit. if unset, Wit assumed installed.`
+	compString := `The location of gcr. if unset, gcr assumed installed.`
 
 	frameFlag := flag.Int("f", 600, memString)
 	//flag.IntVar(frameFlag, "m", 600, memString)
@@ -41,7 +44,7 @@ func flagParse() {
 	isoFlag := flag.String("iso", "", isoString)
 
 	outputFlag := flag.String("out", "", outString)
-	compFlag := flag.String("wit", "", compString)
+	compFlag := flag.String("gcr", "", compString)
 
 	flag.Parse()
 
@@ -88,74 +91,69 @@ func flagParse() {
 	fmt.Printf("Input Iso: %s\n", *isoFlag)
 	fmt.Printf("Output Iso: %s\n", outputName)
 
-	witTest(*compFlag)
-
 	StartManipulation(*frameFlag, *clockFlag, *infiniteFlag, *isoFlag, outputName, *compFlag)
 }
 
-func StartManipulation(frames, clock int, infinite bool, iso, output, witLoc string) {
+func StartManipulation(frames, clock int, infinite bool, iso, output, gcrLoc string) {
 
 	//extract the files from the iso to a directory.
-	runWit(witLoc, "EXTRACT", iso, "./tmp")
+	rungcr(gcrLoc, iso, "root", "e", "./")
+
+	editor.EditFile("./root/&&systemdata/Start.dol", frames, clock, infinite)
 
 	//recombine the files into a proper structure?
-	runWit(witLoc, "COPY", "./tmp", output)
+	rungcr(gcrLoc, "./root", output)
 
 }
 
-func witTest(witLoc string) {
-	runWit(witLoc)
-	fmt.Printf("Wit.exe detected.\n")
-}
+func rungcr(gcrLoc string, commands ...string) {
 
-func runWit(witLoc string, commands ...string) {
-
-	//if wit is installed.
-	if witLoc == "" {
-		cmd := exec.Command("wit.exe", commands...)
+	//if gcr is installed.
+	if gcrLoc == "" {
+		cmd := exec.Command("gcr.exe", commands...)
 		err := cmd.Run()
 
 		if err != nil {
-			fmt.Println("Wit not installed. Please install Wit (https://wit.wiimm.de) or set wit location with -wit flag. ")
+			fmt.Println("gcr not installed. Please install gcr (https://gcr.wiimm.de) or set gcr location with -gcr flag. ")
 			os.Exit(1)
 		}
 		return
 	}
 
-	//if not installed, try for the base folder/wit.exe and try base/bin/wit.exe
-	witPath := witLoc
+	//if not installed, try for the base folder/gcr.exe and try base/bin/gcr.exe
+	gcrPath := gcrLoc
 	if _, err := os.Stat("/path/to/whatever"); !os.IsNotExist(err) {
-		cmd := exec.Command(witPath, commands...)
+		cmd := exec.Command(gcrPath, commands...)
 		err := cmd.Run()
 		if err != nil {
-			fmt.Println("Wit set with -wit flag and wit.exe detected, however an error has occurred.")
+			fmt.Println("gcr set with -gcr flag and gcr.exe detected, however an error has occurred.")
 			os.Exit(1)
 		}
 		return
 	}
 
-	witPath = witLoc + "/wit.exe"
-	if _, err := os.Stat("wit.exe"); !os.IsNotExist(err) {
-		cmd := exec.Command(witPath, commands...)
+	gcrPath = gcrLoc + "/gcr.exe"
+	if _, err := os.Stat("gcr.exe"); !os.IsNotExist(err) {
+		cmd := exec.Command(gcrPath, commands...)
 		err := cmd.Run()
 		if err != nil {
-			fmt.Println("Wit set with -wit flag and wit.exe detected, however an error has occurred.")
+			fmt.Println("gcr set with -gcr flag and gcr.exe detected, however an error has occurred.")
 			os.Exit(1)
 		}
 		return
 	}
 
-	witPath = witLoc + "/bin/wit.exe"
+	gcrPath = gcrLoc + "/bin/gcr.exe"
 	if _, err := os.Stat(""); !os.IsNotExist(err) {
-		cmd := exec.Command(witPath, commands...)
+		cmd := exec.Command(gcrPath, commands...)
 		err := cmd.Run()
 		if err != nil {
-			fmt.Println("Wit set with -wit flag and wit.exe detected, however an error has occurred.")
+			fmt.Println("gcr set with -gcr flag and gcr.exe detected, however an error has occurred.")
 			os.Exit(1)
 		}
 		return
 	}
 
-	fmt.Println("Wit set with -wit flag but wit.exe was not detected.")
+	fmt.Println("gcr set with -gcr flag but gcr.exe was not detected.")
 	os.Exit(1)
 }

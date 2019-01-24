@@ -1,0 +1,573 @@
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.SystemClock_Config,"ax",%progbits
+  18              		.align	1
+  19              		.global	SystemClock_Config
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv5-sp-d16
+  25              	SystemClock_Config:
+  26              	.LFB137:
+  27              		.file 1 "Src/main.c"
+   1:Src/main.c    **** /* USER CODE BEGIN Header */
+   2:Src/main.c    **** /**
+   3:Src/main.c    ****   ******************************************************************************
+   4:Src/main.c    ****   * @file           : main.c
+   5:Src/main.c    ****   * @brief          : Main program body
+   6:Src/main.c    ****   ******************************************************************************
+   7:Src/main.c    ****   ** This notice applies to any and all portions of this file
+   8:Src/main.c    ****   * that are not between comment pairs USER CODE BEGIN and
+   9:Src/main.c    ****   * USER CODE END. Other portions of this file, whether 
+  10:Src/main.c    ****   * inserted by the user or by software development tools
+  11:Src/main.c    ****   * are owned by their respective copyright owners.
+  12:Src/main.c    ****   *
+  13:Src/main.c    ****   * COPYRIGHT(c) 2018 STMicroelectronics
+  14:Src/main.c    ****   *
+  15:Src/main.c    ****   * Redistribution and use in source and binary forms, with or without modification,
+  16:Src/main.c    ****   * are permitted provided that the following conditions are met:
+  17:Src/main.c    ****   *   1. Redistributions of source code must retain the above copyright notice,
+  18:Src/main.c    ****   *      this list of conditions and the following disclaimer.
+  19:Src/main.c    ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  20:Src/main.c    ****   *      this list of conditions and the following disclaimer in the documentation
+  21:Src/main.c    ****   *      and/or other materials provided with the distribution.
+  22:Src/main.c    ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  23:Src/main.c    ****   *      may be used to endorse or promote products derived from this software
+  24:Src/main.c    ****   *      without specific prior written permission.
+  25:Src/main.c    ****   *
+  26:Src/main.c    ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  27:Src/main.c    ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  28:Src/main.c    ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  29:Src/main.c    ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  30:Src/main.c    ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  31:Src/main.c    ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s 			page 2
+
+
+  32:Src/main.c    ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  33:Src/main.c    ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  34:Src/main.c    ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  35:Src/main.c    ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  36:Src/main.c    ****   *
+  37:Src/main.c    ****   ******************************************************************************
+  38:Src/main.c    ****   */
+  39:Src/main.c    **** /* USER CODE END Header */
+  40:Src/main.c    **** 
+  41:Src/main.c    **** /* Includes ------------------------------------------------------------------*/
+  42:Src/main.c    **** #include "main.h"
+  43:Src/main.c    **** #include "crc.h"
+  44:Src/main.c    **** #include "dma.h"
+  45:Src/main.c    **** #include "spi.h"
+  46:Src/main.c    **** #include "gpio.h"
+  47:Src/main.c    **** 
+  48:Src/main.c    **** /* Private includes ----------------------------------------------------------*/
+  49:Src/main.c    **** /* USER CODE BEGIN Includes */
+  50:Src/main.c    **** 
+  51:Src/main.c    **** /* USER CODE END Includes */
+  52:Src/main.c    **** 
+  53:Src/main.c    **** /* Private typedef -----------------------------------------------------------*/
+  54:Src/main.c    **** /* USER CODE BEGIN PTD */
+  55:Src/main.c    **** 
+  56:Src/main.c    **** /* USER CODE END PTD */
+  57:Src/main.c    **** 
+  58:Src/main.c    **** /* Private define ------------------------------------------------------------*/
+  59:Src/main.c    **** /* USER CODE BEGIN PD */
+  60:Src/main.c    **** 
+  61:Src/main.c    **** /* USER CODE END PD */
+  62:Src/main.c    **** 
+  63:Src/main.c    **** /* Private macro -------------------------------------------------------------*/
+  64:Src/main.c    **** /* USER CODE BEGIN PM */
+  65:Src/main.c    **** 
+  66:Src/main.c    **** /* USER CODE END PM */
+  67:Src/main.c    **** 
+  68:Src/main.c    **** /* Private variables ---------------------------------------------------------*/
+  69:Src/main.c    **** 
+  70:Src/main.c    **** /* USER CODE BEGIN PV */
+  71:Src/main.c    **** 
+  72:Src/main.c    **** //If the "completed2" flag is set to 1, the data exchange via SPI 2 is finished. If
+  73:Src/main.c    **** //it is set to 0, the SPI2 peripheral is busy. Thus, we should reset the flag when
+  74:Src/main.c    **** //starting the transmission and set it when the transmission is completed. So, in
+  75:Src/main.c    **** //this file, they will be reset before calling a transmission.
+  76:Src/main.c    **** extern uint8_t completed2;
+  77:Src/main.c    **** extern uint8_t completed3;
+  78:Src/main.c    **** 
+  79:Src/main.c    **** /* USER CODE END PV */
+  80:Src/main.c    **** 
+  81:Src/main.c    **** /* Private function prototypes -----------------------------------------------*/
+  82:Src/main.c    **** void SystemClock_Config(void);
+  83:Src/main.c    **** /* USER CODE BEGIN PFP */
+  84:Src/main.c    **** 
+  85:Src/main.c    **** /* USER CODE END PFP */
+  86:Src/main.c    **** 
+  87:Src/main.c    **** /* Private user code ---------------------------------------------------------*/
+  88:Src/main.c    **** /* USER CODE BEGIN 0 */
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s 			page 3
+
+
+  89:Src/main.c    **** 
+  90:Src/main.c    **** /* USER CODE END 0 */
+  91:Src/main.c    **** 
+  92:Src/main.c    **** /**
+  93:Src/main.c    ****   * @brief  The application entry point.
+  94:Src/main.c    ****   * @retval int
+  95:Src/main.c    ****   */
+  96:Src/main.c    **** int main(void)
+  97:Src/main.c    **** {
+  98:Src/main.c    ****   /* USER CODE BEGIN 1 */
+  99:Src/main.c    **** 
+ 100:Src/main.c    ****   /* USER CODE END 1 */
+ 101:Src/main.c    **** 
+ 102:Src/main.c    ****   /* MCU Configuration--------------------------------------------------------*/
+ 103:Src/main.c    **** 
+ 104:Src/main.c    ****   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+ 105:Src/main.c    ****   HAL_Init();
+ 106:Src/main.c    **** 
+ 107:Src/main.c    ****   /* USER CODE BEGIN Init */
+ 108:Src/main.c    **** 
+ 109:Src/main.c    ****   /* USER CODE END Init */
+ 110:Src/main.c    **** 
+ 111:Src/main.c    ****   /* Configure the system clock */
+ 112:Src/main.c    ****   SystemClock_Config();
+ 113:Src/main.c    **** 
+ 114:Src/main.c    ****   /* USER CODE BEGIN SysInit */
+ 115:Src/main.c    **** 
+ 116:Src/main.c    ****   /* USER CODE END SysInit */
+ 117:Src/main.c    **** 
+ 118:Src/main.c    ****   /* Initialize all configured peripherals */
+ 119:Src/main.c    ****   MX_GPIO_Init();
+ 120:Src/main.c    ****   MX_DMA_Init();
+ 121:Src/main.c    ****   MX_SPI1_Init();
+ 122:Src/main.c    ****   MX_CRC_Init();
+ 123:Src/main.c    ****   MX_SPI2_Init();
+ 124:Src/main.c    ****   MX_SPI3_Init();
+ 125:Src/main.c    ****   /* USER CODE BEGIN 2 */
+ 126:Src/main.c    **** 
+ 127:Src/main.c    ****   uint8_t testDataToSend[128];
+ 128:Src/main.c    ****   uint8_t testDataToGet[128];
+ 129:Src/main.c    ****   for (uint8_t i = 0; i < 128; i++){
+ 130:Src/main.c    **** 	  testDataToSend[i] = i + 1;
+ 131:Src/main.c    ****   }
+ 132:Src/main.c    ****   completed2 = 0;
+ 133:Src/main.c    ****   HAL_SPI_Transmit_DMA(&hspi2, testDataToSend, 128);
+ 134:Src/main.c    ****   completed3 = 0;
+ 135:Src/main.c    ****   HAL_SPI_Transmit_DMA(&hspi3, testDataToSend, 128);
+ 136:Src/main.c    ****   //After that, we must wait until completed2 = 1 before we can transmit again.
+ 137:Src/main.c    **** 
+ 138:Src/main.c    ****   /* USER CODE END 2 */
+ 139:Src/main.c    **** 
+ 140:Src/main.c    ****   /* Infinite loop */
+ 141:Src/main.c    ****   /* USER CODE BEGIN WHILE */
+ 142:Src/main.c    ****   while (1)
+ 143:Src/main.c    ****   {
+ 144:Src/main.c    **** 	  HAL_SPI_Receive_DMA(&hspi2, testDataToGet, 128);
+ 145:Src/main.c    **** 	  for (uint8_t i = 0; i < 128; i++){
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s 			page 4
+
+
+ 146:Src/main.c    **** 		  printf("%d", testDataToGet[i]);
+ 147:Src/main.c    **** 	  }
+ 148:Src/main.c    ****     /* USER CODE END WHILE */
+ 149:Src/main.c    **** 
+ 150:Src/main.c    ****     /* USER CODE BEGIN 3 */
+ 151:Src/main.c    ****   }
+ 152:Src/main.c    ****   /* USER CODE END 3 */
+ 153:Src/main.c    **** }
+ 154:Src/main.c    **** 
+ 155:Src/main.c    **** /**
+ 156:Src/main.c    ****   * @brief System Clock Configuration
+ 157:Src/main.c    ****   * @retval None
+ 158:Src/main.c    ****   */
+ 159:Src/main.c    **** void SystemClock_Config(void)
+ 160:Src/main.c    **** {
+  28              		.loc 1 160 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 80
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 10B5     		push	{r4, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 4, -8
+  36              		.cfi_offset 14, -4
+  37 0002 94B0     		sub	sp, sp, #80
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 88
+ 161:Src/main.c    ****   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  40              		.loc 1 161 0
+  41 0004 3022     		movs	r2, #48
+  42 0006 0021     		movs	r1, #0
+  43 0008 08A8     		add	r0, sp, #32
+  44 000a FFF7FEFF 		bl	memset
+  45              	.LVL0:
+ 162:Src/main.c    ****   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  46              		.loc 1 162 0
+  47 000e 0024     		movs	r4, #0
+  48 0010 0394     		str	r4, [sp, #12]
+  49 0012 0494     		str	r4, [sp, #16]
+  50 0014 0594     		str	r4, [sp, #20]
+  51 0016 0694     		str	r4, [sp, #24]
+  52 0018 0794     		str	r4, [sp, #28]
+  53              	.LBB2:
+ 163:Src/main.c    **** 
+ 164:Src/main.c    ****   /**Configure the main internal regulator output voltage 
+ 165:Src/main.c    ****   */
+ 166:Src/main.c    ****   __HAL_RCC_PWR_CLK_ENABLE();
+  54              		.loc 1 166 0
+  55 001a 164B     		ldr	r3, .L3
+  56 001c 1A6C     		ldr	r2, [r3, #64]
+  57 001e 42F08052 		orr	r2, r2, #268435456
+  58 0022 1A64     		str	r2, [r3, #64]
+  59 0024 1B6C     		ldr	r3, [r3, #64]
+  60 0026 03F08053 		and	r3, r3, #268435456
+  61 002a 0193     		str	r3, [sp, #4]
+  62 002c 019B     		ldr	r3, [sp, #4]
+  63              	.LBE2:
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s 			page 5
+
+
+  64              	.LBB3:
+ 167:Src/main.c    ****   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
+  65              		.loc 1 167 0
+  66 002e 124A     		ldr	r2, .L3+4
+  67 0030 1368     		ldr	r3, [r2]
+  68 0032 23F44043 		bic	r3, r3, #49152
+  69 0036 43F48043 		orr	r3, r3, #16384
+  70 003a 1360     		str	r3, [r2]
+  71 003c 1368     		ldr	r3, [r2]
+  72 003e 03F44043 		and	r3, r3, #49152
+  73 0042 0293     		str	r3, [sp, #8]
+  74 0044 029B     		ldr	r3, [sp, #8]
+  75              	.LBE3:
+ 168:Src/main.c    ****   /**Initializes the CPU, AHB and APB busses clocks 
+ 169:Src/main.c    ****   */
+ 170:Src/main.c    ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  76              		.loc 1 170 0
+  77 0046 0223     		movs	r3, #2
+  78 0048 0893     		str	r3, [sp, #32]
+ 171:Src/main.c    ****   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  79              		.loc 1 171 0
+  80 004a 0123     		movs	r3, #1
+  81 004c 0B93     		str	r3, [sp, #44]
+ 172:Src/main.c    ****   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  82              		.loc 1 172 0
+  83 004e 1023     		movs	r3, #16
+  84 0050 0C93     		str	r3, [sp, #48]
+ 173:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  85              		.loc 1 173 0
+  86 0052 0E94     		str	r4, [sp, #56]
+ 174:Src/main.c    ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  87              		.loc 1 174 0
+  88 0054 08A8     		add	r0, sp, #32
+  89 0056 FFF7FEFF 		bl	HAL_RCC_OscConfig
+  90              	.LVL1:
+ 175:Src/main.c    ****   {
+ 176:Src/main.c    ****     Error_Handler();
+ 177:Src/main.c    ****   }
+ 178:Src/main.c    ****   /**Initializes the CPU, AHB and APB busses clocks 
+ 179:Src/main.c    ****   */
+ 180:Src/main.c    ****   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+  91              		.loc 1 180 0
+  92 005a 0F23     		movs	r3, #15
+  93 005c 0393     		str	r3, [sp, #12]
+ 181:Src/main.c    ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 182:Src/main.c    ****   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  94              		.loc 1 182 0
+  95 005e 0494     		str	r4, [sp, #16]
+ 183:Src/main.c    ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  96              		.loc 1 183 0
+  97 0060 0594     		str	r4, [sp, #20]
+ 184:Src/main.c    ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  98              		.loc 1 184 0
+  99 0062 0694     		str	r4, [sp, #24]
+ 185:Src/main.c    ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+ 100              		.loc 1 185 0
+ 101 0064 0794     		str	r4, [sp, #28]
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s 			page 6
+
+
+ 186:Src/main.c    **** 
+ 187:Src/main.c    ****   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+ 102              		.loc 1 187 0
+ 103 0066 2146     		mov	r1, r4
+ 104 0068 03A8     		add	r0, sp, #12
+ 105 006a FFF7FEFF 		bl	HAL_RCC_ClockConfig
+ 106              	.LVL2:
+ 188:Src/main.c    ****   {
+ 189:Src/main.c    ****     Error_Handler();
+ 190:Src/main.c    ****   }
+ 191:Src/main.c    **** }
+ 107              		.loc 1 191 0
+ 108 006e 14B0     		add	sp, sp, #80
+ 109              	.LCFI2:
+ 110              		.cfi_def_cfa_offset 8
+ 111              		@ sp needed
+ 112 0070 10BD     		pop	{r4, pc}
+ 113              	.L4:
+ 114 0072 00BF     		.align	2
+ 115              	.L3:
+ 116 0074 00380240 		.word	1073887232
+ 117 0078 00700040 		.word	1073770496
+ 118              		.cfi_endproc
+ 119              	.LFE137:
+ 121              		.section	.text.main,"ax",%progbits
+ 122              		.align	1
+ 123              		.global	main
+ 124              		.syntax unified
+ 125              		.thumb
+ 126              		.thumb_func
+ 127              		.fpu fpv5-sp-d16
+ 129              	main:
+ 130              	.LFB136:
+  97:Src/main.c    ****   /* USER CODE BEGIN 1 */
+ 131              		.loc 1 97 0
+ 132              		.cfi_startproc
+ 133              		@ args = 0, pretend = 0, frame = 256
+ 134              		@ frame_needed = 0, uses_anonymous_args = 0
+ 135 0000 10B5     		push	{r4, lr}
+ 136              	.LCFI3:
+ 137              		.cfi_def_cfa_offset 8
+ 138              		.cfi_offset 4, -8
+ 139              		.cfi_offset 14, -4
+ 140 0002 C0B0     		sub	sp, sp, #256
+ 141              	.LCFI4:
+ 142              		.cfi_def_cfa_offset 264
+ 105:Src/main.c    **** 
+ 143              		.loc 1 105 0
+ 144 0004 FFF7FEFF 		bl	HAL_Init
+ 145              	.LVL3:
+ 112:Src/main.c    **** 
+ 146              		.loc 1 112 0
+ 147 0008 FFF7FEFF 		bl	SystemClock_Config
+ 148              	.LVL4:
+ 119:Src/main.c    ****   MX_DMA_Init();
+ 149              		.loc 1 119 0
+ 150 000c FFF7FEFF 		bl	MX_GPIO_Init
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s 			page 7
+
+
+ 151              	.LVL5:
+ 120:Src/main.c    ****   MX_SPI1_Init();
+ 152              		.loc 1 120 0
+ 153 0010 FFF7FEFF 		bl	MX_DMA_Init
+ 154              	.LVL6:
+ 121:Src/main.c    ****   MX_CRC_Init();
+ 155              		.loc 1 121 0
+ 156 0014 FFF7FEFF 		bl	MX_SPI1_Init
+ 157              	.LVL7:
+ 122:Src/main.c    ****   MX_SPI2_Init();
+ 158              		.loc 1 122 0
+ 159 0018 FFF7FEFF 		bl	MX_CRC_Init
+ 160              	.LVL8:
+ 123:Src/main.c    ****   MX_SPI3_Init();
+ 161              		.loc 1 123 0
+ 162 001c FFF7FEFF 		bl	MX_SPI2_Init
+ 163              	.LVL9:
+ 124:Src/main.c    ****   /* USER CODE BEGIN 2 */
+ 164              		.loc 1 124 0
+ 165 0020 FFF7FEFF 		bl	MX_SPI3_Init
+ 166              	.LVL10:
+ 167              	.LBB4:
+ 129:Src/main.c    **** 	  testDataToSend[i] = i + 1;
+ 168              		.loc 1 129 0
+ 169 0024 0023     		movs	r3, #0
+ 170 0026 06E0     		b	.L6
+ 171              	.LVL11:
+ 172              	.L7:
+ 130:Src/main.c    ****   }
+ 173              		.loc 1 130 0 discriminator 3
+ 174 0028 1A46     		mov	r2, r3
+ 175 002a 0133     		adds	r3, r3, #1
+ 176              	.LVL12:
+ 177 002c DBB2     		uxtb	r3, r3
+ 178 002e 40A9     		add	r1, sp, #256
+ 179 0030 0A44     		add	r2, r2, r1
+ 180 0032 02F8803C 		strb	r3, [r2, #-128]
+ 181              	.LVL13:
+ 182              	.L6:
+ 129:Src/main.c    **** 	  testDataToSend[i] = i + 1;
+ 183              		.loc 1 129 0 discriminator 1
+ 184 0036 13F0800F 		tst	r3, #128
+ 185 003a F5D0     		beq	.L7
+ 186              	.LBE4:
+ 132:Src/main.c    ****   HAL_SPI_Transmit_DMA(&hspi2, testDataToSend, 128);
+ 187              		.loc 1 132 0
+ 188 003c 0024     		movs	r4, #0
+ 189 003e 114B     		ldr	r3, .L12
+ 190              	.LVL14:
+ 191 0040 1C70     		strb	r4, [r3]
+ 133:Src/main.c    ****   completed3 = 0;
+ 192              		.loc 1 133 0
+ 193 0042 8022     		movs	r2, #128
+ 194 0044 0DEB0201 		add	r1, sp, r2
+ 195 0048 0F48     		ldr	r0, .L12+4
+ 196 004a FFF7FEFF 		bl	HAL_SPI_Transmit_DMA
+ 197              	.LVL15:
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s 			page 8
+
+
+ 134:Src/main.c    ****   HAL_SPI_Transmit_DMA(&hspi3, testDataToSend, 128);
+ 198              		.loc 1 134 0
+ 199 004e 0F4B     		ldr	r3, .L12+8
+ 200 0050 1C70     		strb	r4, [r3]
+ 135:Src/main.c    ****   //After that, we must wait until completed2 = 1 before we can transmit again.
+ 201              		.loc 1 135 0
+ 202 0052 8022     		movs	r2, #128
+ 203 0054 0DEB0201 		add	r1, sp, r2
+ 204 0058 0D48     		ldr	r0, .L12+12
+ 205 005a FFF7FEFF 		bl	HAL_SPI_Transmit_DMA
+ 206              	.LVL16:
+ 207 005e 09E0     		b	.L10
+ 208              	.LVL17:
+ 209              	.L9:
+ 210              	.LBB5:
+ 146:Src/main.c    **** 	  }
+ 211              		.loc 1 146 0 discriminator 3
+ 212 0060 1DF80410 		ldrb	r1, [sp, r4]	@ zero_extendqisi2
+ 213 0064 0B48     		ldr	r0, .L12+16
+ 214 0066 FFF7FEFF 		bl	printf
+ 215              	.LVL18:
+ 145:Src/main.c    **** 		  printf("%d", testDataToGet[i]);
+ 216              		.loc 1 145 0 discriminator 3
+ 217 006a 0134     		adds	r4, r4, #1
+ 218              	.LVL19:
+ 219 006c E4B2     		uxtb	r4, r4
+ 220              	.LVL20:
+ 221              	.L8:
+ 145:Src/main.c    **** 		  printf("%d", testDataToGet[i]);
+ 222              		.loc 1 145 0 is_stmt 0 discriminator 1
+ 223 006e 14F0800F 		tst	r4, #128
+ 224 0072 F5D0     		beq	.L9
+ 225              	.LVL21:
+ 226              	.L10:
+ 227              	.LBE5:
+ 144:Src/main.c    **** 	  for (uint8_t i = 0; i < 128; i++){
+ 228              		.loc 1 144 0 is_stmt 1
+ 229 0074 8022     		movs	r2, #128
+ 230 0076 6946     		mov	r1, sp
+ 231 0078 0348     		ldr	r0, .L12+4
+ 232 007a FFF7FEFF 		bl	HAL_SPI_Receive_DMA
+ 233              	.LVL22:
+ 234              	.LBB6:
+ 145:Src/main.c    **** 		  printf("%d", testDataToGet[i]);
+ 235              		.loc 1 145 0
+ 236 007e 0024     		movs	r4, #0
+ 237 0080 F5E7     		b	.L8
+ 238              	.L13:
+ 239 0082 00BF     		.align	2
+ 240              	.L12:
+ 241 0084 00000000 		.word	completed2
+ 242 0088 00000000 		.word	hspi2
+ 243 008c 00000000 		.word	completed3
+ 244 0090 00000000 		.word	hspi3
+ 245 0094 00000000 		.word	.LC0
+ 246              	.LBE6:
+ 247              		.cfi_endproc
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s 			page 9
+
+
+ 248              	.LFE136:
+ 250              		.section	.text.Error_Handler,"ax",%progbits
+ 251              		.align	1
+ 252              		.global	Error_Handler
+ 253              		.syntax unified
+ 254              		.thumb
+ 255              		.thumb_func
+ 256              		.fpu fpv5-sp-d16
+ 258              	Error_Handler:
+ 259              	.LFB138:
+ 192:Src/main.c    **** 
+ 193:Src/main.c    **** /* USER CODE BEGIN 4 */
+ 194:Src/main.c    **** 
+ 195:Src/main.c    **** /* USER CODE END 4 */
+ 196:Src/main.c    **** 
+ 197:Src/main.c    **** /**
+ 198:Src/main.c    ****   * @brief  This function is executed in case of error occurrence.
+ 199:Src/main.c    ****   * @retval None
+ 200:Src/main.c    ****   */
+ 201:Src/main.c    **** void Error_Handler(void)
+ 202:Src/main.c    **** {
+ 260              		.loc 1 202 0
+ 261              		.cfi_startproc
+ 262              		@ args = 0, pretend = 0, frame = 0
+ 263              		@ frame_needed = 0, uses_anonymous_args = 0
+ 264              		@ link register save eliminated.
+ 265 0000 7047     		bx	lr
+ 266              		.cfi_endproc
+ 267              	.LFE138:
+ 269              		.section	.rodata.main.str1.4,"aMS",%progbits,1
+ 270              		.align	2
+ 271              	.LC0:
+ 272 0000 256400   		.ascii	"%d\000"
+ 273              		.text
+ 274              	.Letext0:
+ 275              		.file 2 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+ 276              		.file 3 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+ 277              		.file 4 "Drivers/CMSIS/Include/core_cm7.h"
+ 278              		.file 5 "Drivers/CMSIS/Device/ST/STM32F7xx/Include/system_stm32f7xx.h"
+ 279              		.file 6 "Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f746xx.h"
+ 280              		.file 7 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+ 281              		.file 8 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+ 282              		.file 9 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+ 283              		.file 10 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708
+ 284              		.file 11 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h"
+ 285              		.file 12 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc_ex.h"
+ 286              		.file 13 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h"
+ 287              		.file 14 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_dma.h"
+ 288              		.file 15 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_crc.h"
+ 289              		.file 16 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_spi.h"
+ 290              		.file 17 "Inc/crc.h"
+ 291              		.file 18 "Inc/spi.h"
+ 292              		.file 19 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708
+ 293              		.file 20 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h"
+ 294              		.file 21 "Inc/gpio.h"
+ 295              		.file 22 "Inc/dma.h"
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s:18     .text.SystemClock_Config:00000000 $t
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s:25     .text.SystemClock_Config:00000000 SystemClock_Config
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s:116    .text.SystemClock_Config:00000074 $d
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s:122    .text.main:00000000 $t
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s:129    .text.main:00000000 main
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s:241    .text.main:00000084 $d
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s:251    .text.Error_Handler:00000000 $t
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s:258    .text.Error_Handler:00000000 Error_Handler
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccK0AdFa.s:270    .rodata.main.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+memset
+HAL_RCC_OscConfig
+HAL_RCC_ClockConfig
+HAL_Init
+MX_GPIO_Init
+MX_DMA_Init
+MX_SPI1_Init
+MX_CRC_Init
+MX_SPI2_Init
+MX_SPI3_Init
+HAL_SPI_Transmit_DMA
+printf
+HAL_SPI_Receive_DMA
+completed2
+hspi2
+completed3
+hspi3
