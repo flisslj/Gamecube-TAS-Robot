@@ -3,6 +3,13 @@
 static char* currentISO = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
 static char* currentTAS = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
 
+void contInit(void){
+	wiringPiSetup();
+	memInit();
+	replayInit();
+	SDinit();
+}
+
 uint64_t getAttachedHardware(){
 	uint64_t contInfo = CONTROLLER_TYPE<<8 | CONTROLLER_VERSION;
 	uint64_t replayInfo = reset();

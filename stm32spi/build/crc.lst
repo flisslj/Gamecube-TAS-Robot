@@ -1,0 +1,307 @@
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"crc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MX_CRC_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	MX_CRC_Init
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv5-sp-d16
+  25              	MX_CRC_Init:
+  26              	.LFB136:
+  27              		.file 1 "Src/crc.c"
+   1:Src/crc.c     **** /**
+   2:Src/crc.c     ****   ******************************************************************************
+   3:Src/crc.c     ****   * File Name          : CRC.c
+   4:Src/crc.c     ****   * Description        : This file provides code for the configuration
+   5:Src/crc.c     ****   *                      of the CRC instances.
+   6:Src/crc.c     ****   ******************************************************************************
+   7:Src/crc.c     ****   ** This notice applies to any and all portions of this file
+   8:Src/crc.c     ****   * that are not between comment pairs USER CODE BEGIN and
+   9:Src/crc.c     ****   * USER CODE END. Other portions of this file, whether 
+  10:Src/crc.c     ****   * inserted by the user or by software development tools
+  11:Src/crc.c     ****   * are owned by their respective copyright owners.
+  12:Src/crc.c     ****   *
+  13:Src/crc.c     ****   * COPYRIGHT(c) 2018 STMicroelectronics
+  14:Src/crc.c     ****   *
+  15:Src/crc.c     ****   * Redistribution and use in source and binary forms, with or without modification,
+  16:Src/crc.c     ****   * are permitted provided that the following conditions are met:
+  17:Src/crc.c     ****   *   1. Redistributions of source code must retain the above copyright notice,
+  18:Src/crc.c     ****   *      this list of conditions and the following disclaimer.
+  19:Src/crc.c     ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  20:Src/crc.c     ****   *      this list of conditions and the following disclaimer in the documentation
+  21:Src/crc.c     ****   *      and/or other materials provided with the distribution.
+  22:Src/crc.c     ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  23:Src/crc.c     ****   *      may be used to endorse or promote products derived from this software
+  24:Src/crc.c     ****   *      without specific prior written permission.
+  25:Src/crc.c     ****   *
+  26:Src/crc.c     ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  27:Src/crc.c     ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  28:Src/crc.c     ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  29:Src/crc.c     ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  30:Src/crc.c     ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  31:Src/crc.c     ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s 			page 2
+
+
+  32:Src/crc.c     ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  33:Src/crc.c     ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  34:Src/crc.c     ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  35:Src/crc.c     ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  36:Src/crc.c     ****   *
+  37:Src/crc.c     ****   ******************************************************************************
+  38:Src/crc.c     ****   */
+  39:Src/crc.c     **** 
+  40:Src/crc.c     **** /* Includes ------------------------------------------------------------------*/
+  41:Src/crc.c     **** #include "crc.h"
+  42:Src/crc.c     **** 
+  43:Src/crc.c     **** /* USER CODE BEGIN 0 */
+  44:Src/crc.c     **** 
+  45:Src/crc.c     **** /* USER CODE END 0 */
+  46:Src/crc.c     **** 
+  47:Src/crc.c     **** CRC_HandleTypeDef hcrc;
+  48:Src/crc.c     **** 
+  49:Src/crc.c     **** /* CRC init function */
+  50:Src/crc.c     **** void MX_CRC_Init(void)
+  51:Src/crc.c     **** {
+  28              		.loc 1 51 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 08B5     		push	{r3, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 3, -8
+  36              		.cfi_offset 14, -4
+  52:Src/crc.c     **** 
+  53:Src/crc.c     ****   hcrc.Instance = CRC;
+  37              		.loc 1 53 0
+  38 0002 0848     		ldr	r0, .L5
+  39 0004 084B     		ldr	r3, .L5+4
+  40 0006 0360     		str	r3, [r0]
+  54:Src/crc.c     ****   hcrc.Init.DefaultPolynomialUse = DEFAULT_POLYNOMIAL_ENABLE;
+  41              		.loc 1 54 0
+  42 0008 0023     		movs	r3, #0
+  43 000a 0371     		strb	r3, [r0, #4]
+  55:Src/crc.c     ****   hcrc.Init.DefaultInitValueUse = DEFAULT_INIT_VALUE_ENABLE;
+  44              		.loc 1 55 0
+  45 000c 4371     		strb	r3, [r0, #5]
+  56:Src/crc.c     ****   hcrc.Init.InputDataInversionMode = CRC_INPUTDATA_INVERSION_NONE;
+  46              		.loc 1 56 0
+  47 000e 4361     		str	r3, [r0, #20]
+  57:Src/crc.c     ****   hcrc.Init.OutputDataInversionMode = CRC_OUTPUTDATA_INVERSION_DISABLE;
+  48              		.loc 1 57 0
+  49 0010 8361     		str	r3, [r0, #24]
+  58:Src/crc.c     ****   hcrc.InputDataFormat = CRC_INPUTDATA_FORMAT_BYTES;
+  50              		.loc 1 58 0
+  51 0012 0123     		movs	r3, #1
+  52 0014 0362     		str	r3, [r0, #32]
+  59:Src/crc.c     ****   if (HAL_CRC_Init(&hcrc) != HAL_OK)
+  53              		.loc 1 59 0
+  54 0016 FFF7FEFF 		bl	HAL_CRC_Init
+  55              	.LVL0:
+  56 001a 00B9     		cbnz	r0, .L4
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s 			page 3
+
+
+  57              	.L1:
+  58 001c 08BD     		pop	{r3, pc}
+  59              	.L4:
+  60:Src/crc.c     ****   {
+  61:Src/crc.c     ****     Error_Handler();
+  60              		.loc 1 61 0
+  61 001e FFF7FEFF 		bl	Error_Handler
+  62              	.LVL1:
+  62:Src/crc.c     ****   }
+  63:Src/crc.c     **** 
+  64:Src/crc.c     **** }
+  63              		.loc 1 64 0
+  64 0022 FBE7     		b	.L1
+  65              	.L6:
+  66              		.align	2
+  67              	.L5:
+  68 0024 00000000 		.word	hcrc
+  69 0028 00300240 		.word	1073885184
+  70              		.cfi_endproc
+  71              	.LFE136:
+  73              		.section	.text.HAL_CRC_MspInit,"ax",%progbits
+  74              		.align	1
+  75              		.global	HAL_CRC_MspInit
+  76              		.syntax unified
+  77              		.thumb
+  78              		.thumb_func
+  79              		.fpu fpv5-sp-d16
+  81              	HAL_CRC_MspInit:
+  82              	.LFB137:
+  65:Src/crc.c     **** 
+  66:Src/crc.c     **** void HAL_CRC_MspInit(CRC_HandleTypeDef* crcHandle)
+  67:Src/crc.c     **** {
+  83              		.loc 1 67 0
+  84              		.cfi_startproc
+  85              		@ args = 0, pretend = 0, frame = 8
+  86              		@ frame_needed = 0, uses_anonymous_args = 0
+  87              		@ link register save eliminated.
+  88              	.LVL2:
+  68:Src/crc.c     **** 
+  69:Src/crc.c     ****   if(crcHandle->Instance==CRC)
+  89              		.loc 1 69 0
+  90 0000 0268     		ldr	r2, [r0]
+  91 0002 094B     		ldr	r3, .L15
+  92 0004 9A42     		cmp	r2, r3
+  93 0006 00D0     		beq	.L14
+  94              	.L13:
+  70:Src/crc.c     ****   {
+  71:Src/crc.c     ****   /* USER CODE BEGIN CRC_MspInit 0 */
+  72:Src/crc.c     **** 
+  73:Src/crc.c     ****   /* USER CODE END CRC_MspInit 0 */
+  74:Src/crc.c     ****     /* CRC clock enable */
+  75:Src/crc.c     ****     __HAL_RCC_CRC_CLK_ENABLE();
+  76:Src/crc.c     ****   /* USER CODE BEGIN CRC_MspInit 1 */
+  77:Src/crc.c     **** 
+  78:Src/crc.c     ****   /* USER CODE END CRC_MspInit 1 */
+  79:Src/crc.c     ****   }
+  80:Src/crc.c     **** }
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s 			page 4
+
+
+  95              		.loc 1 80 0
+  96 0008 7047     		bx	lr
+  97              	.L14:
+  67:Src/crc.c     **** 
+  98              		.loc 1 67 0
+  99 000a 82B0     		sub	sp, sp, #8
+ 100              	.LCFI1:
+ 101              		.cfi_def_cfa_offset 8
+ 102              	.LBB2:
+  75:Src/crc.c     ****   /* USER CODE BEGIN CRC_MspInit 1 */
+ 103              		.loc 1 75 0
+ 104 000c 03F50063 		add	r3, r3, #2048
+ 105 0010 1A6B     		ldr	r2, [r3, #48]
+ 106 0012 42F48052 		orr	r2, r2, #4096
+ 107 0016 1A63     		str	r2, [r3, #48]
+ 108 0018 1B6B     		ldr	r3, [r3, #48]
+ 109 001a 03F48053 		and	r3, r3, #4096
+ 110 001e 0193     		str	r3, [sp, #4]
+ 111 0020 019B     		ldr	r3, [sp, #4]
+ 112              	.LBE2:
+ 113              		.loc 1 80 0
+ 114 0022 02B0     		add	sp, sp, #8
+ 115              	.LCFI2:
+ 116              		.cfi_def_cfa_offset 0
+ 117              		@ sp needed
+ 118 0024 F0E7     		b	.L13
+ 119              	.L16:
+ 120 0026 00BF     		.align	2
+ 121              	.L15:
+ 122 0028 00300240 		.word	1073885184
+ 123              		.cfi_endproc
+ 124              	.LFE137:
+ 126              		.section	.text.HAL_CRC_MspDeInit,"ax",%progbits
+ 127              		.align	1
+ 128              		.global	HAL_CRC_MspDeInit
+ 129              		.syntax unified
+ 130              		.thumb
+ 131              		.thumb_func
+ 132              		.fpu fpv5-sp-d16
+ 134              	HAL_CRC_MspDeInit:
+ 135              	.LFB138:
+  81:Src/crc.c     **** 
+  82:Src/crc.c     **** void HAL_CRC_MspDeInit(CRC_HandleTypeDef* crcHandle)
+  83:Src/crc.c     **** {
+ 136              		.loc 1 83 0
+ 137              		.cfi_startproc
+ 138              		@ args = 0, pretend = 0, frame = 0
+ 139              		@ frame_needed = 0, uses_anonymous_args = 0
+ 140              		@ link register save eliminated.
+ 141              	.LVL3:
+  84:Src/crc.c     **** 
+  85:Src/crc.c     ****   if(crcHandle->Instance==CRC)
+ 142              		.loc 1 85 0
+ 143 0000 0268     		ldr	r2, [r0]
+ 144 0002 054B     		ldr	r3, .L20
+ 145 0004 9A42     		cmp	r2, r3
+ 146 0006 00D0     		beq	.L19
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s 			page 5
+
+
+ 147              	.L17:
+ 148 0008 7047     		bx	lr
+ 149              	.L19:
+  86:Src/crc.c     ****   {
+  87:Src/crc.c     ****   /* USER CODE BEGIN CRC_MspDeInit 0 */
+  88:Src/crc.c     **** 
+  89:Src/crc.c     ****   /* USER CODE END CRC_MspDeInit 0 */
+  90:Src/crc.c     ****     /* Peripheral clock disable */
+  91:Src/crc.c     ****     __HAL_RCC_CRC_CLK_DISABLE();
+ 150              		.loc 1 91 0
+ 151 000a 044A     		ldr	r2, .L20+4
+ 152 000c 136B     		ldr	r3, [r2, #48]
+ 153 000e 23F48053 		bic	r3, r3, #4096
+ 154 0012 1363     		str	r3, [r2, #48]
+  92:Src/crc.c     ****   /* USER CODE BEGIN CRC_MspDeInit 1 */
+  93:Src/crc.c     **** 
+  94:Src/crc.c     ****   /* USER CODE END CRC_MspDeInit 1 */
+  95:Src/crc.c     ****   }
+  96:Src/crc.c     **** } 
+ 155              		.loc 1 96 0
+ 156 0014 F8E7     		b	.L17
+ 157              	.L21:
+ 158 0016 00BF     		.align	2
+ 159              	.L20:
+ 160 0018 00300240 		.word	1073885184
+ 161 001c 00380240 		.word	1073887232
+ 162              		.cfi_endproc
+ 163              	.LFE138:
+ 165              		.comm	hcrc,36,4
+ 166              		.text
+ 167              	.Letext0:
+ 168              		.file 2 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+ 169              		.file 3 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+ 170              		.file 4 "Drivers/CMSIS/Include/core_cm7.h"
+ 171              		.file 5 "Drivers/CMSIS/Device/ST/STM32F7xx/Include/system_stm32f7xx.h"
+ 172              		.file 6 "Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f746xx.h"
+ 173              		.file 7 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+ 174              		.file 8 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+ 175              		.file 9 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.2017083
+ 176              		.file 10 "c:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708
+ 177              		.file 11 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h"
+ 178              		.file 12 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_crc.h"
+ 179              		.file 13 "Inc/crc.h"
+ 180              		.file 14 "Inc/main.h"
+ARM GAS  C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 crc.c
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s:18     .text.MX_CRC_Init:00000000 $t
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s:25     .text.MX_CRC_Init:00000000 MX_CRC_Init
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s:68     .text.MX_CRC_Init:00000024 $d
+                            *COM*:00000024 hcrc
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s:74     .text.HAL_CRC_MspInit:00000000 $t
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s:81     .text.HAL_CRC_MspInit:00000000 HAL_CRC_MspInit
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s:122    .text.HAL_CRC_MspInit:00000028 $d
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s:127    .text.HAL_CRC_MspDeInit:00000000 $t
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s:134    .text.HAL_CRC_MspDeInit:00000000 HAL_CRC_MspDeInit
+C:\Users\ROUTHE~1\AppData\Local\Temp\ccbvlh9s.s:160    .text.HAL_CRC_MspDeInit:00000018 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+HAL_CRC_Init
+Error_Handler

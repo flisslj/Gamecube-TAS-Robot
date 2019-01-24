@@ -14,6 +14,12 @@
 */
 
 static uint8_t* cmd = malloc(sizeof(uint8_t)* 3)
+static int REP_BUFFER = -1;
+
+//the reading buffer for the component
+//literally just two best friend bytes
+//it's because we can only read 8 bits at a time from the mcp
+static char* readBuffer = malloc(sizeof(char)*2);
 
 /**
 * Initialize the replay component part of the code
@@ -21,11 +27,8 @@ static uint8_t* cmd = malloc(sizeof(uint8_t)* 3)
 * In particular, the wiringpi, SPI, cmd, and pins need setup
 */
 void replayInit(){
-	//initialize the wiringpi interface
-	wiringPiSetup();
-	
 	//initialize the SPI
-	int fd0 = wiringPiSPISetup(MCP_CHANNEL, MCP_SPEED);
+	REP_BUFFER = wiringPiSPISetup(MCP_CHANNEL, MCP_SPI_SPEED);
 	
 	//setup the command
 	*(cmd + CMD_DEVICE_ADDRESS) = MCP_OPCODE |  (MCP_ADDRESS << 1);
@@ -69,14 +72,16 @@ uint16_t replayReset(){
 	
 	//wait until send is low and read the mcp
 	while(digitalRead(REPLAY_SND)==1);
-	info |= (wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH-1)<<8);
+	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
+	read(REP_BUFFER,readBuffer,1);
 	digitalWrite(REPLAY_CLK,0);
 	delayMicroseconds(5); //delay 5 us because why not
 	digitalWrite(REPLAY_CLK,1);
 	
 	//wait until send is high again and read the mcp
 	while(digitalRead(REPLAY_SND)==0);
-	info |= (wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH-1)<<0);
+	wiringPiSPIDataRW(MCP_CHANNEL,cmd,CMD_LENGTH);
+	read(REP_BUFFER,readBuffer+1,1);
 	digitalWrite(REPLAY_CLK,0);
 	delayMicroseconds(5); //delay 5 us because why not
 	digitalWrite(REPLAY_CLK,1);
@@ -90,7 +95,18 @@ uint16_t replayReset(){
 	//reset the command
 	*(cmd + CMD_REGISTER_ADDRESS) = MCP_GPIO_A;
 	
+	info = *(readBuffer)<<8 + *(readBuffer+1);
+	
 	return info;
+}
+
+/**
+* Runs the replay device until interrupted
+* TODO STOP HAVING ANXIETY I GUESS
+*/
+
+void replayRun(){
+	return;
 }
 
 /** 

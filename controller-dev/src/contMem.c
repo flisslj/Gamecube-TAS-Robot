@@ -9,9 +9,6 @@ static uint8_t* memcmd = malloc(sizeof(uint8_t)* 3)
 * There may be additional pins for memory dump control purposes
 */
 void memInit(){
-	//initialize the wiringpi interface
-	wiringPiSetup();
-	
 	//initialize the SPI
 	int fd0 = wiringPiSPISetup(MCP_CHANNEL, MCP_SPEED);
 	
