@@ -15,7 +15,7 @@
 * The port onboard the gamecube for memory dump retrieval
 */
 
-int fileDesc;
+boolean isRunning;
 
 /**
 * running main has some format
@@ -30,6 +30,7 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 	
+	
 	char type = *(argv[1]);
 	char* basePath = argv[2];
 	char* command = malloc(sizeof(char)*MAX_STDIN_CMD_LENGTH);
@@ -38,21 +39,36 @@ int main(int argc, char *argv[]){
 	
 	contInit();
 	
+	//by default, the program is not running
+	isRunning = false;
+	
 	//handles grabbing and returns commands through stdin
 	if(type=='0'){
 		//UART setup is surprisingly simple
-		fileDesc = serialOpen("/dev/ttyAMA0", UART_BAUD);
+		serialOpen("/dev/ttyAMA0", UART_BAUD);
 	}
 	
 	while(1){
 		//spinlock until we get a command
 		//this means functions like run should be interrupt-driven
 		//unless we can slap interrupts on this in which case nvm
-		
+		int n = 0;
 		if(type=='1'){
-			getline(&command,&len,stdin);
+			while(n==0){
+				if (ioctl(0, I_NREAD, &n) == 0 && n > 0){
+					getline(&command,&len,stdin);
+				}else{
+					if(isRunning){
+						contRun();
+					}
+				}
+			}
 		}else if(type=='0'){
-			while(serialDataAvail(fileDesc)==0 || serialDataAvail(fileDesc)==-1);
+			while(serialDataAvail(fileDesc)==0 || serialDataAvail(fileDesc)==-1){
+				if(isRunning){
+					contRun();
+				}
+			}
 			read(fileDesc,command, MAX_STDIN_CMD_LENGTH);
 		}else{
 			printf("%c",type);
@@ -142,14 +158,12 @@ int main(int argc, char *argv[]){
 				generalPrint(type, "FALSE\n");
 			}
 		}else if(strcmp(command,"run\n")==0){
-			if(contRun()){
-				generalPrint(type, "TRUE\n");
-			}else{
-				generalPrint(type, "FALSE\n");
-			}
+			isRunning = true;
+			generalPrint(type, "TRUE\n");
 		}else if(strcmp(command,"abort\n")==0){
 			if(contAbort()){
 				generalPrint(type, "TRUE\n");
+				isRunning = false;
 			}else{
 				generalPrint(type, "FALSE\n");
 			}

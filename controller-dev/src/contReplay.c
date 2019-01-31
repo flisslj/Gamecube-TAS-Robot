@@ -117,15 +117,6 @@ uint16_t replayReset(){
 	return info;
 }
 
-/**
-* Runs the replay device until interrupted
-* TODO STOP HAVING ANXIETY I GUESS
-*/
-
-void replayRun(){
-	return;
-}
-
 /** 
 * Transmits a byte array of defined length to the replay device
 * 
@@ -139,12 +130,17 @@ void replayRun(){
 */
 enum frame_state replayTransmit(uint32_t length, uint8_t* data){
 	for(int i = 0; i < length; i++){
-		if(digitalRead(REPLAY_RSND)==1){
+		if(digitalRead(REPLAY_RSND)==0){
+			digitalWrite(REPLAY_CLK, 0);
+			//wait the standard amount (except not really, interrupts eventually)
+			delayMicroseconds(CMD_CLK_DELAY_US);
+			//flip clock again
+			digitalWrite(REPLAY_CLK, 1);
 			return RESEND_PREVIOUS;
 		}
 		replayByte(*(data+i));
-		//wait for the next send signal
-		while(digitalRead(REPLAY_SND)==1);
+		//don't wait for the next send signal
+		//while(digitalRead(REPLAY_SND)==1);
 	}
 	
 	//some very short delay to wait for baremetal - less than the time to the next send signal
@@ -170,11 +166,13 @@ void replayByte(uint8_t byte){
 	//after this flip the clock down
 	digitalWrite(REPLAY_CLK, 0);
 	//wait the standard amount (except not really, interrupts eventually)
-	delayMicroseconds(CMD_CLK_DELAY_US);
+	//delayMicroseconds(CMD_CLK_DELAY_US);
+	while(digitalRead(REPLAY_SND)==0);
 	//flip clock again
 	digitalWrite(REPLAY_CLK, 1);
 	//wait again lmfao
-	delayMicroseconds(CMD_CLK_DELAY_US);
+	//delayMicroseconds(CMD_CLK_DELAY_US);
+	while(digitalRead(REPLAY_SND)==1);
 	
 	return;
 }
