@@ -1,8 +1,8 @@
 package main
 
 import (
-	//"bufio"
-	"bytes"
+	"bufio"
+	//"bytes"
 	"flag"
 	"fmt"
 	"io"
@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"time"
 )
 
 var Port int
@@ -23,7 +24,7 @@ func main() {
 	PortDesc := `The port to use for the communication.`
 	SecretDesc := `The secret key used to make sure that ONLY the controller can send api commands.`
 	ControllerDesc := `The location of the controller program to be called. `
-	port := flag.Int("p", 80, PortDesc)
+	port := flag.Int("p", 8080, PortDesc)
 	secret := flag.String("s", "password1234", SecretDesc)
 	controller := flag.String("c", "../../controller-dev/src/controller", ControllerDesc)
 
@@ -46,12 +47,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = cmd.Start()
+	//err = cmd.Start()
 	if err != nil {
 		fmt.Printf("Program Start errored with error %s.\n", err.Error())
 		os.Exit(-1)
 	}
-
+	//fmt.Printf("Started program controller. Initing Handler.\n")
 	http.HandleFunc("/", defaultHandler)
 	http.HandleFunc("/api/", apiHandler)
 
@@ -143,15 +144,28 @@ func runCommand(command string) (response string) {
 	if false {
 		return command
 	}
-	fmt.Printf("command: %s\n", command)
-	io.WriteString(Stdin, command)
-
+	fmt.Printf("%s\n", command)
+	/*io.WriteString(Stdin, command)
 	buf := new(bytes.Buffer)
-	buf.ReadFrom(Stdout)
-	newStr := buf.String()
-	fmt.Printf("response: %s\n", newStr)
+	*/
+	c2 := make(chan string, 1)
+	go func() {
+		reader := bufio.NewReader(os.Stdin)
+		text, _ := reader.ReadString('\n')
+		c2 <- text
+	}()
 
-	return newStr
+	select {
+	case newStr := <-c2:
+		//newStr := buf.String()
+		//fmt.Printf("response: %s\n", newStr)
+		return newStr
+	case <-time.After(3 * time.Second):
+		//fmt.Println("Timeout Triggered.")
+		return "Timeout"
+	}
+
+	return ""
 }
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
@@ -169,7 +183,7 @@ func Heartbeat(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
-	fmt.Fprintf(w, "%s", runCommand("heartbeet:3735936751"))
+	fmt.Fprintf(w, "%s", runCommand("heartbeat:3735936751"))
 }
 func GetAttachedHardware(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {

@@ -81,7 +81,7 @@ int main(int argc, char *argv[]){
 			free(returnString);
 		}else if(strncmp(command,"heartbeat:",10)==0){
 			//we then grab the variable and then determine whether to return error or confirmation
-			//TODO
+			generalPrint(type,"DEADDEeF\n");
 		}else if(strcmp(command,"sdsize\n")==0){
 			uint64_t ret = getSDsize();
 			//encode ret into base 64
@@ -174,7 +174,8 @@ int main(int argc, char *argv[]){
 				generalPrint(type, "FALSE\n");
 			}
 		}else{
-			generalPrint(type, "incorrect command\n");
+			generalPrint(type, command);
+			generalPrint(type, "is an incorrect command\n");
 		}
 	}
 	
@@ -183,7 +184,8 @@ int main(int argc, char *argv[]){
 
 void generalPrint(char type, char* message){
 	if(type=='1'){
-		fprintf(stdout,message);
+		printf(message);
+		fflush(stdout);
 	}else if(type=='0'){
 		serialPrintf(fileDesc,message);
 	}
