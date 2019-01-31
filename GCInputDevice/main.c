@@ -14,9 +14,9 @@ void testOutput();
 
 void main()
 {
-    //printf("Hello World\n");
-    //reset();
-    testOutput();
+    printf("Hello World\n");
+    reset();
+    //testOutput();
 }
 
 #define InputDeviceType 1
