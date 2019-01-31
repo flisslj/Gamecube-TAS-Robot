@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bufio"
+	//"bufio"
 	"flag"
 	"fmt"
 	"io"
@@ -53,6 +53,10 @@ func main() {
 }
 
 func confirmSecret(r *http.Request) bool {
+	if Secret == "" {
+		return true
+	}
+
 	keys, ok := r.URL.Query()["secret"]
 
 	if !ok {
@@ -69,7 +73,7 @@ func confirmSecret(r *http.Request) bool {
 	// we only want the single item.
 	key := keys[0]
 
-	if string(key) == Secret || Secret == "" {
+	if string(key) == Secret {
 		return true
 	}
 
@@ -109,13 +113,17 @@ func upload(w http.ResponseWriter, r *http.Request, filepath string) {
 }
 
 func runCommand(command string) (response string) {
+	//if statement to make the program return a
+	if false {
+		return command
+	}
 	fmt.Println(command)
-	reader := bufio.NewReader(os.Stdin)
+	/*reader := bufio.NewReader(os.Stdin)
 	text, err := reader.ReadString('\n')
 	if err != nil {
 		return err.Error()
-	}
-	return text
+	}*/
+	return "THis was a successfull test. "
 }
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {

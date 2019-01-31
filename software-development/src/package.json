@@ -7,5 +7,9 @@
     "start": "electron ."
   },
   "author": "Luke Fliss",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "request": "^2.88.0",
+    "serialport": "^7.1.0"
+  }
 }
