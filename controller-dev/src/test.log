@@ -1,0 +1,7 @@
+List of commands:
+heartbeat, hardware
+sdsize, sdopen, loadiso
+getfiles, getisos, gettases
+getcurrenttas, getcurrentiso
+loadtas, settas, setiso
+run, abort, and help, ya silly

@@ -4,15 +4,15 @@
 //the onboard spi component only takes chars
 //even though we send 16 bits at a time, we need two bytes
 //honestly you could shoot me in the knee and i wouldn't even feel it
-static char* sdCmd= malloc(sizeof(char)*2);
+char* sdCmd;
 
 //file descriptor for the spi buffer
-static int SD_SPI_BUFFER = -1;
+int SD_SPI_BUFFER;
 
 //the reading buffer for the component
 //the largest number the SD card returns is a 64 bit int
 //we get it in 16 bit chunks, so 4*16 = 64
-static uint16_t* readBuffer = malloc(sizeof(uint16_t)*4);
+uint16_t* readBuffer;
 
 /**
 * Initializes the SD function
@@ -21,12 +21,16 @@ static uint16_t* readBuffer = malloc(sizeof(uint16_t)*4);
 */
 void SDinit(){
 	//set up the second channel
-	SPI_BUFFER = wiringPiSPISetup(SD_CHANNEL, SD_SPI_SPEED);
+	SD_SPI_BUFFER = wiringPiSPISetup(SD_SPI_CHANNEL, SD_SPI_SPEED);
 	
+	sdCmd= malloc(sizeof(char)*2);
+	readBuffer = malloc(sizeof(uint16_t)*4);
+
 	//both snd and rsnd are controlled by the board
 	//we pull up anyway, for posterity
 	pinMode(SD_SND, INPUT);
 	pinMode(SD_RSND, INPUT);
+	pinMode(SD_CMD, OUTPUT);
 	pullUpDnControl(SD_SND, PUD_UP);
 	pullUpDnControl(SD_RSND, PUD_UP);
 }
@@ -43,9 +47,13 @@ void SDinit(){
 uint32_t getSDinfo(){
 	//Here's the general process in order to grab stuff from the spi
 	//This is used for most of the commands here
-	
+
 	//Send the command magic number to the SPI
 	SDsendCMD(SD_GET_INFO);
+	//pulsing cmd
+	digitalWrite(SD_CMD,1);
+	delay(5);
+	digitalWrite(SD_CMD,0);
 	for(int i = 0; i < sizeof(uint32_t)/sizeof(uint16_t); i++){
 		//Wait for an indication 
 		while(digitalRead(SD_SND)==1);
@@ -54,8 +62,11 @@ uint32_t getSDinfo(){
 		SDsendCMD(SD_NULL);
 		//Read the data from the SPI buffer
 		read(SD_SPI_BUFFER,readBuffer+i,1);
+		digitalWrite(SD_CMD,1);
+        	delay(5);
+        	digitalWrite(SD_CMD,0);
 	}
-	
+
 	//now that we have the data, we just convert it to uint32_t
 	//this assumes big endian
 	return (((uint32_t)(*readBuffer))<<16 + *(readBuffer+1));
@@ -75,16 +86,22 @@ uint64_t getSDsize(){
 	//Wait for an indication
 	for(int i = 0; i < sizeof(uint64_t)/sizeof(uint16_t); i++){
 		while(digitalRead(SD_SND)==1);
-		SDsendCMD(SD_NULL);
-		read(SD_SPI_BUFFER,(readBuffer+i),1);
+		*(readBuffer+i) = SDsendCMD(SD_NULL);
 	}
 	
 	//convert the short array into a long long
 	uint64_t returnValue = 0;
-	returnValue += *(readBuffer)<<48;
-	returnValue += *(readBuffer+1)<<32;
-	returnValue += *(readBuffer+2)<<16;
-	returnValue += *(readBuffer+3)<<0;
+
+	//this value exists due to typecasting
+	//it's a pain
+	uint64_t tempVal = 0;
+	tempVal = *(readBuffer);
+	returnValue += tempVal<<48;
+	tempVal = *(readBuffer+1);
+	returnValue += tempVal<<32;
+	tempVal = *(readBuffer+2);
+	returnValue += tempVal<<16;
+	returnValue += *(readBuffer+3);
 	
 	return returnValue;
 }
@@ -106,10 +123,16 @@ uint64_t getSDEmptySpace(){
 	
 	//convert the short array into a long long
 	uint64_t returnValue = 0;
-	returnValue += *(readBuffer)<<48;
-	returnValue += *(readBuffer+1)<<32;
-	returnValue += *(readBuffer+2)<<16;
-	returnValue += *(readBuffer+3)<<0;
+	//this value exists due to typecasting
+	//it's a pain
+	uint64_t tempVal = 0;
+	tempVal = *(readBuffer);
+	returnValue += tempVal<<48;
+	tempVal = *(readBuffer+1);
+	returnValue += tempVal<<32;
+	tempVal = *(readBuffer+2);
+	returnValue += tempVal<<16;
+	returnValue += *(readBuffer+3);
 	
 	return returnValue;
 }
@@ -208,9 +231,13 @@ void SDtransmit(uint32_t length, uint8_t* data){
 *
 * It converts the 16 bit integer to a byte array, then uses the wiringpi library
 */
-void SDsendCMD(uint16_t cmd){
+uint16_t SDsendCMD(uint16_t cmd){
 	
 	*(sdCmd) = cmd>>8;
 	*(sdCmd+1) = cmd%(1<<8);
-	return wiringPiSPIDataRW(SD_SPI_CHANNEL,sdCmd,2);
+	wiringPiSPIDataRW(SD_SPI_CHANNEL,sdCmd,2);
+	uint16_t retVal = *(sdCmd);
+	retVal <<= 8;
+	retVal += *(sdCmd+1);
+	return retVal;
 }

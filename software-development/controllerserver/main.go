@@ -2,30 +2,57 @@ package main
 
 import (
 	"bufio"
+	//"bytes"
 	"flag"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"strconv"
+	"time"
 )
 
 var Port int
 var Secret string
+var Controller string
+var Stdin io.WriteCloser
+var Stdout io.ReadCloser
 
 func main() {
 	PortDesc := `The port to use for the communication.`
 	SecretDesc := `The secret key used to make sure that ONLY the controller can send api commands.`
-
-	port := flag.Int("p", 80, PortDesc)
+	ControllerDesc := `The location of the controller program to be called. `
+	port := flag.Int("p", 8080, PortDesc)
 	secret := flag.String("s", "password1234", SecretDesc)
+	controller := flag.String("c", "../../controller-dev/src/controller", ControllerDesc)
 
 	flag.Parse()
 
 	Port = *port
 	Secret = *secret
+	Controller = *controller
 
+	cmd := exec.Command(Controller, "1", "./src")
+	stdin, err := cmd.StdinPipe()
+	Stdin = stdin
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	stdout, err := cmd.StdoutPipe()
+	Stdout = stdout
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//err = cmd.Start()
+	if err != nil {
+		fmt.Printf("Program Start errored with error %s.\n", err.Error())
+		os.Exit(-1)
+	}
+	//fmt.Printf("Started program controller. Initing Handler.\n")
 	http.HandleFunc("/", defaultHandler)
 	http.HandleFunc("/api/", apiHandler)
 
@@ -53,6 +80,10 @@ func main() {
 }
 
 func confirmSecret(r *http.Request) bool {
+	if Secret == "" {
+		return true
+	}
+
 	keys, ok := r.URL.Query()["secret"]
 
 	if !ok {
@@ -69,7 +100,7 @@ func confirmSecret(r *http.Request) bool {
 	// we only want the single item.
 	key := keys[0]
 
-	if string(key) == Secret || Secret == "" {
+	if string(key) == Secret {
 		return true
 	}
 
@@ -109,13 +140,32 @@ func upload(w http.ResponseWriter, r *http.Request, filepath string) {
 }
 
 func runCommand(command string) (response string) {
-	fmt.Println(command)
-	reader := bufio.NewReader(os.Stdin)
-	text, err := reader.ReadString('\n')
-	if err != nil {
-		return err.Error()
+	//if statement to make the program return a
+	if false {
+		return command
 	}
-	return text
+	fmt.Printf("%s\n", command)
+	/*io.WriteString(Stdin, command)
+	buf := new(bytes.Buffer)
+	*/
+	c2 := make(chan string, 1)
+	go func() {
+		reader := bufio.NewReader(os.Stdin)
+		text, _ := reader.ReadString('\n')
+		c2 <- text
+	}()
+
+	select {
+	case newStr := <-c2:
+		//newStr := buf.String()
+		//fmt.Printf("response: %s\n", newStr)
+		return newStr
+	case <-time.After(3 * time.Second):
+		//fmt.Println("Timeout Triggered.")
+		return "Timeout"
+	}
+
+	return ""
 }
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
@@ -133,7 +183,7 @@ func Heartbeat(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Invalid Secret.")
 		return
 	}
-	fmt.Fprintf(w, "%s", runCommand("heartbeet:3735936751"))
+	fmt.Fprintf(w, "%s", runCommand("heartbeat:3735936751"))
 }
 func GetAttachedHardware(w http.ResponseWriter, r *http.Request) {
 	if !confirmSecret(r) {
