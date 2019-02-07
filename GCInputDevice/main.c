@@ -3,7 +3,6 @@
 #include <wiringPi.h>
 #include <unistd.h>
 
-
 #define testControllerPlayback 1
 
 void reset();
@@ -125,34 +124,35 @@ void reset()
         digitalWrite(SendPin, 1);
         digitalWrite(ResendPin, 1);
 
-if(wait){
-        //output type
-        outputOnDataPins(InputDeviceType);
-
-        //pull Send Low
-        digitalWrite(SendPin, 0);
-
-        //wait for clock pulse
-        while (digitalRead(ClockPin))
+        if (wait)
         {
+            //output type
+            outputOnDataPins(InputDeviceType);
+
+            //pull Send Low
+            digitalWrite(SendPin, 0);
+
+            //wait for clock pulse
+            while (digitalRead(ClockPin))
+            {
+            }
+
+            //wait for end of clock pulse low.
+            while (!digitalRead(ClockPin))
+            {
+            }
+
+            //output version
+            outputOnDataPins(InputDeviceVersion);
+
+            //pull send high
+            digitalWrite(SendPin, 1);
+
+            //wait for clock to go low again.
+            while (digitalRead(ClockPin))
+            {
+            }
         }
-
-        //wait for end of clock pulse low.
-        while (!digitalRead(ClockPin))
-        {
-        }
-
-        //output version
-        outputOnDataPins(InputDeviceVersion);
-
-        //pull send high
-        digitalWrite(SendPin, 1);
-
-        //wait for clock to go low again.
-        while (digitalRead(ClockPin))
-        {
-        }
-}
         //set pins back to input.
         pinMode(DataPin00, INPUT);
         pinMode(DataPin01, INPUT);
@@ -199,7 +199,8 @@ void playback()
 {
     //temporary
     while (1)
-    {	printf("frame playback\n");
+    {
+        printf("frame playback\n");
         testReset
         getFrame();
         testReset
@@ -301,8 +302,7 @@ void getFrame()
     }
 }
 
-
-
+int first = 1;
 //poll for the controller data from the gamecube that signifies "next frame", than begin the
 void outputFrame()
 {
@@ -341,8 +341,17 @@ void outputFrame()
     }
     */
 
-    delayMicroseconds(98);
-	//printf("outputting\n");
+    delayMicroseconds(36);
+    if (!first)
+    {
+        delayMicroseconds(62);
+    }
+    else
+    {
+        first = 0;
+    }
+
+    //printf("outputting\n");
     for (int i = 0; i < 64; i++)
     { //output the values read in.
         digitalWrite(CtrlOut1, 0);
