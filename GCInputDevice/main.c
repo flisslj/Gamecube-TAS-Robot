@@ -15,12 +15,21 @@ void testOutput();
 void main()
 {
     printf("Hello World\n");
-    reset();
+    //reset();
     //testOutput();
+
+    if (testControllerPlayback)
+    {
+        while (1)
+        {
+            playback();
+        }
+    }
 }
 
 #define InputDeviceType 1
 #define InputDeviceVersion 1
+#define testControllerPlayback 1
 
 #define DataPin00 2   // physical pins 3
 #define DataPin01 3   // physical pins 5
@@ -198,22 +207,98 @@ void playback()
 //poll for the next frame. Every time, check for the reset pin.
 void getFrame()
 {
-    int frame[frameSize];
-    //read in the freame, checking for reset every time.
-    for (int i = 0; i < frameSize; i++)
-    {
-        //check for reset.
-        testReset;
 
-        while (!digitalRead(ClockPin) && digitalRead(ResetPin))
-            ;                         // wait for clock pin high (or reset).
-        frame[i] = inputOnDataPins(); //read in data
-        digitalWrite(SendPin, 1);
-        //write send high
-        while (digitalRead(ClockPin) && digitalRead(ResetPin))
-            ;                     //wait for clock low (or reset)
-        digitalWrite(SendPin, 0); //set send pin low.
+    if (!testControllerPlayback)
+    {
+
+        int frame[frameSize];
+        //read in the freame, checking for reset every time.
+        for (int i = 0; i < frameSize; i++)
+        {
+            //check for reset.
+            testReset;
+
+            while (!digitalRead(ClockPin) && digitalRead(ResetPin))
+                ;                         // wait for clock pin high (or reset).
+            frame[i] = inputOnDataPins(); //read in data
+            digitalWrite(SendPin, 1);
+            //write send high
+            while (digitalRead(ClockPin) && digitalRead(ResetPin))
+            {
+            }                         //wait for clock low (or reset)
+            digitalWrite(SendPin, 0); //set send pin low.
+        }
     }
+    else
+    {
+        ctrl1Frames[0][0] = 0;
+        ctrl1Frames[0][1] = 0;
+        ctrl1Frames[0][2] = 0;
+        ctrl1Frames[0][3] = 0;
+        ctrl1Frames[0][4] = 0;
+        ctrl1Frames[0][5] = 0;
+        ctrl1Frames[0][6] = 0;
+        ctrl1Frames[0][7] = 0;
+        ctrl1Frames[0][8] = 1;
+        ctrl1Frames[0][9] = 0;
+        ctrl1Frames[0][10] = 0;
+        ctrl1Frames[0][11] = 0;
+        ctrl1Frames[0][12] = 0;
+        ctrl1Frames[0][13] = 0;
+        ctrl1Frames[0][14] = 0;
+        ctrl1Frames[0][15] = 0;
+        ctrl1Frames[0][16] = 0;
+        ctrl1Frames[0][17] = 0;
+        ctrl1Frames[0][18] = 0;
+        ctrl1Frames[0][19] = 0;
+        ctrl1Frames[0][20] = 0;
+        ctrl1Frames[0][21] = 0;
+        ctrl1Frames[0][22] = 0;
+        ctrl1Frames[0][23] = 0;
+        ctrl1Frames[0][24] = 1;
+        ctrl1Frames[0][25] = 0;
+        ctrl1Frames[0][26] = 0;
+        ctrl1Frames[0][27] = 0;
+        ctrl1Frames[0][28] = 0;
+        ctrl1Frames[0][29] = 0;
+        ctrl1Frames[0][30] = 0;
+        ctrl1Frames[0][31] = 0;
+        ctrl1Frames[0][32] = 1;
+        ctrl1Frames[0][33] = 0;
+        ctrl1Frames[0][34] = 0;
+        ctrl1Frames[0][35] = 0;
+        ctrl1Frames[0][36] = 0;
+        ctrl1Frames[0][37] = 0;
+        ctrl1Frames[0][38] = 0;
+        ctrl1Frames[0][39] = 0;
+        ctrl1Frames[0][40] = 1;
+        ctrl1Frames[0][41] = 0;
+        ctrl1Frames[0][42] = 0;
+        ctrl1Frames[0][43] = 0;
+        ctrl1Frames[0][44] = 0;
+        ctrl1Frames[0][45] = 0;
+        ctrl1Frames[0][46] = 0;
+        ctrl1Frames[0][47] = 0;
+        ctrl1Frames[0][48] = 0;
+        ctrl1Frames[0][49] = 0;
+        ctrl1Frames[0][50] = 0;
+        ctrl1Frames[0][51] = 0;
+        ctrl1Frames[0][52] = 0;
+        ctrl1Frames[0][53] = 0;
+        ctrl1Frames[0][54] = 0;
+        ctrl1Frames[0][55] = 0;
+        ctrl1Frames[0][56] = 0;
+        ctrl1Frames[0][57] = 0;
+        ctrl1Frames[0][58] = 0;
+        ctrl1Frames[0][59] = 0;
+        ctrl1Frames[0][60] = 0;
+        ctrl1Frames[0][61] = 0;
+        ctrl1Frames[0][62] = 0;
+        ctrl1Frames[0][63] = 0;
+    }
+}
+
+{
 }
 
 //poll for the controller data from the gamecube that signifies "next frame", than begin the
@@ -224,36 +309,36 @@ void outputFrame()
     {
         testReset
     }
-
-    int startSequence[96] = {
-        0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, // 0 1 0 0
-        0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, // 0 0 0 0
-        0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, // 0 0 0 0
-        0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, // 0 0 1 1
-        0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, // 0 0 0 0
-        0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1  // 0 0 1 0
-    };
+    /*
+    int startSequence[24] = {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0};
 
     int tracker = 0; //value used to track the differences between the input and the expected.
 
     //read every us~ and store that data.
-    for (int i = 0; i < 96; i++)
+    for (int i = 0; i < 24; i++)
     {
+        delayMicroseconds(2);
         if (startSequence[i] != digitalRead(CtrlIn1))
         {
             tracker++;
         }
+
+        while (digitalRead(CtrlIn1))
+        {
+            testReset
+        }
         //read controller in.
-        asm("nop"); // the number of nops may need to be increased or decreased to properly match the timings of things.
     }
 
     //arbitrary 10 % difference. if there are more than 10 errors, return.
-    if (tracker >= 10)
+    if (tracker >= 4)
     {
 
         return;
     }
+    */
 
+    delayMicroseconds(98);
     for (int i = 0; i < 64; i++)
     { //output the values read in.
         digitalWrite(CtrlOut1, 0);
@@ -265,14 +350,18 @@ void outputFrame()
         digitalWrite(CtrlOut1, 1);
         delayMicroseconds(1);
     }
+    digitalWrite(CtrlOut1, 0);
+    delayMicroseconds(1);
+    digitalWrite(CtrlOut1, 1); //for now, no circle buffer
 }
+
 void testOutput()
 {
     wiringPiSetupGpio();
     pinMode(CtrlOut1, OUTPUT);
     for (int i = 0; i < 64; i++)
     { //output the values read in.
-        ctrl1Frames[0][i] = i%2;
+        ctrl1Frames[0][i] = i % 2;
     }
 
     while (1)
@@ -280,7 +369,7 @@ void testOutput()
         for (int i = 0; i < 64; i++)
         { //output the values read in.
             digitalWrite(CtrlOut1, 0);
-	    delayMicroseconds(1);
+            delayMicroseconds(1);
             digitalWrite(CtrlOut1, ctrl1Frames[0][i]); //for now, no circle buffer
             delayMicroseconds(1);
             digitalWrite(CtrlOut1, ctrl1Frames[0][i]); // for now, no circle buffer.
