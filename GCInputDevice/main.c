@@ -3,6 +3,9 @@
 #include <wiringPi.h>
 #include <unistd.h>
 
+
+#define testControllerPlayback 1
+
 void reset();
 void main();
 void outputOnDataPins(uint8_t num);
@@ -15,7 +18,7 @@ void testOutput();
 void main()
 {
     printf("Hello World\n");
-    //reset();
+    reset();
     //testOutput();
 
     if (testControllerPlayback)
@@ -29,8 +32,7 @@ void main()
 
 #define InputDeviceType 1
 #define InputDeviceVersion 1
-#define testControllerPlayback 1
-
+#define wait 0
 #define DataPin00 2   // physical pins 3
 #define DataPin01 3   // physical pins 5
 #define DataPin02 4   // physical pins 7
@@ -123,6 +125,7 @@ void reset()
         digitalWrite(SendPin, 1);
         digitalWrite(ResendPin, 1);
 
+if(wait){
         //output type
         outputOnDataPins(InputDeviceType);
 
@@ -149,7 +152,7 @@ void reset()
         while (digitalRead(ClockPin))
         {
         }
-
+}
         //set pins back to input.
         pinMode(DataPin00, INPUT);
         pinMode(DataPin01, INPUT);
@@ -196,7 +199,7 @@ void playback()
 {
     //temporary
     while (1)
-    {
+    {	printf("frame playback\n");
         testReset
         getFrame();
         testReset
@@ -298,12 +301,12 @@ void getFrame()
     }
 }
 
-{
-}
+
 
 //poll for the controller data from the gamecube that signifies "next frame", than begin the
 void outputFrame()
 {
+    printf("waiting for pull low\n");
     //read for controller input 1. if there isint one, test for reset. if reset, return.
     while (digitalRead(CtrlIn1))
     {
@@ -339,6 +342,7 @@ void outputFrame()
     */
 
     delayMicroseconds(98);
+	//printf("outputting\n");
     for (int i = 0; i < 64; i++)
     { //output the values read in.
         digitalWrite(CtrlOut1, 0);
@@ -353,6 +357,7 @@ void outputFrame()
     digitalWrite(CtrlOut1, 0);
     delayMicroseconds(1);
     digitalWrite(CtrlOut1, 1); //for now, no circle buffer
+    printf("done outputting.");
 }
 
 void testOutput()
