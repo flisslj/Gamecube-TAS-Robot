@@ -1,0 +1,2135 @@
+   1              		.file	"main.c"
+   2              	# GNU C++14 (Debian 6.3.0-18+deb9u1) version 6.3.0 20170516 (i686-linux-gnu)
+   3              	#	compiled by GNU C version 6.3.0 20170516, GMP version 6.1.2, MPFR version 3.1.5, MPC version 1.0.
+   4              	# GGC heuristics: --param ggc-min-expand=98 --param ggc-min-heapsize=128632
+   5              	# options passed:  -imultiarch i386-linux-gnu -D_GNU_SOURCE main.c
+   6              	# -mtune=generic -march=i686 -auxbase-strip main.s -g -O2 -fverbose-asm
+   7              	# options enabled:  -fPIC -fPIE -faggressive-loop-optimizations
+   8              	# -falign-labels -fasynchronous-unwind-tables -fauto-inc-dec
+   9              	# -fbranch-count-reg -fcaller-saves -fchkp-check-incomplete-type
+  10              	# -fchkp-check-read -fchkp-check-write -fchkp-instrument-calls
+  11              	# -fchkp-narrow-bounds -fchkp-optimize -fchkp-store-bounds
+  12              	# -fchkp-use-static-bounds -fchkp-use-static-const-bounds
+  13              	# -fchkp-use-wrappers -fcombine-stack-adjustments -fcommon -fcompare-elim
+  14              	# -fcprop-registers -fcrossjumping -fcse-follow-jumps -fdefer-pop
+  15              	# -fdelete-null-pointer-checks -fdevirtualize -fdevirtualize-speculatively
+  16              	# -fdwarf2-cfi-asm -fearly-inlining -feliminate-unused-debug-types
+  17              	# -fexceptions -fexpensive-optimizations -fforward-propagate -ffunction-cse
+  18              	# -fgcse -fgcse-lm -fgnu-runtime -fgnu-unique -fguess-branch-probability
+  19              	# -fhoist-adjacent-loads -fident -fif-conversion -fif-conversion2
+  20              	# -findirect-inlining -finline -finline-atomics
+  21              	# -finline-functions-called-once -finline-small-functions -fipa-cp
+  22              	# -fipa-cp-alignment -fipa-icf -fipa-icf-functions -fipa-icf-variables
+  23              	# -fipa-profile -fipa-pure-const -fipa-ra -fipa-reference -fipa-sra
+  24              	# -fira-hoist-pressure -fira-share-save-slots -fira-share-spill-slots
+  25              	# -fisolate-erroneous-paths-dereference -fivopts -fkeep-static-consts
+  26              	# -fleading-underscore -flifetime-dse -flra-remat -flto-odr-type-merging
+  27              	# -fmath-errno -fmerge-constants -fmerge-debug-strings
+  28              	# -fmove-loop-invariants -fomit-frame-pointer -foptimize-sibling-calls
+  29              	# -foptimize-strlen -fpartial-inlining -fpcc-struct-return -fpeephole
+  30              	# -fpeephole2 -fplt -fprefetch-loop-arrays -free -freorder-blocks
+  31              	# -freorder-functions -frerun-cse-after-loop
+  32              	# -fsched-critical-path-heuristic -fsched-dep-count-heuristic
+  33              	# -fsched-group-heuristic -fsched-interblock -fsched-last-insn-heuristic
+  34              	# -fsched-rank-heuristic -fsched-spec -fsched-spec-insn-heuristic
+  35              	# -fsched-stalled-insns-dep -fschedule-fusion -fschedule-insns2
+  36              	# -fsemantic-interposition -fshow-column -fshrink-wrap -fsigned-zeros
+  37              	# -fsplit-ivs-in-unroller -fsplit-wide-types -fssa-backprop -fssa-phiopt
+  38              	# -fstdarg-opt -fstrict-aliasing -fstrict-overflow
+  39              	# -fstrict-volatile-bitfields -fsync-libcalls -fthread-jumps
+  40              	# -ftoplevel-reorder -ftrapping-math -ftree-bit-ccp -ftree-builtin-call-dce
+  41              	# -ftree-ccp -ftree-ch -ftree-coalesce-vars -ftree-copy-prop -ftree-cselim
+  42              	# -ftree-dce -ftree-dominator-opts -ftree-dse -ftree-forwprop -ftree-fre
+  43              	# -ftree-loop-if-convert -ftree-loop-im -ftree-loop-ivcanon
+  44              	# -ftree-loop-optimize -ftree-parallelize-loops= -ftree-phiprop -ftree-pre
+  45              	# -ftree-pta -ftree-reassoc -ftree-scev-cprop -ftree-sink -ftree-slsr
+  46              	# -ftree-sra -ftree-switch-conversion -ftree-tail-merge -ftree-ter
+  47              	# -ftree-vrp -funit-at-a-time -funwind-tables -fvar-tracking
+  48              	# -fvar-tracking-assignments -fverbose-asm -fzero-initialized-in-bss -m32
+  49              	# -m80387 -m96bit-long-double -malign-stringops
+  50              	# -mavx256-split-unaligned-load -mavx256-split-unaligned-store
+  51              	# -mfancy-math-387 -mfp-ret-in-387 -mglibc -mieee-fp -mlong-double-80
+  52              	# -mno-red-zone -mno-sse4 -mpush-args -msahf -mstv -mtls-direct-seg-refs
+  53              	# -mvzeroupper
+  54              	
+  55              		.text
+  56              	.Ltext0:
+  57              		.p2align 4,,15
+  58              		.globl	_Z16outputOnDataPinsh
+  60              	_Z16outputOnDataPinsh:
+  61              	.LFB14:
+  62              		.file 1 "main.c"
+   1:main.c        **** #include <stdint.h>
+   2:main.c        **** #include <stdio.h>
+   3:main.c        **** #include <wiringPi.h>
+   4:main.c        **** #include <unistd.h>
+   5:main.c        **** 
+   6:main.c        **** #define testControllerPlayback 1 //THis value is if the controller playback is in testing more or n
+   7:main.c        **** #define wait 0                   //this value defines if the reset triggers should be waited for or
+   8:main.c        **** 
+   9:main.c        **** void reset();
+  10:main.c        **** int main();
+  11:main.c        **** void outputOnDataPins(uint8_t num);
+  12:main.c        **** uint8_t inputOnDataPins();
+  13:main.c        **** void playback();
+  14:main.c        **** void getFrame();
+  15:main.c        **** void outputFrame();
+  16:main.c        **** void testOutput();
+  17:main.c        **** 
+  18:main.c        **** int main()
+  19:main.c        **** {
+  20:main.c        ****     printf("Hello World\n");
+  21:main.c        ****     reset();
+  22:main.c        ****     //testOutput();
+  23:main.c        **** }
+  24:main.c        **** 
+  25:main.c        **** #define InputDeviceType 1
+  26:main.c        **** #define InputDeviceVersion 1
+  27:main.c        **** #define DataPin00 2   // physical pins 3
+  28:main.c        **** #define DataPin01 3   // physical pins 5
+  29:main.c        **** #define DataPin02 4   // physical pins 7
+  30:main.c        **** #define DataPin03 5   // physical pins 29
+  31:main.c        **** #define DataPin04 6   // physical pins 31
+  32:main.c        **** #define DataPin05 7   // physical pins 26
+  33:main.c        **** #define DataPin06 8   // physical pins 24
+  34:main.c        **** #define DataPin07 9   // physical pins 21
+  35:main.c        **** #define CtrlIn1 10    // physical pins 19
+  36:main.c        **** #define CtrlIn2 11    // physical pins 23
+  37:main.c        **** #define CtrlIn3 12    // physical pins 32
+  38:main.c        **** #define CtrlIn4 13    // physical pins 33
+  39:main.c        **** #define CtrlOut1 14   // physical pins 8
+  40:main.c        **** #define CtrlOut2 15   // physical pins 10
+  41:main.c        **** #define CtrlOut3 16   // physical pins 36
+  42:main.c        **** #define CtrlOut4 17   // physical pins 11
+  43:main.c        **** #define ResetPin 18   // physical pins 12
+  44:main.c        **** #define ClockPin 19   // physical pins 35
+  45:main.c        **** #define SendPin 20    // physical pins 38
+  46:main.c        **** #define ResendPin 21  // physical pins 40
+  47:main.c        **** #define GCResetPin 22 // Physical pins 15
+  48:main.c        **** #define GCPowerPin 23 // physical pins 16
+  49:main.c        **** 
+  50:main.c        **** #define frameSize 40
+  51:main.c        **** 
+  52:main.c        **** #define testReset               \
+  53:main.c        ****     if (!digitalRead(ResetPin)) \
+  54:main.c        ****     {                           \
+  55:main.c        ****         return;                 \
+  56:main.c        ****     };
+  57:main.c        **** #define outputDelay \
+  58:main.c        ****     asm("nop");     \
+  59:main.c        ****     asm("nop");     \
+  60:main.c        ****     asm("nop");     \
+  61:main.c        ****     asm("nop");     \
+  62:main.c        ****     asm("nop");     \
+  63:main.c        ****     asm("nop");     \
+  64:main.c        ****     asm("nop");     \
+  65:main.c        ****     asm("nop");     \
+  66:main.c        ****     asm("nop");     \
+  67:main.c        ****     asm("nop");     \
+  68:main.c        ****     asm("nop");     \
+  69:main.c        ****     asm("nop");     \
+  70:main.c        ****     asm("nop");     \
+  71:main.c        ****     asm("nop");     \
+  72:main.c        ****     asm("nop");     \
+  73:main.c        ****     asm("nop");     \
+  74:main.c        ****     asm("nop");     \
+  75:main.c        ****     asm("nop");     \
+  76:main.c        ****     asm("nop");     \
+  77:main.c        ****     asm("nop");     \
+  78:main.c        ****     asm("nop");     \
+  79:main.c        ****     asm("nop");
+  80:main.c        **** 
+  81:main.c        **** #define frameValueSize 40
+  82:main.c        **** #define frameBuffer 10
+  83:main.c        **** int ctrl1Frames[frameBuffer][frameValueSize];
+  84:main.c        **** //reset board to inital state.
+  85:main.c        **** void reset()
+  86:main.c        **** {
+  87:main.c        ****     while (1)
+  88:main.c        ****     {
+  89:main.c        ****         printf("RESETTING\n");
+  90:main.c        ****         //set up the datapins to use the GPIO.
+  91:main.c        ****         wiringPiSetupGpio();
+  92:main.c        **** 
+  93:main.c        ****         //set pin directions.
+  94:main.c        ****         pinMode(DataPin00, OUTPUT);
+  95:main.c        ****         pinMode(DataPin01, OUTPUT);
+  96:main.c        ****         pinMode(DataPin02, OUTPUT);
+  97:main.c        ****         pinMode(DataPin03, OUTPUT);
+  98:main.c        ****         pinMode(DataPin04, OUTPUT);
+  99:main.c        ****         pinMode(DataPin05, OUTPUT);
+ 100:main.c        ****         pinMode(DataPin06, OUTPUT);
+ 101:main.c        ****         pinMode(DataPin07, OUTPUT);
+ 102:main.c        ****         pinMode(CtrlIn1, INPUT);
+ 103:main.c        ****         pinMode(CtrlIn2, INPUT);
+ 104:main.c        ****         pinMode(CtrlIn3, INPUT);
+ 105:main.c        ****         pinMode(CtrlIn4, INPUT);
+ 106:main.c        ****         pinMode(CtrlOut1, OUTPUT);
+ 107:main.c        ****         pinMode(CtrlOut2, OUTPUT);
+ 108:main.c        ****         pinMode(CtrlOut3, OUTPUT);
+ 109:main.c        ****         pinMode(CtrlOut4, OUTPUT);
+ 110:main.c        ****         pinMode(ResetPin, INPUT);
+ 111:main.c        ****         pinMode(ClockPin, INPUT);
+ 112:main.c        ****         pinMode(SendPin, OUTPUT);
+ 113:main.c        ****         pinMode(ResendPin, OUTPUT);
+ 114:main.c        ****         pinMode(GCPowerPin, OUTPUT);
+ 115:main.c        ****         pinMode(GCResetPin, OUTPUT);
+ 116:main.c        ****         digitalWrite(SendPin, 1);
+ 117:main.c        ****         digitalWrite(ResendPin, 1);
+ 118:main.c        **** 
+ 119:main.c        ****         if (wait)
+ 120:main.c        ****         {
+ 121:main.c        ****             //output type
+ 122:main.c        ****             outputOnDataPins(InputDeviceType);
+ 123:main.c        **** 
+ 124:main.c        ****             //pull Send Low
+ 125:main.c        ****             digitalWrite(SendPin, 0);
+ 126:main.c        **** 
+ 127:main.c        ****             //wait for clock pulse
+ 128:main.c        ****             while (digitalRead(ClockPin))
+ 129:main.c        ****             {
+ 130:main.c        ****             }
+ 131:main.c        **** 
+ 132:main.c        ****             //wait for end of clock pulse low.
+ 133:main.c        ****             while (!digitalRead(ClockPin))
+ 134:main.c        ****             {
+ 135:main.c        ****             }
+ 136:main.c        **** 
+ 137:main.c        ****             //output version
+ 138:main.c        ****             outputOnDataPins(InputDeviceVersion);
+ 139:main.c        **** 
+ 140:main.c        ****             //pull send high
+ 141:main.c        ****             digitalWrite(SendPin, 1);
+ 142:main.c        **** 
+ 143:main.c        ****             //wait for clock to go low again.
+ 144:main.c        ****             while (digitalRead(ClockPin))
+ 145:main.c        ****             {
+ 146:main.c        ****             }
+ 147:main.c        ****         }
+ 148:main.c        ****         //set pins back to input.
+ 149:main.c        ****         pinMode(DataPin00, INPUT);
+ 150:main.c        ****         pinMode(DataPin01, INPUT);
+ 151:main.c        ****         pinMode(DataPin02, INPUT);
+ 152:main.c        ****         pinMode(DataPin03, INPUT);
+ 153:main.c        ****         pinMode(DataPin04, INPUT);
+ 154:main.c        ****         pinMode(DataPin05, INPUT);
+ 155:main.c        ****         pinMode(DataPin06, INPUT);
+ 156:main.c        ****         pinMode(DataPin07, INPUT);
+ 157:main.c        **** 
+ 158:main.c        ****         //begin playback.
+ 159:main.c        ****         playback();
+ 160:main.c        ****     }
+ 161:main.c        **** }
+ 162:main.c        **** 
+ 163:main.c        **** //output data to the datapins.
+ 164:main.c        **** void outputOnDataPins(uint8_t num)
+ 165:main.c        **** {
+  63              		.loc 1 165 0
+  64              		.cfi_startproc
+  65              	.LVL0:
+  66 0000 57       		pushl	%edi	#
+  67              		.cfi_def_cfa_offset 8
+  68              		.cfi_offset 7, -8
+  69 0001 56       		pushl	%esi	#
+  70              		.cfi_def_cfa_offset 12
+  71              		.cfi_offset 6, -12
+  72 0002 53       		pushl	%ebx	#
+  73              		.cfi_def_cfa_offset 16
+  74              		.cfi_offset 3, -16
+  75              		.loc 1 165 0
+  76 0003 8B7C2410 		movl	16(%esp), %edi	# num, num
+  77 0007 E8FCFFFF 		call	__x86.get_pc_thunk.bx	#
+  77      FF
+  78 000c 81C30200 		addl	$_GLOBAL_OFFSET_TABLE_, %ebx	# tmp87,
+  78      0000
+ 166:main.c        ****     digitalWrite(DataPin00, (num & (1 << 0)) >> 0);
+  79              		.loc 1 166 0
+  80 0012 83EC08   		subl	$8, %esp	#,
+  81              		.cfi_def_cfa_offset 24
+  82 0015 89F8     		movl	%edi, %eax	# num, tmp123
+  83 0017 0FB6F0   		movzbl	%al, %esi	# tmp123, _2
+  84 001a 89F8     		movl	%edi, %eax	# num, tmp108
+  85 001c 83E001   		andl	$1, %eax	#, tmp108
+  86 001f 50       		pushl	%eax	# tmp108
+  87              		.cfi_def_cfa_offset 28
+  88 0020 6A02     		pushl	$2	#
+  89              		.cfi_def_cfa_offset 32
+  90 0022 E8FCFFFF 		call	digitalWrite@PLT	#
+  90      FF
+  91              	.LVL1:
+ 167:main.c        ****     digitalWrite(DataPin01, (num & (1 << 1)) >> 1);
+  92              		.loc 1 167 0
+  93 0027 58       		popl	%eax	#
+  94              		.cfi_def_cfa_offset 28
+  95 0028 89F0     		movl	%esi, %eax	# _2, tmp109
+  96 002a 5A       		popl	%edx	#
+  97              		.cfi_def_cfa_offset 24
+  98 002b D1F8     		sarl	%eax	# tmp109
+  99 002d 83E001   		andl	$1, %eax	#, tmp110
+ 100 0030 50       		pushl	%eax	# tmp110
+ 101              		.cfi_def_cfa_offset 28
+ 102 0031 6A03     		pushl	$3	#
+ 103              		.cfi_def_cfa_offset 32
+ 104 0033 E8FCFFFF 		call	digitalWrite@PLT	#
+ 104      FF
+ 105              	.LVL2:
+ 168:main.c        ****     digitalWrite(DataPin02, (num & (1 << 2)) >> 2);
+ 106              		.loc 1 168 0
+ 107 0038 59       		popl	%ecx	#
+ 108              		.cfi_def_cfa_offset 28
+ 109 0039 58       		popl	%eax	#
+ 110              		.cfi_def_cfa_offset 24
+ 111 003a 89F0     		movl	%esi, %eax	# _2, tmp111
+ 112 003c C1F802   		sarl	$2, %eax	#, tmp111
+ 113 003f 83E001   		andl	$1, %eax	#, tmp112
+ 114 0042 50       		pushl	%eax	# tmp112
+ 115              		.cfi_def_cfa_offset 28
+ 116 0043 6A04     		pushl	$4	#
+ 117              		.cfi_def_cfa_offset 32
+ 118 0045 E8FCFFFF 		call	digitalWrite@PLT	#
+ 118      FF
+ 119              	.LVL3:
+ 169:main.c        ****     digitalWrite(DataPin03, (num & (1 << 3)) >> 3);
+ 120              		.loc 1 169 0
+ 121 004a 58       		popl	%eax	#
+ 122              		.cfi_def_cfa_offset 28
+ 123 004b 89F0     		movl	%esi, %eax	# _2, tmp113
+ 124 004d 5A       		popl	%edx	#
+ 125              		.cfi_def_cfa_offset 24
+ 126 004e C1F803   		sarl	$3, %eax	#, tmp113
+ 127 0051 83E001   		andl	$1, %eax	#, tmp114
+ 128 0054 50       		pushl	%eax	# tmp114
+ 129              		.cfi_def_cfa_offset 28
+ 130 0055 6A05     		pushl	$5	#
+ 131              		.cfi_def_cfa_offset 32
+ 132 0057 E8FCFFFF 		call	digitalWrite@PLT	#
+ 132      FF
+ 133              	.LVL4:
+ 170:main.c        ****     digitalWrite(DataPin04, (num & (1 << 4)) >> 4);
+ 134              		.loc 1 170 0
+ 135 005c 59       		popl	%ecx	#
+ 136              		.cfi_def_cfa_offset 28
+ 137 005d 58       		popl	%eax	#
+ 138              		.cfi_def_cfa_offset 24
+ 139 005e 89F0     		movl	%esi, %eax	# _2, tmp115
+ 140 0060 C1F804   		sarl	$4, %eax	#, tmp115
+ 141 0063 83E001   		andl	$1, %eax	#, tmp116
+ 142 0066 50       		pushl	%eax	# tmp116
+ 143              		.cfi_def_cfa_offset 28
+ 144 0067 6A06     		pushl	$6	#
+ 145              		.cfi_def_cfa_offset 32
+ 146 0069 E8FCFFFF 		call	digitalWrite@PLT	#
+ 146      FF
+ 147              	.LVL5:
+ 171:main.c        ****     digitalWrite(DataPin05, (num & (1 << 5)) >> 5);
+ 148              		.loc 1 171 0
+ 149 006e 58       		popl	%eax	#
+ 150              		.cfi_def_cfa_offset 28
+ 151 006f 89F0     		movl	%esi, %eax	# _2, tmp117
+ 172:main.c        ****     digitalWrite(DataPin06, (num & (1 << 6)) >> 6);
+ 152              		.loc 1 172 0
+ 153 0071 C1FE06   		sarl	$6, %esi	#, tmp119
+ 171:main.c        ****     digitalWrite(DataPin05, (num & (1 << 5)) >> 5);
+ 154              		.loc 1 171 0
+ 155 0074 5A       		popl	%edx	#
+ 156              		.cfi_def_cfa_offset 24
+ 157 0075 C1F805   		sarl	$5, %eax	#, tmp117
+ 158              		.loc 1 172 0
+ 159 0078 83E601   		andl	$1, %esi	#, tmp120
+ 171:main.c        ****     digitalWrite(DataPin05, (num & (1 << 5)) >> 5);
+ 160              		.loc 1 171 0
+ 161 007b 83E001   		andl	$1, %eax	#, tmp118
+ 162 007e 50       		pushl	%eax	# tmp118
+ 163              		.cfi_def_cfa_offset 28
+ 164 007f 6A07     		pushl	$7	#
+ 165              		.cfi_def_cfa_offset 32
+ 166 0081 E8FCFFFF 		call	digitalWrite@PLT	#
+ 166      FF
+ 167              	.LVL6:
+ 168              		.loc 1 172 0
+ 169 0086 59       		popl	%ecx	#
+ 170              		.cfi_def_cfa_offset 28
+ 171 0087 58       		popl	%eax	#
+ 172              		.cfi_def_cfa_offset 24
+ 173 0088 56       		pushl	%esi	# tmp120
+ 174              		.cfi_def_cfa_offset 28
+ 175 0089 6A08     		pushl	$8	#
+ 176              		.cfi_def_cfa_offset 32
+ 177 008b E8FCFFFF 		call	digitalWrite@PLT	#
+ 177      FF
+ 178              	.LVL7:
+ 173:main.c        ****     digitalWrite(DataPin07, (num & (1 << 7)) >> 7);
+ 179              		.loc 1 173 0
+ 180 0090 58       		popl	%eax	#
+ 181              		.cfi_def_cfa_offset 28
+ 182 0091 89F8     		movl	%edi, %eax	# num, tmp121
+ 183 0093 5A       		popl	%edx	#
+ 184              		.cfi_def_cfa_offset 24
+ 185 0094 C0E807   		shrb	$7, %al	#, tmp121
+ 186 0097 0FB6F8   		movzbl	%al, %edi	# tmp121, tmp122
+ 187 009a 57       		pushl	%edi	# tmp122
+ 188              		.cfi_def_cfa_offset 28
+ 189 009b 6A09     		pushl	$9	#
+ 190              		.cfi_def_cfa_offset 32
+ 191 009d E8FCFFFF 		call	digitalWrite@PLT	#
+ 191      FF
+ 192              	.LVL8:
+ 174:main.c        **** }
+ 193              		.loc 1 174 0
+ 194 00a2 83C410   		addl	$16, %esp	#,
+ 195              		.cfi_def_cfa_offset 16
+ 196 00a5 5B       		popl	%ebx	#
+ 197              		.cfi_restore 3
+ 198              		.cfi_def_cfa_offset 12
+ 199 00a6 5E       		popl	%esi	#
+ 200              		.cfi_restore 6
+ 201              		.cfi_def_cfa_offset 8
+ 202 00a7 5F       		popl	%edi	#
+ 203              		.cfi_restore 7
+ 204              		.cfi_def_cfa_offset 4
+ 205 00a8 C3       		ret
+ 206              		.cfi_endproc
+ 207              	.LFE14:
+ 209 00a9 8DB42600 		.p2align 4,,15
+ 209      000000
+ 210              		.globl	_Z15inputOnDataPinsv
+ 212              	_Z15inputOnDataPinsv:
+ 213              	.LFB15:
+ 175:main.c        **** 
+ 176:main.c        **** //read data from the datapins
+ 177:main.c        **** uint8_t inputOnDataPins()
+ 178:main.c        **** {
+ 214              		.loc 1 178 0
+ 215              		.cfi_startproc
+ 216 00b0 55       		pushl	%ebp	#
+ 217              		.cfi_def_cfa_offset 8
+ 218              		.cfi_offset 5, -8
+ 219 00b1 57       		pushl	%edi	#
+ 220              		.cfi_def_cfa_offset 12
+ 221              		.cfi_offset 7, -12
+ 222 00b2 56       		pushl	%esi	#
+ 223              		.cfi_def_cfa_offset 16
+ 224              		.cfi_offset 6, -16
+ 225 00b3 53       		pushl	%ebx	#
+ 226              		.cfi_def_cfa_offset 20
+ 227              		.cfi_offset 3, -20
+ 228 00b4 E8FCFFFF 		call	__x86.get_pc_thunk.bx	#
+ 228      FF
+ 229 00b9 81C30200 		addl	$_GLOBAL_OFFSET_TABLE_, %ebx	# tmp87,
+ 229      0000
+ 230 00bf 83EC18   		subl	$24, %esp	#,
+ 231              		.cfi_def_cfa_offset 44
+ 179:main.c        ****     return (digitalRead(DataPin00) << 0) |
+ 232              		.loc 1 179 0
+ 233 00c2 6A02     		pushl	$2	#
+ 234              		.cfi_def_cfa_offset 48
+ 235 00c4 E8FCFFFF 		call	digitalRead@PLT	#
+ 235      FF
+ 236              	.LVL9:
+ 180:main.c        ****            (digitalRead(DataPin01) << 1) |
+ 237              		.loc 1 180 0
+ 238 00c9 C7042403 		movl	$3, (%esp)	#,
+ 238      000000
+ 179:main.c        ****     return (digitalRead(DataPin00) << 0) |
+ 239              		.loc 1 179 0
+ 240 00d0 89C5     		movl	%eax, %ebp	#, _3
+ 241              		.loc 1 180 0
+ 242 00d2 E8FCFFFF 		call	digitalRead@PLT	#
+ 242      FF
+ 243              	.LVL10:
+ 181:main.c        ****            (digitalRead(DataPin02) << 2) |
+ 244              		.loc 1 181 0
+ 245 00d7 C7042404 		movl	$4, (%esp)	#,
+ 245      000000
+ 180:main.c        ****            (digitalRead(DataPin01) << 1) |
+ 246              		.loc 1 180 0
+ 247 00de 89C6     		movl	%eax, %esi	#, _6
+ 248              		.loc 1 181 0
+ 249 00e0 E8FCFFFF 		call	digitalRead@PLT	#
+ 249      FF
+ 250              	.LVL11:
+ 251 00e5 8D3C8500 		leal	0(,%eax,4), %edi	#, tmp120
+ 251      000000
+ 180:main.c        ****            (digitalRead(DataPin01) << 1) |
+ 252              		.loc 1 180 0
+ 253 00ec 01F6     		addl	%esi, %esi	# tmp119
+ 182:main.c        ****            (digitalRead(DataPin03) << 3) |
+ 254              		.loc 1 182 0
+ 255 00ee C7042405 		movl	$5, (%esp)	#,
+ 255      000000
+ 256 00f5 E8FCFFFF 		call	digitalRead@PLT	#
+ 256      FF
+ 257              	.LVL12:
+ 180:main.c        ****            (digitalRead(DataPin01) << 1) |
+ 258              		.loc 1 180 0
+ 259 00fa 09FE     		orl	%edi, %esi	# tmp120, tmp121
+ 260              		.loc 1 182 0
+ 261 00fc C1E003   		sall	$3, %eax	#, tmp122
+ 183:main.c        ****            (digitalRead(DataPin04) << 4) |
+ 262              		.loc 1 183 0
+ 263 00ff C7042406 		movl	$6, (%esp)	#,
+ 263      000000
+ 180:main.c        ****            (digitalRead(DataPin02) << 2) |
+ 264              		.loc 1 180 0
+ 265 0106 09EE     		orl	%ebp, %esi	# _3, _14
+ 181:main.c        ****            (digitalRead(DataPin03) << 3) |
+ 266              		.loc 1 181 0
+ 267 0108 09C6     		orl	%eax, %esi	# tmp122, _19
+ 268              		.loc 1 183 0
+ 269 010a E8FCFFFF 		call	digitalRead@PLT	#
+ 269      FF
+ 270              	.LVL13:
+ 271 010f C1E004   		sall	$4, %eax	#, tmp123
+ 184:main.c        ****            (digitalRead(DataPin05) << 5) |
+ 272              		.loc 1 184 0
+ 273 0112 C7042407 		movl	$7, (%esp)	#,
+ 273      000000
+ 182:main.c        ****            (digitalRead(DataPin04) << 4) |
+ 274              		.loc 1 182 0
+ 275 0119 09C6     		orl	%eax, %esi	# tmp123, _24
+ 276              		.loc 1 184 0
+ 277 011b E8FCFFFF 		call	digitalRead@PLT	#
+ 277      FF
+ 278              	.LVL14:
+ 279 0120 C1E005   		sall	$5, %eax	#, tmp124
+ 185:main.c        ****            (digitalRead(DataPin06) << 6) |
+ 280              		.loc 1 185 0
+ 281 0123 C7042408 		movl	$8, (%esp)	#,
+ 281      000000
+ 183:main.c        ****            (digitalRead(DataPin05) << 5) |
+ 282              		.loc 1 183 0
+ 283 012a 09C6     		orl	%eax, %esi	# tmp124, _29
+ 284              		.loc 1 185 0
+ 285 012c E8FCFFFF 		call	digitalRead@PLT	#
+ 285      FF
+ 286              	.LVL15:
+ 287 0131 C1E006   		sall	$6, %eax	#, tmp125
+ 186:main.c        ****            (digitalRead(DataPin07) << 7);
+ 288              		.loc 1 186 0
+ 289 0134 C7042409 		movl	$9, (%esp)	#,
+ 289      000000
+ 184:main.c        ****            (digitalRead(DataPin06) << 6) |
+ 290              		.loc 1 184 0
+ 291 013b 09C6     		orl	%eax, %esi	# tmp125, _34
+ 292              		.loc 1 186 0
+ 293 013d E8FCFFFF 		call	digitalRead@PLT	#
+ 293      FF
+ 294              	.LVL16:
+ 187:main.c        **** }
+ 295              		.loc 1 187 0
+ 296 0142 83C41C   		addl	$28, %esp	#,
+ 297              		.cfi_def_cfa_offset 20
+ 186:main.c        ****            (digitalRead(DataPin07) << 7);
+ 298              		.loc 1 186 0
+ 299 0145 C1E007   		sall	$7, %eax	#, tmp127
+ 300              		.loc 1 187 0
+ 301 0148 5B       		popl	%ebx	#
+ 302              		.cfi_restore 3
+ 303              		.cfi_def_cfa_offset 16
+ 185:main.c        ****            (digitalRead(DataPin07) << 7);
+ 304              		.loc 1 185 0
+ 305 0149 09F0     		orl	%esi, %eax	# _34, tmp126
+ 306              		.loc 1 187 0
+ 307 014b 5E       		popl	%esi	#
+ 308              		.cfi_restore 6
+ 309              		.cfi_def_cfa_offset 12
+ 310 014c 5F       		popl	%edi	#
+ 311              		.cfi_restore 7
+ 312              		.cfi_def_cfa_offset 8
+ 313 014d 5D       		popl	%ebp	#
+ 314              		.cfi_restore 5
+ 315              		.cfi_def_cfa_offset 4
+ 316 014e C3       		ret
+ 317              		.cfi_endproc
+ 318              	.LFE15:
+ 320 014f 90       		.p2align 4,,15
+ 321              		.globl	_Z8getFramev
+ 323              	_Z8getFramev:
+ 324              	.LFB17:
+ 188:main.c        **** 
+ 189:main.c        **** //begin main playback loop to read data from the controller and output to the gamecube.
+ 190:main.c        **** void playback()
+ 191:main.c        **** {
+ 192:main.c        ****     //temporary
+ 193:main.c        ****     while (1)
+ 194:main.c        ****     {
+ 195:main.c        ****         //printf("frame playback\n");
+ 196:main.c        ****         testReset
+ 197:main.c        ****         getFrame();
+ 198:main.c        ****         testReset
+ 199:main.c        ****         outputFrame();
+ 200:main.c        ****     }
+ 201:main.c        **** }
+ 202:main.c        **** 
+ 203:main.c        **** //poll for the next frame. Every time, check for the reset pin.
+ 204:main.c        **** void getFrame()
+ 205:main.c        **** {
+ 325              		.loc 1 205 0
+ 326              		.cfi_startproc
+ 327 0150 E8FCFFFF 		call	__x86.get_pc_thunk.ax	#
+ 327      FF
+ 328 0155 05010000 		addl	$_GLOBAL_OFFSET_TABLE_, %eax	# tmp87,
+ 328      00
+ 329              	.LBB3:
+ 206:main.c        **** 
+ 207:main.c        ****     if (!testControllerPlayback)
+ 208:main.c        ****     {
+ 209:main.c        **** 
+ 210:main.c        ****         int frame[frameSize];
+ 211:main.c        ****         //read in the freame, checking for reset every time.
+ 212:main.c        ****         for (int i = 0; i < frameSize; i++)
+ 213:main.c        ****         {
+ 214:main.c        ****             //check for reset.
+ 215:main.c        ****             testReset;
+ 216:main.c        **** 
+ 217:main.c        ****             while (!digitalRead(ClockPin) && digitalRead(ResetPin))
+ 218:main.c        ****                 ;                         // wait for clock pin high (or reset).
+ 219:main.c        ****             frame[i] = inputOnDataPins(); //read in data
+ 220:main.c        ****             digitalWrite(SendPin, 1);
+ 221:main.c        ****             //write send high
+ 222:main.c        ****             while (digitalRead(ClockPin) && digitalRead(ResetPin))
+ 223:main.c        ****             {
+ 224:main.c        ****             }                         //wait for clock low (or reset)
+ 225:main.c        ****             digitalWrite(SendPin, 0); //set send pin low.
+ 226:main.c        ****         }
+ 227:main.c        ****     }
+ 228:main.c        ****     else
+ 229:main.c        ****     {
+ 230:main.c        ****         ctrl1Frames[0][0] = 0;
+ 330              		.loc 1 230 0
+ 331 015a C7800000 		movl	$0, ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 331      00000000 
+ 331      0000
+ 231:main.c        ****         ctrl1Frames[0][1] = 0;
+ 332              		.loc 1 231 0
+ 333 0164 C7800400 		movl	$0, 4+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 333      00000000 
+ 333      0000
+ 232:main.c        ****         ctrl1Frames[0][2] = 0;
+ 334              		.loc 1 232 0
+ 335 016e C7800800 		movl	$0, 8+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 335      00000000 
+ 335      0000
+ 233:main.c        ****         ctrl1Frames[0][3] = 0;
+ 336              		.loc 1 233 0
+ 337 0178 C7800C00 		movl	$0, 12+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 337      00000000 
+ 337      0000
+ 234:main.c        ****         ctrl1Frames[0][4] = 0;
+ 338              		.loc 1 234 0
+ 339 0182 C7801000 		movl	$0, 16+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 339      00000000 
+ 339      0000
+ 235:main.c        ****         ctrl1Frames[0][5] = 0;
+ 340              		.loc 1 235 0
+ 341 018c C7801400 		movl	$0, 20+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 341      00000000 
+ 341      0000
+ 236:main.c        ****         ctrl1Frames[0][6] = 0;
+ 342              		.loc 1 236 0
+ 343 0196 C7801800 		movl	$0, 24+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 343      00000000 
+ 343      0000
+ 237:main.c        ****         ctrl1Frames[0][7] = 0;
+ 344              		.loc 1 237 0
+ 345 01a0 C7801C00 		movl	$0, 28+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 345      00000000 
+ 345      0000
+ 238:main.c        ****         ctrl1Frames[0][8] = 1;
+ 346              		.loc 1 238 0
+ 347 01aa C7802000 		movl	$1, 32+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 347      00000100 
+ 347      0000
+ 239:main.c        ****         ctrl1Frames[0][9] = 0;
+ 348              		.loc 1 239 0
+ 349 01b4 C7802400 		movl	$0, 36+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 349      00000000 
+ 349      0000
+ 240:main.c        ****         ctrl1Frames[0][10] = 0;
+ 350              		.loc 1 240 0
+ 351 01be C7802800 		movl	$0, 40+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 351      00000000 
+ 351      0000
+ 241:main.c        ****         ctrl1Frames[0][11] = 0;
+ 352              		.loc 1 241 0
+ 353 01c8 C7802C00 		movl	$0, 44+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 353      00000000 
+ 353      0000
+ 242:main.c        ****         ctrl1Frames[0][12] = 0;
+ 354              		.loc 1 242 0
+ 355 01d2 C7803000 		movl	$0, 48+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 355      00000000 
+ 355      0000
+ 243:main.c        ****         ctrl1Frames[0][13] = 0;
+ 356              		.loc 1 243 0
+ 357 01dc C7803400 		movl	$0, 52+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 357      00000000 
+ 357      0000
+ 244:main.c        ****         ctrl1Frames[0][14] = 0;
+ 358              		.loc 1 244 0
+ 359 01e6 C7803800 		movl	$0, 56+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 359      00000000 
+ 359      0000
+ 245:main.c        ****         ctrl1Frames[0][15] = 0;
+ 360              		.loc 1 245 0
+ 361 01f0 C7803C00 		movl	$0, 60+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 361      00000000 
+ 361      0000
+ 246:main.c        ****         ctrl1Frames[0][16] = 0;
+ 362              		.loc 1 246 0
+ 363 01fa C7804000 		movl	$0, 64+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 363      00000000 
+ 363      0000
+ 247:main.c        ****         ctrl1Frames[0][17] = 0;
+ 364              		.loc 1 247 0
+ 365 0204 C7804400 		movl	$0, 68+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 365      00000000 
+ 365      0000
+ 248:main.c        ****         ctrl1Frames[0][18] = 0;
+ 366              		.loc 1 248 0
+ 367 020e C7804800 		movl	$0, 72+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 367      00000000 
+ 367      0000
+ 249:main.c        ****         ctrl1Frames[0][19] = 0;
+ 368              		.loc 1 249 0
+ 369 0218 C7804C00 		movl	$0, 76+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 369      00000000 
+ 369      0000
+ 250:main.c        ****         ctrl1Frames[0][20] = 0;
+ 370              		.loc 1 250 0
+ 371 0222 C7805000 		movl	$0, 80+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 371      00000000 
+ 371      0000
+ 251:main.c        ****         ctrl1Frames[0][21] = 0;
+ 372              		.loc 1 251 0
+ 373 022c C7805400 		movl	$0, 84+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 373      00000000 
+ 373      0000
+ 252:main.c        ****         ctrl1Frames[0][22] = 0;
+ 374              		.loc 1 252 0
+ 375 0236 C7805800 		movl	$0, 88+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 375      00000000 
+ 375      0000
+ 253:main.c        ****         ctrl1Frames[0][23] = 0;
+ 376              		.loc 1 253 0
+ 377 0240 C7805C00 		movl	$0, 92+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 377      00000000 
+ 377      0000
+ 254:main.c        ****         ctrl1Frames[0][24] = 1;
+ 378              		.loc 1 254 0
+ 379 024a C7806000 		movl	$1, 96+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 379      00000100 
+ 379      0000
+ 255:main.c        ****         ctrl1Frames[0][25] = 0;
+ 380              		.loc 1 255 0
+ 381 0254 C7806400 		movl	$0, 100+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 381      00000000 
+ 381      0000
+ 256:main.c        ****         ctrl1Frames[0][26] = 0;
+ 382              		.loc 1 256 0
+ 383 025e C7806800 		movl	$0, 104+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 383      00000000 
+ 383      0000
+ 257:main.c        ****         ctrl1Frames[0][27] = 0;
+ 384              		.loc 1 257 0
+ 385 0268 C7806C00 		movl	$0, 108+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 385      00000000 
+ 385      0000
+ 258:main.c        ****         ctrl1Frames[0][28] = 0;
+ 386              		.loc 1 258 0
+ 387 0272 C7807000 		movl	$0, 112+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 387      00000000 
+ 387      0000
+ 259:main.c        ****         ctrl1Frames[0][29] = 0;
+ 388              		.loc 1 259 0
+ 389 027c C7807400 		movl	$0, 116+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 389      00000000 
+ 389      0000
+ 260:main.c        ****         ctrl1Frames[0][30] = 0;
+ 390              		.loc 1 260 0
+ 391 0286 C7807800 		movl	$0, 120+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 391      00000000 
+ 391      0000
+ 261:main.c        ****         ctrl1Frames[0][31] = 0;
+ 392              		.loc 1 261 0
+ 393 0290 C7807C00 		movl	$0, 124+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 393      00000000 
+ 393      0000
+ 262:main.c        ****         ctrl1Frames[0][32] = 1;
+ 394              		.loc 1 262 0
+ 395 029a C7808000 		movl	$1, 128+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 395      00000100 
+ 395      0000
+ 263:main.c        ****         ctrl1Frames[0][33] = 0;
+ 396              		.loc 1 263 0
+ 397 02a4 C7808400 		movl	$0, 132+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 397      00000000 
+ 397      0000
+ 264:main.c        ****         ctrl1Frames[0][34] = 0;
+ 398              		.loc 1 264 0
+ 399 02ae C7808800 		movl	$0, 136+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 399      00000000 
+ 399      0000
+ 265:main.c        ****         ctrl1Frames[0][35] = 0;
+ 400              		.loc 1 265 0
+ 401 02b8 C7808C00 		movl	$0, 140+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 401      00000000 
+ 401      0000
+ 266:main.c        ****         ctrl1Frames[0][36] = 0;
+ 402              		.loc 1 266 0
+ 403 02c2 C7809000 		movl	$0, 144+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 403      00000000 
+ 403      0000
+ 267:main.c        ****         ctrl1Frames[0][37] = 0;
+ 404              		.loc 1 267 0
+ 405 02cc C7809400 		movl	$0, 148+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 405      00000000 
+ 405      0000
+ 268:main.c        ****         ctrl1Frames[0][38] = 0;
+ 406              		.loc 1 268 0
+ 407 02d6 C7809800 		movl	$0, 152+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 407      00000000 
+ 407      0000
+ 269:main.c        ****         ctrl1Frames[0][39] = 0;
+ 408              		.loc 1 269 0
+ 409 02e0 C7809C00 		movl	$0, 156+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 409      00000000 
+ 409      0000
+ 270:main.c        ****         ctrl1Frames[0][40] = 1;
+ 410              		.loc 1 270 0
+ 411 02ea C780A000 		movl	$1, 160+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 411      00000100 
+ 411      0000
+ 271:main.c        ****         ctrl1Frames[0][41] = 0;
+ 412              		.loc 1 271 0
+ 413 02f4 C780A400 		movl	$0, 164+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 413      00000000 
+ 413      0000
+ 272:main.c        ****         ctrl1Frames[0][42] = 0;
+ 414              		.loc 1 272 0
+ 415 02fe C780A800 		movl	$0, 168+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 415      00000000 
+ 415      0000
+ 273:main.c        ****         ctrl1Frames[0][43] = 0;
+ 416              		.loc 1 273 0
+ 417 0308 C780AC00 		movl	$0, 172+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 417      00000000 
+ 417      0000
+ 274:main.c        ****         ctrl1Frames[0][44] = 0;
+ 418              		.loc 1 274 0
+ 419 0312 C780B000 		movl	$0, 176+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 419      00000000 
+ 419      0000
+ 275:main.c        ****         ctrl1Frames[0][45] = 0;
+ 420              		.loc 1 275 0
+ 421 031c C780B400 		movl	$0, 180+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 421      00000000 
+ 421      0000
+ 276:main.c        ****         ctrl1Frames[0][46] = 0;
+ 422              		.loc 1 276 0
+ 423 0326 C780B800 		movl	$0, 184+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 423      00000000 
+ 423      0000
+ 277:main.c        ****         ctrl1Frames[0][47] = 0;
+ 424              		.loc 1 277 0
+ 425 0330 C780BC00 		movl	$0, 188+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 425      00000000 
+ 425      0000
+ 278:main.c        ****         ctrl1Frames[0][48] = 0;
+ 426              		.loc 1 278 0
+ 427 033a C780C000 		movl	$0, 192+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 427      00000000 
+ 427      0000
+ 279:main.c        ****         ctrl1Frames[0][49] = 0;
+ 428              		.loc 1 279 0
+ 429 0344 C780C400 		movl	$0, 196+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 429      00000000 
+ 429      0000
+ 280:main.c        ****         ctrl1Frames[0][50] = 0;
+ 430              		.loc 1 280 0
+ 431 034e C780C800 		movl	$0, 200+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 431      00000000 
+ 431      0000
+ 281:main.c        ****         ctrl1Frames[0][51] = 0;
+ 432              		.loc 1 281 0
+ 433 0358 C780CC00 		movl	$0, 204+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 433      00000000 
+ 433      0000
+ 282:main.c        ****         ctrl1Frames[0][52] = 0;
+ 434              		.loc 1 282 0
+ 435 0362 C780D000 		movl	$0, 208+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 435      00000000 
+ 435      0000
+ 283:main.c        ****         ctrl1Frames[0][53] = 0;
+ 436              		.loc 1 283 0
+ 437 036c C780D400 		movl	$0, 212+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 437      00000000 
+ 437      0000
+ 284:main.c        ****         ctrl1Frames[0][54] = 0;
+ 438              		.loc 1 284 0
+ 439 0376 C780D800 		movl	$0, 216+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 439      00000000 
+ 439      0000
+ 285:main.c        ****         ctrl1Frames[0][55] = 0;
+ 440              		.loc 1 285 0
+ 441 0380 C780DC00 		movl	$0, 220+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 441      00000000 
+ 441      0000
+ 286:main.c        ****         ctrl1Frames[0][56] = 0;
+ 442              		.loc 1 286 0
+ 443 038a C780E000 		movl	$0, 224+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 443      00000000 
+ 443      0000
+ 287:main.c        ****         ctrl1Frames[0][57] = 0;
+ 444              		.loc 1 287 0
+ 445 0394 C780E400 		movl	$0, 228+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 445      00000000 
+ 445      0000
+ 288:main.c        ****         ctrl1Frames[0][58] = 0;
+ 446              		.loc 1 288 0
+ 447 039e C780E800 		movl	$0, 232+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 447      00000000 
+ 447      0000
+ 289:main.c        ****         ctrl1Frames[0][59] = 0;
+ 448              		.loc 1 289 0
+ 449 03a8 C780EC00 		movl	$0, 236+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 449      00000000 
+ 449      0000
+ 290:main.c        ****         ctrl1Frames[0][60] = 0;
+ 450              		.loc 1 290 0
+ 451 03b2 C780F000 		movl	$0, 240+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 451      00000000 
+ 451      0000
+ 291:main.c        ****         ctrl1Frames[0][61] = 0;
+ 452              		.loc 1 291 0
+ 453 03bc C780F400 		movl	$0, 244+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 453      00000000 
+ 453      0000
+ 292:main.c        ****         ctrl1Frames[0][62] = 0;
+ 454              		.loc 1 292 0
+ 455 03c6 C780F800 		movl	$0, 248+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 455      00000000 
+ 455      0000
+ 293:main.c        ****         ctrl1Frames[0][63] = 0;
+ 456              		.loc 1 293 0
+ 457 03d0 C780FC00 		movl	$0, 252+ctrl1Frames@GOTOFF(%eax)	#, ctrl1Frames
+ 457      00000000 
+ 457      0000
+ 458 03da C3       		ret
+ 459              	.LBE3:
+ 460              		.cfi_endproc
+ 461              	.LFE17:
+ 463              		.section	.rodata.str1.1,"aMS",@progbits,1
+ 464              	.LC0:
+ 465 0000 77616974 		.string	"waiting for pull low"
+ 465      696E6720 
+ 465      666F7220 
+ 465      70756C6C 
+ 465      206C6F77 
+ 466              	.LC1:
+ 467 0015 646F6E65 		.string	"done outputting."
+ 467      206F7574 
+ 467      70757474 
+ 467      696E672E 
+ 467      00
+ 468              		.text
+ 469 03db 908D7426 		.p2align 4,,15
+ 469      00
+ 470              		.globl	_Z11outputFramev
+ 472              	_Z11outputFramev:
+ 473              	.LFB18:
+ 294:main.c        ****     }
+ 295:main.c        **** }
+ 296:main.c        **** 
+ 297:main.c        **** int first = 1;
+ 298:main.c        **** //poll for the controller data from the gamecube that signifies "next frame", than begin the
+ 299:main.c        **** void outputFrame()
+ 300:main.c        **** {
+ 474              		.loc 1 300 0
+ 475              		.cfi_startproc
+ 476 03e0 57       		pushl	%edi	#
+ 477              		.cfi_def_cfa_offset 8
+ 478              		.cfi_offset 7, -8
+ 479 03e1 56       		pushl	%esi	#
+ 480              		.cfi_def_cfa_offset 12
+ 481              		.cfi_offset 6, -12
+ 482 03e2 53       		pushl	%ebx	#
+ 483              		.cfi_def_cfa_offset 16
+ 484              		.cfi_offset 3, -16
+ 485 03e3 E8FCFFFF 		call	__x86.get_pc_thunk.bx	#
+ 485      FF
+ 486 03e8 81C30200 		addl	$_GLOBAL_OFFSET_TABLE_, %ebx	# tmp107,
+ 486      0000
+ 301:main.c        ****     printf("waiting for pull low\n");
+ 487              		.loc 1 301 0
+ 488 03ee 83EC0C   		subl	$12, %esp	#,
+ 489              		.cfi_def_cfa_offset 28
+ 490 03f1 8D830000 		leal	.LC0@GOTOFF(%ebx), %eax	#, tmp118
+ 490      0000
+ 491 03f7 50       		pushl	%eax	# tmp118
+ 492              		.cfi_def_cfa_offset 32
+ 493 03f8 E8FCFFFF 		call	puts@PLT	#
+ 493      FF
+ 494              	.LVL17:
+ 495 03fd 83C410   		addl	$16, %esp	#,
+ 496              		.cfi_def_cfa_offset 16
+ 497 0400 EB1B     		jmp	.L8	#
+ 498              		.p2align 4,,10
+ 499 0402 8DB60000 		.p2align 3
+ 499      0000
+ 500              	.L23:
+ 302:main.c        ****     //read for controller input 1. if there isint one, test for reset. if reset, return.
+ 303:main.c        ****     while (digitalRead(CtrlIn1))
+ 304:main.c        ****     {
+ 305:main.c        ****         testReset;
+ 501              		.loc 1 305 0
+ 502 0408 83EC0C   		subl	$12, %esp	#,
+ 503              		.cfi_def_cfa_offset 28
+ 504 040b 6A12     		pushl	$18	#
+ 505              		.cfi_def_cfa_offset 32
+ 506 040d E8FCFFFF 		call	digitalRead@PLT	#
+ 506      FF
+ 507              	.LVL18:
+ 508 0412 83C410   		addl	$16, %esp	#,
+ 509              		.cfi_def_cfa_offset 16
+ 510 0415 85C0     		testl	%eax, %eax	# _9
+ 511 0417 0F840001 		je	.L6	#,
+ 511      0000
+ 512              	.L8:
+ 303:main.c        ****     {
+ 513              		.loc 1 303 0
+ 514 041d 83EC0C   		subl	$12, %esp	#,
+ 515              		.cfi_def_cfa_offset 28
+ 516 0420 6A0A     		pushl	$10	#
+ 517              		.cfi_def_cfa_offset 32
+ 518 0422 E8FCFFFF 		call	digitalRead@PLT	#
+ 518      FF
+ 519              	.LVL19:
+ 520 0427 83C410   		addl	$16, %esp	#,
+ 521              		.cfi_def_cfa_offset 16
+ 522 042a 85C0     		testl	%eax, %eax	# _7
+ 523 042c 75DA     		jne	.L23	#,
+ 524 042e EB15     		jmp	.L7	#
+ 525              		.p2align 4,,10
+ 526              		.p2align 3
+ 527              	.L24:
+ 306:main.c        ****     }
+ 307:main.c        **** 
+ 308:main.c        ****     uint32_t cycles = 0;
+ 309:main.c        ****     for (;;)
+ 310:main.c        ****     {
+ 311:main.c        ****         cycles++;
+ 312:main.c        ****         if (digitalRead(CtrlIn1))
+ 313:main.c        ****         {
+ 314:main.c        ****             break;
+ 315:main.c        ****         }
+ 316:main.c        ****         testReset;
+ 528              		.loc 1 316 0
+ 529 0430 83EC0C   		subl	$12, %esp	#,
+ 530              		.cfi_def_cfa_offset 28
+ 531 0433 6A12     		pushl	$18	#
+ 532              		.cfi_def_cfa_offset 32
+ 533 0435 E8FCFFFF 		call	digitalRead@PLT	#
+ 533      FF
+ 534              	.LVL20:
+ 535 043a 83C410   		addl	$16, %esp	#,
+ 536              		.cfi_def_cfa_offset 16
+ 537 043d 85C0     		testl	%eax, %eax	# _15
+ 538 043f 0F84D800 		je	.L6	#,
+ 538      0000
+ 539              	.L7:
+ 312:main.c        ****         {
+ 540              		.loc 1 312 0
+ 541 0445 83EC0C   		subl	$12, %esp	#,
+ 542              		.cfi_def_cfa_offset 28
+ 543 0448 6A0A     		pushl	$10	#
+ 544              		.cfi_def_cfa_offset 32
+ 545 044a E8FCFFFF 		call	digitalRead@PLT	#
+ 545      FF
+ 546              	.LVL21:
+ 547 044f 83C410   		addl	$16, %esp	#,
+ 548              		.cfi_def_cfa_offset 16
+ 549 0452 85C0     		testl	%eax, %eax	# _12
+ 550 0454 74DA     		je	.L24	#,
+ 551              	.LBB7:
+ 552              	.LBB8:
+ 317:main.c        ****     }
+ 318:main.c        ****     /*
+ 319:main.c        ****     int startSequence[24] = {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0
+ 320:main.c        **** 
+ 321:main.c        ****     int tracker = 0; //value used to track the differences between the input and the expected.
+ 322:main.c        **** 
+ 323:main.c        ****     //read every us~ and store that data.
+ 324:main.c        ****     for (int i = 0; i < 24; i++)
+ 325:main.c        ****     {
+ 326:main.c        ****         delayMicroseconds(2);
+ 327:main.c        ****         if (startSequence[i] != digitalRead(CtrlIn1))
+ 328:main.c        ****         {
+ 329:main.c        ****             tracker++;
+ 330:main.c        ****         }
+ 331:main.c        **** 
+ 332:main.c        ****         while (digitalRead(CtrlIn1))
+ 333:main.c        ****         {
+ 334:main.c        ****             testReset
+ 335:main.c        ****         }
+ 336:main.c        ****         //read controller in.
+ 337:main.c        ****     }
+ 338:main.c        **** 
+ 339:main.c        ****     //arbitrary 10 % difference. if there are more than 10 errors, return.
+ 340:main.c        ****     if (tracker >= 4)
+ 341:main.c        ****     {
+ 342:main.c        **** 
+ 343:main.c        ****         return;
+ 344:main.c        ****     }
+ 345:main.c        ****     */
+ 346:main.c        **** 
+ 347:main.c        ****     delayMicroseconds(36);
+ 553              		.loc 1 347 0
+ 554 0456 83EC0C   		subl	$12, %esp	#,
+ 555              		.cfi_def_cfa_offset 28
+ 556 0459 6A24     		pushl	$36	#
+ 557              		.cfi_def_cfa_offset 32
+ 558 045b E8FCFFFF 		call	delayMicroseconds@PLT	#
+ 558      FF
+ 559              	.LVL22:
+ 348:main.c        ****     if (!first)
+ 560              		.loc 1 348 0
+ 561 0460 8B830000 		movl	first@GOTOFF(%ebx), %eax	# first,
+ 561      0000
+ 562 0466 83C410   		addl	$16, %esp	#,
+ 563              		.cfi_def_cfa_offset 16
+ 564 0469 85C0     		testl	%eax, %eax	#
+ 565 046b 0F84B000 		je	.L25	#,
+ 565      0000
+ 566              	.L12:
+ 567 0471 8DB30000 		leal	ctrl1Frames@GOTOFF(%ebx), %esi	#, ivtmp.36
+ 567      0000
+ 568 0477 8DBB0001 		leal	256+ctrl1Frames@GOTOFF(%ebx), %edi	#, _44
+ 568      0000
+ 569 047d 8D7600   		.p2align 4,,10
+ 570              		.p2align 3
+ 571              	.L13:
+ 572              	.LBB9:
+ 349:main.c        ****     {
+ 350:main.c        ****         delayMicroseconds(62);
+ 351:main.c        ****     }
+ 352:main.c        ****     else
+ 353:main.c        ****     {
+ 354:main.c        ****         //first = 0;
+ 355:main.c        ****     }
+ 356:main.c        **** 
+ 357:main.c        ****     //printf("outputting\n");
+ 358:main.c        ****     for (int i = 0; i < 64; i++)
+ 359:main.c        ****     { //output the values read in.
+ 360:main.c        ****         digitalWrite(CtrlOut1, 0);
+ 573              		.loc 1 360 0
+ 574 0480 83EC08   		subl	$8, %esp	#,
+ 575              		.cfi_def_cfa_offset 24
+ 576 0483 83C604   		addl	$4, %esi	#, ivtmp.36
+ 577 0486 6A00     		pushl	$0	#
+ 578              		.cfi_def_cfa_offset 28
+ 579 0488 6A0E     		pushl	$14	#
+ 580              		.cfi_def_cfa_offset 32
+ 581 048a E8FCFFFF 		call	digitalWrite@PLT	#
+ 581      FF
+ 582              	.LVL23:
+ 361:main.c        ****         delayMicroseconds(1);
+ 583              		.loc 1 361 0
+ 584 048f C7042401 		movl	$1, (%esp)	#,
+ 584      000000
+ 585 0496 E8FCFFFF 		call	delayMicroseconds@PLT	#
+ 585      FF
+ 586              	.LVL24:
+ 362:main.c        ****         digitalWrite(CtrlOut1, ctrl1Frames[0][i]); //for now, no circle buffer
+ 587              		.loc 1 362 0
+ 588 049b 59       		popl	%ecx	#
+ 589              		.cfi_def_cfa_offset 28
+ 590 049c 58       		popl	%eax	#
+ 591              		.cfi_def_cfa_offset 24
+ 592 049d FF76FC   		pushl	-4(%esi)	# MEM[base: _42, offset: 0B]
+ 593              		.cfi_def_cfa_offset 28
+ 594 04a0 6A0E     		pushl	$14	#
+ 595              		.cfi_def_cfa_offset 32
+ 596 04a2 E8FCFFFF 		call	digitalWrite@PLT	#
+ 596      FF
+ 597              	.LVL25:
+ 363:main.c        ****         delayMicroseconds(1);
+ 598              		.loc 1 363 0
+ 599 04a7 C7042401 		movl	$1, (%esp)	#,
+ 599      000000
+ 600 04ae E8FCFFFF 		call	delayMicroseconds@PLT	#
+ 600      FF
+ 601              	.LVL26:
+ 364:main.c        ****         digitalWrite(CtrlOut1, ctrl1Frames[0][i]); // for now, no circle buffer.
+ 602              		.loc 1 364 0
+ 603 04b3 58       		popl	%eax	#
+ 604              		.cfi_def_cfa_offset 28
+ 605 04b4 5A       		popl	%edx	#
+ 606              		.cfi_def_cfa_offset 24
+ 607 04b5 FF76FC   		pushl	-4(%esi)	# MEM[base: _42, offset: 0B]
+ 608              		.cfi_def_cfa_offset 28
+ 609 04b8 6A0E     		pushl	$14	#
+ 610              		.cfi_def_cfa_offset 32
+ 611 04ba E8FCFFFF 		call	digitalWrite@PLT	#
+ 611      FF
+ 612              	.LVL27:
+ 365:main.c        ****         delayMicroseconds(1);
+ 613              		.loc 1 365 0
+ 614 04bf C7042401 		movl	$1, (%esp)	#,
+ 614      000000
+ 615 04c6 E8FCFFFF 		call	delayMicroseconds@PLT	#
+ 615      FF
+ 616              	.LVL28:
+ 366:main.c        ****         digitalWrite(CtrlOut1, 1);
+ 617              		.loc 1 366 0
+ 618 04cb 59       		popl	%ecx	#
+ 619              		.cfi_def_cfa_offset 28
+ 620 04cc 58       		popl	%eax	#
+ 621              		.cfi_def_cfa_offset 24
+ 622 04cd 6A01     		pushl	$1	#
+ 623              		.cfi_def_cfa_offset 28
+ 624 04cf 6A0E     		pushl	$14	#
+ 625              		.cfi_def_cfa_offset 32
+ 626 04d1 E8FCFFFF 		call	digitalWrite@PLT	#
+ 626      FF
+ 627              	.LVL29:
+ 367:main.c        ****         delayMicroseconds(1);
+ 628              		.loc 1 367 0
+ 629 04d6 C7042401 		movl	$1, (%esp)	#,
+ 629      000000
+ 630 04dd E8FCFFFF 		call	delayMicroseconds@PLT	#
+ 630      FF
+ 631              	.LVL30:
+ 358:main.c        ****     { //output the values read in.
+ 632              		.loc 1 358 0
+ 633 04e2 83C410   		addl	$16, %esp	#,
+ 634              		.cfi_def_cfa_offset 16
+ 635 04e5 39FE     		cmpl	%edi, %esi	# _44, ivtmp.36
+ 636 04e7 7597     		jne	.L13	#,
+ 637              	.LBE9:
+ 368:main.c        ****     }
+ 369:main.c        ****     digitalWrite(CtrlOut1, 0);
+ 638              		.loc 1 369 0
+ 639 04e9 83EC08   		subl	$8, %esp	#,
+ 640              		.cfi_def_cfa_offset 24
+ 641 04ec 6A00     		pushl	$0	#
+ 642              		.cfi_def_cfa_offset 28
+ 643 04ee 6A0E     		pushl	$14	#
+ 644              		.cfi_def_cfa_offset 32
+ 645 04f0 E8FCFFFF 		call	digitalWrite@PLT	#
+ 645      FF
+ 646              	.LVL31:
+ 370:main.c        ****     delayMicroseconds(2);
+ 647              		.loc 1 370 0
+ 648 04f5 C7042402 		movl	$2, (%esp)	#,
+ 648      000000
+ 649 04fc E8FCFFFF 		call	delayMicroseconds@PLT	#
+ 649      FF
+ 650              	.LVL32:
+ 371:main.c        ****     digitalWrite(CtrlOut1, 1); //for now, no circle buffer
+ 651              		.loc 1 371 0
+ 652 0501 58       		popl	%eax	#
+ 653              		.cfi_def_cfa_offset 28
+ 654 0502 5A       		popl	%edx	#
+ 655              		.cfi_def_cfa_offset 24
+ 656 0503 6A01     		pushl	$1	#
+ 657              		.cfi_def_cfa_offset 28
+ 658 0505 6A0E     		pushl	$14	#
+ 659              		.cfi_def_cfa_offset 32
+ 660 0507 E8FCFFFF 		call	digitalWrite@PLT	#
+ 660      FF
+ 661              	.LVL33:
+ 372:main.c        ****     printf("done outputting.");
+ 662              		.loc 1 372 0
+ 663 050c 8D830000 		leal	.LC1@GOTOFF(%ebx), %eax	#, tmp119
+ 663      0000
+ 664 0512 890424   		movl	%eax, (%esp)	# tmp119,
+ 665 0515 E8FCFFFF 		call	printf@PLT	#
+ 665      FF
+ 666              	.LVL34:
+ 667 051a 83C410   		addl	$16, %esp	#,
+ 668              		.cfi_def_cfa_offset 16
+ 669              	.L6:
+ 670              	.LBE8:
+ 671              	.LBE7:
+ 373:main.c        **** }
+ 672              		.loc 1 373 0
+ 673 051d 5B       		popl	%ebx	#
+ 674              		.cfi_remember_state
+ 675              		.cfi_restore 3
+ 676              		.cfi_def_cfa_offset 12
+ 677 051e 5E       		popl	%esi	#
+ 678              		.cfi_restore 6
+ 679              		.cfi_def_cfa_offset 8
+ 680 051f 5F       		popl	%edi	#
+ 681              		.cfi_restore 7
+ 682              		.cfi_def_cfa_offset 4
+ 683 0520 C3       		ret
+ 684              	.L25:
+ 685              		.cfi_restore_state
+ 686              	.LBB11:
+ 687              	.LBB10:
+ 350:main.c        ****     }
+ 688              		.loc 1 350 0
+ 689 0521 83EC0C   		subl	$12, %esp	#,
+ 690              		.cfi_def_cfa_offset 28
+ 691 0524 6A3E     		pushl	$62	#
+ 692              		.cfi_def_cfa_offset 32
+ 693 0526 E8FCFFFF 		call	delayMicroseconds@PLT	#
+ 693      FF
+ 694              	.LVL35:
+ 695 052b 83C410   		addl	$16, %esp	#,
+ 696              		.cfi_def_cfa_offset 16
+ 697 052e E93EFFFF 		jmp	.L12	#
+ 697      FF
+ 698              	.LBE10:
+ 699              	.LBE11:
+ 700              		.cfi_endproc
+ 701              	.LFE18:
+ 703 0533 8DB60000 		.p2align 4,,15
+ 703      00008DBC 
+ 703      27000000 
+ 703      00
+ 704              		.globl	_Z8playbackv
+ 706              	_Z8playbackv:
+ 707              	.LFB16:
+ 191:main.c        ****     //temporary
+ 708              		.loc 1 191 0
+ 709              		.cfi_startproc
+ 710 0540 53       		pushl	%ebx	#
+ 711              		.cfi_def_cfa_offset 8
+ 712              		.cfi_offset 3, -8
+ 713 0541 E8FCFFFF 		call	__x86.get_pc_thunk.bx	#
+ 713      FF
+ 714 0546 81C30200 		addl	$_GLOBAL_OFFSET_TABLE_, %ebx	# tmp87,
+ 714      0000
+ 715 054c 83EC08   		subl	$8, %esp	#,
+ 716              		.cfi_def_cfa_offset 16
+ 717 054f EB22     		jmp	.L28	#
+ 718              		.p2align 4,,10
+ 719 0551 8DB42600 		.p2align 3
+ 719      000000
+ 720              	.L36:
+ 197:main.c        ****         testReset
+ 721              		.loc 1 197 0
+ 722 0558 E8FCFFFF 		call	_Z8getFramev	#
+ 722      FF
+ 723              	.LVL36:
+ 198:main.c        ****         outputFrame();
+ 724              		.loc 1 198 0
+ 725 055d 83EC0C   		subl	$12, %esp	#,
+ 726              		.cfi_def_cfa_offset 28
+ 727 0560 6A12     		pushl	$18	#
+ 728              		.cfi_def_cfa_offset 32
+ 729 0562 E8FCFFFF 		call	digitalRead@PLT	#
+ 729      FF
+ 730              	.LVL37:
+ 731 0567 83C410   		addl	$16, %esp	#,
+ 732              		.cfi_def_cfa_offset 16
+ 733 056a 85C0     		testl	%eax, %eax	# _8
+ 734 056c 7416     		je	.L26	#,
+ 199:main.c        ****     }
+ 735              		.loc 1 199 0
+ 736 056e E8FCFFFF 		call	_Z11outputFramev	#
+ 736      FF
+ 737              	.LVL38:
+ 738              	.L28:
+ 196:main.c        ****         getFrame();
+ 739              		.loc 1 196 0
+ 740 0573 83EC0C   		subl	$12, %esp	#,
+ 741              		.cfi_def_cfa_offset 28
+ 742 0576 6A12     		pushl	$18	#
+ 743              		.cfi_def_cfa_offset 32
+ 744 0578 E8FCFFFF 		call	digitalRead@PLT	#
+ 744      FF
+ 745              	.LVL39:
+ 746 057d 83C410   		addl	$16, %esp	#,
+ 747              		.cfi_def_cfa_offset 16
+ 748 0580 85C0     		testl	%eax, %eax	# _5
+ 749 0582 75D4     		jne	.L36	#,
+ 750              	.L26:
+ 201:main.c        **** 
+ 751              		.loc 1 201 0
+ 752 0584 83C408   		addl	$8, %esp	#,
+ 753              		.cfi_def_cfa_offset 8
+ 754 0587 5B       		popl	%ebx	#
+ 755              		.cfi_restore 3
+ 756              		.cfi_def_cfa_offset 4
+ 757 0588 C3       		ret
+ 758              		.cfi_endproc
+ 759              	.LFE16:
+ 761              		.section	.rodata.str1.1
+ 762              	.LC2:
+ 763 0026 52455345 		.string	"RESETTING"
+ 763      5454494E 
+ 763      4700
+ 764              		.text
+ 765 0589 8DB42600 		.p2align 4,,15
+ 765      000000
+ 766              		.globl	_Z5resetv
+ 768              	_Z5resetv:
+ 769              	.LFB13:
+  86:main.c        ****     while (1)
+ 770              		.loc 1 86 0
+ 771              		.cfi_startproc
+ 772 0590 56       		pushl	%esi	#
+ 773              		.cfi_def_cfa_offset 8
+ 774              		.cfi_offset 6, -8
+ 775 0591 53       		pushl	%ebx	#
+ 776              		.cfi_def_cfa_offset 12
+ 777              		.cfi_offset 3, -12
+ 778 0592 E8FCFFFF 		call	__x86.get_pc_thunk.bx	#
+ 778      FF
+ 779 0597 81C30200 		addl	$_GLOBAL_OFFSET_TABLE_, %ebx	# tmp87,
+ 779      0000
+ 780 059d 83EC04   		subl	$4, %esp	#,
+ 781              		.cfi_def_cfa_offset 16
+ 782 05a0 8DB30000 		leal	.LC2@GOTOFF(%ebx), %esi	#, tmp89
+ 782      0000
+ 783 05a6 8D76008D 		.p2align 4,,10
+ 783      BC270000 
+ 783      0000
+ 784              		.p2align 3
+ 785              	.L38:
+  89:main.c        ****         //set up the datapins to use the GPIO.
+ 786              		.loc 1 89 0
+ 787 05b0 83EC0C   		subl	$12, %esp	#,
+ 788              		.cfi_def_cfa_offset 28
+ 789 05b3 56       		pushl	%esi	# tmp89
+ 790              		.cfi_def_cfa_offset 32
+ 791 05b4 E8FCFFFF 		call	puts@PLT	#
+ 791      FF
+ 792              	.LVL40:
+  91:main.c        **** 
+ 793              		.loc 1 91 0
+ 794 05b9 83C410   		addl	$16, %esp	#,
+ 795              		.cfi_def_cfa_offset 16
+ 796 05bc E8FCFFFF 		call	wiringPiSetupGpio@PLT	#
+ 796      FF
+ 797              	.LVL41:
+  94:main.c        ****         pinMode(DataPin01, OUTPUT);
+ 798              		.loc 1 94 0
+ 799 05c1 83EC08   		subl	$8, %esp	#,
+ 800              		.cfi_def_cfa_offset 24
+ 801 05c4 6A01     		pushl	$1	#
+ 802              		.cfi_def_cfa_offset 28
+ 803 05c6 6A02     		pushl	$2	#
+ 804              		.cfi_def_cfa_offset 32
+ 805 05c8 E8FCFFFF 		call	pinMode@PLT	#
+ 805      FF
+ 806              	.LVL42:
+  95:main.c        ****         pinMode(DataPin02, OUTPUT);
+ 807              		.loc 1 95 0
+ 808 05cd 58       		popl	%eax	#
+ 809              		.cfi_def_cfa_offset 28
+ 810 05ce 5A       		popl	%edx	#
+ 811              		.cfi_def_cfa_offset 24
+ 812 05cf 6A01     		pushl	$1	#
+ 813              		.cfi_def_cfa_offset 28
+ 814 05d1 6A03     		pushl	$3	#
+ 815              		.cfi_def_cfa_offset 32
+ 816 05d3 E8FCFFFF 		call	pinMode@PLT	#
+ 816      FF
+ 817              	.LVL43:
+  96:main.c        ****         pinMode(DataPin03, OUTPUT);
+ 818              		.loc 1 96 0
+ 819 05d8 59       		popl	%ecx	#
+ 820              		.cfi_def_cfa_offset 28
+ 821 05d9 58       		popl	%eax	#
+ 822              		.cfi_def_cfa_offset 24
+ 823 05da 6A01     		pushl	$1	#
+ 824              		.cfi_def_cfa_offset 28
+ 825 05dc 6A04     		pushl	$4	#
+ 826              		.cfi_def_cfa_offset 32
+ 827 05de E8FCFFFF 		call	pinMode@PLT	#
+ 827      FF
+ 828              	.LVL44:
+  97:main.c        ****         pinMode(DataPin04, OUTPUT);
+ 829              		.loc 1 97 0
+ 830 05e3 58       		popl	%eax	#
+ 831              		.cfi_def_cfa_offset 28
+ 832 05e4 5A       		popl	%edx	#
+ 833              		.cfi_def_cfa_offset 24
+ 834 05e5 6A01     		pushl	$1	#
+ 835              		.cfi_def_cfa_offset 28
+ 836 05e7 6A05     		pushl	$5	#
+ 837              		.cfi_def_cfa_offset 32
+ 838 05e9 E8FCFFFF 		call	pinMode@PLT	#
+ 838      FF
+ 839              	.LVL45:
+  98:main.c        ****         pinMode(DataPin05, OUTPUT);
+ 840              		.loc 1 98 0
+ 841 05ee 59       		popl	%ecx	#
+ 842              		.cfi_def_cfa_offset 28
+ 843 05ef 58       		popl	%eax	#
+ 844              		.cfi_def_cfa_offset 24
+ 845 05f0 6A01     		pushl	$1	#
+ 846              		.cfi_def_cfa_offset 28
+ 847 05f2 6A06     		pushl	$6	#
+ 848              		.cfi_def_cfa_offset 32
+ 849 05f4 E8FCFFFF 		call	pinMode@PLT	#
+ 849      FF
+ 850              	.LVL46:
+  99:main.c        ****         pinMode(DataPin06, OUTPUT);
+ 851              		.loc 1 99 0
+ 852 05f9 58       		popl	%eax	#
+ 853              		.cfi_def_cfa_offset 28
+ 854 05fa 5A       		popl	%edx	#
+ 855              		.cfi_def_cfa_offset 24
+ 856 05fb 6A01     		pushl	$1	#
+ 857              		.cfi_def_cfa_offset 28
+ 858 05fd 6A07     		pushl	$7	#
+ 859              		.cfi_def_cfa_offset 32
+ 860 05ff E8FCFFFF 		call	pinMode@PLT	#
+ 860      FF
+ 861              	.LVL47:
+ 100:main.c        ****         pinMode(DataPin07, OUTPUT);
+ 862              		.loc 1 100 0
+ 863 0604 59       		popl	%ecx	#
+ 864              		.cfi_def_cfa_offset 28
+ 865 0605 58       		popl	%eax	#
+ 866              		.cfi_def_cfa_offset 24
+ 867 0606 6A01     		pushl	$1	#
+ 868              		.cfi_def_cfa_offset 28
+ 869 0608 6A08     		pushl	$8	#
+ 870              		.cfi_def_cfa_offset 32
+ 871 060a E8FCFFFF 		call	pinMode@PLT	#
+ 871      FF
+ 872              	.LVL48:
+ 101:main.c        ****         pinMode(CtrlIn1, INPUT);
+ 873              		.loc 1 101 0
+ 874 060f 58       		popl	%eax	#
+ 875              		.cfi_def_cfa_offset 28
+ 876 0610 5A       		popl	%edx	#
+ 877              		.cfi_def_cfa_offset 24
+ 878 0611 6A01     		pushl	$1	#
+ 879              		.cfi_def_cfa_offset 28
+ 880 0613 6A09     		pushl	$9	#
+ 881              		.cfi_def_cfa_offset 32
+ 882 0615 E8FCFFFF 		call	pinMode@PLT	#
+ 882      FF
+ 883              	.LVL49:
+ 102:main.c        ****         pinMode(CtrlIn2, INPUT);
+ 884              		.loc 1 102 0
+ 885 061a 59       		popl	%ecx	#
+ 886              		.cfi_def_cfa_offset 28
+ 887 061b 58       		popl	%eax	#
+ 888              		.cfi_def_cfa_offset 24
+ 889 061c 6A00     		pushl	$0	#
+ 890              		.cfi_def_cfa_offset 28
+ 891 061e 6A0A     		pushl	$10	#
+ 892              		.cfi_def_cfa_offset 32
+ 893 0620 E8FCFFFF 		call	pinMode@PLT	#
+ 893      FF
+ 894              	.LVL50:
+ 103:main.c        ****         pinMode(CtrlIn3, INPUT);
+ 895              		.loc 1 103 0
+ 896 0625 58       		popl	%eax	#
+ 897              		.cfi_def_cfa_offset 28
+ 898 0626 5A       		popl	%edx	#
+ 899              		.cfi_def_cfa_offset 24
+ 900 0627 6A00     		pushl	$0	#
+ 901              		.cfi_def_cfa_offset 28
+ 902 0629 6A0B     		pushl	$11	#
+ 903              		.cfi_def_cfa_offset 32
+ 904 062b E8FCFFFF 		call	pinMode@PLT	#
+ 904      FF
+ 905              	.LVL51:
+ 104:main.c        ****         pinMode(CtrlIn4, INPUT);
+ 906              		.loc 1 104 0
+ 907 0630 59       		popl	%ecx	#
+ 908              		.cfi_def_cfa_offset 28
+ 909 0631 58       		popl	%eax	#
+ 910              		.cfi_def_cfa_offset 24
+ 911 0632 6A00     		pushl	$0	#
+ 912              		.cfi_def_cfa_offset 28
+ 913 0634 6A0C     		pushl	$12	#
+ 914              		.cfi_def_cfa_offset 32
+ 915 0636 E8FCFFFF 		call	pinMode@PLT	#
+ 915      FF
+ 916              	.LVL52:
+ 105:main.c        ****         pinMode(CtrlOut1, OUTPUT);
+ 917              		.loc 1 105 0
+ 918 063b 58       		popl	%eax	#
+ 919              		.cfi_def_cfa_offset 28
+ 920 063c 5A       		popl	%edx	#
+ 921              		.cfi_def_cfa_offset 24
+ 922 063d 6A00     		pushl	$0	#
+ 923              		.cfi_def_cfa_offset 28
+ 924 063f 6A0D     		pushl	$13	#
+ 925              		.cfi_def_cfa_offset 32
+ 926 0641 E8FCFFFF 		call	pinMode@PLT	#
+ 926      FF
+ 927              	.LVL53:
+ 106:main.c        ****         pinMode(CtrlOut2, OUTPUT);
+ 928              		.loc 1 106 0
+ 929 0646 59       		popl	%ecx	#
+ 930              		.cfi_def_cfa_offset 28
+ 931 0647 58       		popl	%eax	#
+ 932              		.cfi_def_cfa_offset 24
+ 933 0648 6A01     		pushl	$1	#
+ 934              		.cfi_def_cfa_offset 28
+ 935 064a 6A0E     		pushl	$14	#
+ 936              		.cfi_def_cfa_offset 32
+ 937 064c E8FCFFFF 		call	pinMode@PLT	#
+ 937      FF
+ 938              	.LVL54:
+ 107:main.c        ****         pinMode(CtrlOut3, OUTPUT);
+ 939              		.loc 1 107 0
+ 940 0651 58       		popl	%eax	#
+ 941              		.cfi_def_cfa_offset 28
+ 942 0652 5A       		popl	%edx	#
+ 943              		.cfi_def_cfa_offset 24
+ 944 0653 6A01     		pushl	$1	#
+ 945              		.cfi_def_cfa_offset 28
+ 946 0655 6A0F     		pushl	$15	#
+ 947              		.cfi_def_cfa_offset 32
+ 948 0657 E8FCFFFF 		call	pinMode@PLT	#
+ 948      FF
+ 949              	.LVL55:
+ 108:main.c        ****         pinMode(CtrlOut4, OUTPUT);
+ 950              		.loc 1 108 0
+ 951 065c 59       		popl	%ecx	#
+ 952              		.cfi_def_cfa_offset 28
+ 953 065d 58       		popl	%eax	#
+ 954              		.cfi_def_cfa_offset 24
+ 955 065e 6A01     		pushl	$1	#
+ 956              		.cfi_def_cfa_offset 28
+ 957 0660 6A10     		pushl	$16	#
+ 958              		.cfi_def_cfa_offset 32
+ 959 0662 E8FCFFFF 		call	pinMode@PLT	#
+ 959      FF
+ 960              	.LVL56:
+ 109:main.c        ****         pinMode(ResetPin, INPUT);
+ 961              		.loc 1 109 0
+ 962 0667 58       		popl	%eax	#
+ 963              		.cfi_def_cfa_offset 28
+ 964 0668 5A       		popl	%edx	#
+ 965              		.cfi_def_cfa_offset 24
+ 966 0669 6A01     		pushl	$1	#
+ 967              		.cfi_def_cfa_offset 28
+ 968 066b 6A11     		pushl	$17	#
+ 969              		.cfi_def_cfa_offset 32
+ 970 066d E8FCFFFF 		call	pinMode@PLT	#
+ 970      FF
+ 971              	.LVL57:
+ 110:main.c        ****         pinMode(ClockPin, INPUT);
+ 972              		.loc 1 110 0
+ 973 0672 59       		popl	%ecx	#
+ 974              		.cfi_def_cfa_offset 28
+ 975 0673 58       		popl	%eax	#
+ 976              		.cfi_def_cfa_offset 24
+ 977 0674 6A00     		pushl	$0	#
+ 978              		.cfi_def_cfa_offset 28
+ 979 0676 6A12     		pushl	$18	#
+ 980              		.cfi_def_cfa_offset 32
+ 981 0678 E8FCFFFF 		call	pinMode@PLT	#
+ 981      FF
+ 982              	.LVL58:
+ 111:main.c        ****         pinMode(SendPin, OUTPUT);
+ 983              		.loc 1 111 0
+ 984 067d 58       		popl	%eax	#
+ 985              		.cfi_def_cfa_offset 28
+ 986 067e 5A       		popl	%edx	#
+ 987              		.cfi_def_cfa_offset 24
+ 988 067f 6A00     		pushl	$0	#
+ 989              		.cfi_def_cfa_offset 28
+ 990 0681 6A13     		pushl	$19	#
+ 991              		.cfi_def_cfa_offset 32
+ 992 0683 E8FCFFFF 		call	pinMode@PLT	#
+ 992      FF
+ 993              	.LVL59:
+ 112:main.c        ****         pinMode(ResendPin, OUTPUT);
+ 994              		.loc 1 112 0
+ 995 0688 59       		popl	%ecx	#
+ 996              		.cfi_def_cfa_offset 28
+ 997 0689 58       		popl	%eax	#
+ 998              		.cfi_def_cfa_offset 24
+ 999 068a 6A01     		pushl	$1	#
+ 1000              		.cfi_def_cfa_offset 28
+ 1001 068c 6A14     		pushl	$20	#
+ 1002              		.cfi_def_cfa_offset 32
+ 1003 068e E8FCFFFF 		call	pinMode@PLT	#
+ 1003      FF
+ 1004              	.LVL60:
+ 113:main.c        ****         pinMode(GCPowerPin, OUTPUT);
+ 1005              		.loc 1 113 0
+ 1006 0693 58       		popl	%eax	#
+ 1007              		.cfi_def_cfa_offset 28
+ 1008 0694 5A       		popl	%edx	#
+ 1009              		.cfi_def_cfa_offset 24
+ 1010 0695 6A01     		pushl	$1	#
+ 1011              		.cfi_def_cfa_offset 28
+ 1012 0697 6A15     		pushl	$21	#
+ 1013              		.cfi_def_cfa_offset 32
+ 1014 0699 E8FCFFFF 		call	pinMode@PLT	#
+ 1014      FF
+ 1015              	.LVL61:
+ 114:main.c        ****         pinMode(GCResetPin, OUTPUT);
+ 1016              		.loc 1 114 0
+ 1017 069e 59       		popl	%ecx	#
+ 1018              		.cfi_def_cfa_offset 28
+ 1019 069f 58       		popl	%eax	#
+ 1020              		.cfi_def_cfa_offset 24
+ 1021 06a0 6A01     		pushl	$1	#
+ 1022              		.cfi_def_cfa_offset 28
+ 1023 06a2 6A17     		pushl	$23	#
+ 1024              		.cfi_def_cfa_offset 32
+ 1025 06a4 E8FCFFFF 		call	pinMode@PLT	#
+ 1025      FF
+ 1026              	.LVL62:
+ 115:main.c        ****         digitalWrite(SendPin, 1);
+ 1027              		.loc 1 115 0
+ 1028 06a9 58       		popl	%eax	#
+ 1029              		.cfi_def_cfa_offset 28
+ 1030 06aa 5A       		popl	%edx	#
+ 1031              		.cfi_def_cfa_offset 24
+ 1032 06ab 6A01     		pushl	$1	#
+ 1033              		.cfi_def_cfa_offset 28
+ 1034 06ad 6A16     		pushl	$22	#
+ 1035              		.cfi_def_cfa_offset 32
+ 1036 06af E8FCFFFF 		call	pinMode@PLT	#
+ 1036      FF
+ 1037              	.LVL63:
+ 116:main.c        ****         digitalWrite(ResendPin, 1);
+ 1038              		.loc 1 116 0
+ 1039 06b4 59       		popl	%ecx	#
+ 1040              		.cfi_def_cfa_offset 28
+ 1041 06b5 58       		popl	%eax	#
+ 1042              		.cfi_def_cfa_offset 24
+ 1043 06b6 6A01     		pushl	$1	#
+ 1044              		.cfi_def_cfa_offset 28
+ 1045 06b8 6A14     		pushl	$20	#
+ 1046              		.cfi_def_cfa_offset 32
+ 1047 06ba E8FCFFFF 		call	digitalWrite@PLT	#
+ 1047      FF
+ 1048              	.LVL64:
+ 117:main.c        **** 
+ 1049              		.loc 1 117 0
+ 1050 06bf 58       		popl	%eax	#
+ 1051              		.cfi_def_cfa_offset 28
+ 1052 06c0 5A       		popl	%edx	#
+ 1053              		.cfi_def_cfa_offset 24
+ 1054 06c1 6A01     		pushl	$1	#
+ 1055              		.cfi_def_cfa_offset 28
+ 1056 06c3 6A15     		pushl	$21	#
+ 1057              		.cfi_def_cfa_offset 32
+ 1058 06c5 E8FCFFFF 		call	digitalWrite@PLT	#
+ 1058      FF
+ 1059              	.LVL65:
+ 149:main.c        ****         pinMode(DataPin01, INPUT);
+ 1060              		.loc 1 149 0
+ 1061 06ca 59       		popl	%ecx	#
+ 1062              		.cfi_def_cfa_offset 28
+ 1063 06cb 58       		popl	%eax	#
+ 1064              		.cfi_def_cfa_offset 24
+ 1065 06cc 6A00     		pushl	$0	#
+ 1066              		.cfi_def_cfa_offset 28
+ 1067 06ce 6A02     		pushl	$2	#
+ 1068              		.cfi_def_cfa_offset 32
+ 1069 06d0 E8FCFFFF 		call	pinMode@PLT	#
+ 1069      FF
+ 1070              	.LVL66:
+ 150:main.c        ****         pinMode(DataPin02, INPUT);
+ 1071              		.loc 1 150 0
+ 1072 06d5 58       		popl	%eax	#
+ 1073              		.cfi_def_cfa_offset 28
+ 1074 06d6 5A       		popl	%edx	#
+ 1075              		.cfi_def_cfa_offset 24
+ 1076 06d7 6A00     		pushl	$0	#
+ 1077              		.cfi_def_cfa_offset 28
+ 1078 06d9 6A03     		pushl	$3	#
+ 1079              		.cfi_def_cfa_offset 32
+ 1080 06db E8FCFFFF 		call	pinMode@PLT	#
+ 1080      FF
+ 1081              	.LVL67:
+ 151:main.c        ****         pinMode(DataPin03, INPUT);
+ 1082              		.loc 1 151 0
+ 1083 06e0 59       		popl	%ecx	#
+ 1084              		.cfi_def_cfa_offset 28
+ 1085 06e1 58       		popl	%eax	#
+ 1086              		.cfi_def_cfa_offset 24
+ 1087 06e2 6A00     		pushl	$0	#
+ 1088              		.cfi_def_cfa_offset 28
+ 1089 06e4 6A04     		pushl	$4	#
+ 1090              		.cfi_def_cfa_offset 32
+ 1091 06e6 E8FCFFFF 		call	pinMode@PLT	#
+ 1091      FF
+ 1092              	.LVL68:
+ 152:main.c        ****         pinMode(DataPin04, INPUT);
+ 1093              		.loc 1 152 0
+ 1094 06eb 58       		popl	%eax	#
+ 1095              		.cfi_def_cfa_offset 28
+ 1096 06ec 5A       		popl	%edx	#
+ 1097              		.cfi_def_cfa_offset 24
+ 1098 06ed 6A00     		pushl	$0	#
+ 1099              		.cfi_def_cfa_offset 28
+ 1100 06ef 6A05     		pushl	$5	#
+ 1101              		.cfi_def_cfa_offset 32
+ 1102 06f1 E8FCFFFF 		call	pinMode@PLT	#
+ 1102      FF
+ 1103              	.LVL69:
+ 153:main.c        ****         pinMode(DataPin05, INPUT);
+ 1104              		.loc 1 153 0
+ 1105 06f6 59       		popl	%ecx	#
+ 1106              		.cfi_def_cfa_offset 28
+ 1107 06f7 58       		popl	%eax	#
+ 1108              		.cfi_def_cfa_offset 24
+ 1109 06f8 6A00     		pushl	$0	#
+ 1110              		.cfi_def_cfa_offset 28
+ 1111 06fa 6A06     		pushl	$6	#
+ 1112              		.cfi_def_cfa_offset 32
+ 1113 06fc E8FCFFFF 		call	pinMode@PLT	#
+ 1113      FF
+ 1114              	.LVL70:
+ 154:main.c        ****         pinMode(DataPin06, INPUT);
+ 1115              		.loc 1 154 0
+ 1116 0701 58       		popl	%eax	#
+ 1117              		.cfi_def_cfa_offset 28
+ 1118 0702 5A       		popl	%edx	#
+ 1119              		.cfi_def_cfa_offset 24
+ 1120 0703 6A00     		pushl	$0	#
+ 1121              		.cfi_def_cfa_offset 28
+ 1122 0705 6A07     		pushl	$7	#
+ 1123              		.cfi_def_cfa_offset 32
+ 1124 0707 E8FCFFFF 		call	pinMode@PLT	#
+ 1124      FF
+ 1125              	.LVL71:
+ 155:main.c        ****         pinMode(DataPin07, INPUT);
+ 1126              		.loc 1 155 0
+ 1127 070c 59       		popl	%ecx	#
+ 1128              		.cfi_def_cfa_offset 28
+ 1129 070d 58       		popl	%eax	#
+ 1130              		.cfi_def_cfa_offset 24
+ 1131 070e 6A00     		pushl	$0	#
+ 1132              		.cfi_def_cfa_offset 28
+ 1133 0710 6A08     		pushl	$8	#
+ 1134              		.cfi_def_cfa_offset 32
+ 1135 0712 E8FCFFFF 		call	pinMode@PLT	#
+ 1135      FF
+ 1136              	.LVL72:
+ 156:main.c        **** 
+ 1137              		.loc 1 156 0
+ 1138 0717 58       		popl	%eax	#
+ 1139              		.cfi_def_cfa_offset 28
+ 1140 0718 5A       		popl	%edx	#
+ 1141              		.cfi_def_cfa_offset 24
+ 1142 0719 6A00     		pushl	$0	#
+ 1143              		.cfi_def_cfa_offset 28
+ 1144 071b 6A09     		pushl	$9	#
+ 1145              		.cfi_def_cfa_offset 32
+ 1146 071d E8FCFFFF 		call	pinMode@PLT	#
+ 1146      FF
+ 1147              	.LVL73:
+ 159:main.c        ****     }
+ 1148              		.loc 1 159 0
+ 1149 0722 83C410   		addl	$16, %esp	#,
+ 1150              		.cfi_def_cfa_offset 16
+ 1151 0725 E8FCFFFF 		call	_Z8playbackv	#
+ 1151      FF
+ 1152              	.LVL74:
+ 1153 072a E981FEFF 		jmp	.L38	#
+ 1153      FF
+ 1154              		.cfi_endproc
+ 1155              	.LFE13:
+ 1157              		.section	.rodata.str1.1
+ 1158              	.LC3:
+ 1159 0030 48656C6C 		.string	"Hello World"
+ 1159      6F20576F 
+ 1159      726C6400 
+ 1160              		.section	.text.startup,"ax",@progbits
+ 1161              		.p2align 4,,15
+ 1162              		.globl	main
+ 1164              	main:
+ 1165              	.LFB12:
+  19:main.c        ****     printf("Hello World\n");
+ 1166              		.loc 1 19 0
+ 1167              		.cfi_startproc
+ 1168 0000 8D4C2404 		leal	4(%esp), %ecx	#,
+ 1169              		.cfi_def_cfa 1, 0
+ 1170 0004 83E4F0   		andl	$-16, %esp	#,
+ 1171 0007 FF71FC   		pushl	-4(%ecx)	#
+ 1172 000a 55       		pushl	%ebp	#
+ 1173              		.cfi_escape 0x10,0x5,0x2,0x75,0
+ 1174 000b 89E5     		movl	%esp, %ebp	#,
+ 1175 000d 53       		pushl	%ebx	#
+ 1176 000e 51       		pushl	%ecx	#
+ 1177              		.cfi_escape 0xf,0x3,0x75,0x78,0x6
+ 1178              		.cfi_escape 0x10,0x3,0x2,0x75,0x7c
+ 1179 000f E8FCFFFF 		call	__x86.get_pc_thunk.bx	#
+ 1179      FF
+ 1180 0014 81C30200 		addl	$_GLOBAL_OFFSET_TABLE_, %ebx	# tmp87,
+ 1180      0000
+  20:main.c        ****     reset();
+ 1181              		.loc 1 20 0
+ 1182 001a 83EC0C   		subl	$12, %esp	#,
+ 1183 001d 8D830000 		leal	.LC3@GOTOFF(%ebx), %eax	#, tmp89
+ 1183      0000
+ 1184 0023 50       		pushl	%eax	# tmp89
+ 1185 0024 E8FCFFFF 		call	puts@PLT	#
+ 1185      FF
+ 1186              	.LVL75:
+  21:main.c        ****     //testOutput();
+ 1187              		.loc 1 21 0
+ 1188 0029 83C410   		addl	$16, %esp	#,
+ 1189 002c E8FCFFFF 		call	_Z5resetv	#
+ 1189      FF
+ 1190              	.LVL76:
+ 1191              		.cfi_endproc
+ 1192              	.LFE12:
+ 1194              		.section	.rodata.str1.1
+ 1195              	.LC4:
+ 1196 003c 53656E64 		.string	"Sending The output. "
+ 1196      696E6720 
+ 1196      54686520 
+ 1196      6F757470 
+ 1196      75742E20 
+ 1197              		.text
+ 1198 072f 90       		.p2align 4,,15
+ 1199              		.globl	_Z10testOutputv
+ 1201              	_Z10testOutputv:
+ 1202              	.LFB19:
+ 374:main.c        **** 
+ 375:main.c        **** void testOutput()
+ 376:main.c        **** {
+ 1203              		.loc 1 376 0
+ 1204              		.cfi_startproc
+ 1205 0730 55       		pushl	%ebp	#
+ 1206              		.cfi_def_cfa_offset 8
+ 1207              		.cfi_offset 5, -8
+ 1208 0731 57       		pushl	%edi	#
+ 1209              		.cfi_def_cfa_offset 12
+ 1210              		.cfi_offset 7, -12
+ 1211 0732 56       		pushl	%esi	#
+ 1212              		.cfi_def_cfa_offset 16
+ 1213              		.cfi_offset 6, -16
+ 1214 0733 53       		pushl	%ebx	#
+ 1215              		.cfi_def_cfa_offset 20
+ 1216              		.cfi_offset 3, -20
+ 1217 0734 E8FCFFFF 		call	__x86.get_pc_thunk.bx	#
+ 1217      FF
+ 1218 0739 81C30200 		addl	$_GLOBAL_OFFSET_TABLE_, %ebx	# tmp87,
+ 1218      0000
+ 1219 073f 83EC1C   		subl	$28, %esp	#,
+ 1220              		.cfi_def_cfa_offset 48
+ 377:main.c        ****     wiringPiSetupGpio();
+ 1221              		.loc 1 377 0
+ 1222 0742 E8FCFFFF 		call	wiringPiSetupGpio@PLT	#
+ 1222      FF
+ 1223              	.LVL77:
+ 378:main.c        ****     pinMode(CtrlOut1, OUTPUT);
+ 1224              		.loc 1 378 0
+ 1225 0747 83EC08   		subl	$8, %esp	#,
+ 1226              		.cfi_def_cfa_offset 56
+ 1227 074a 6A01     		pushl	$1	#
+ 1228              		.cfi_def_cfa_offset 60
+ 1229 074c 6A0E     		pushl	$14	#
+ 1230              		.cfi_def_cfa_offset 64
+ 1231 074e E8FCFFFF 		call	pinMode@PLT	#
+ 1231      FF
+ 1232              	.LVL78:
+ 1233 0753 83C410   		addl	$16, %esp	#,
+ 1234              		.cfi_def_cfa_offset 48
+ 1235              	.LBB12:
+ 379:main.c        ****     for (int i = 0; i < 64; i++)
+ 1236              		.loc 1 379 0
+ 1237 0756 31C0     		xorl	%eax, %eax	# i
+ 1238              	.LVL79:
+ 1239              	.L43:
+ 380:main.c        ****     { //output the values read in.
+ 381:main.c        ****         ctrl1Frames[0][i] = i % 2;
+ 1240              		.loc 1 381 0 discriminator 2
+ 1241 0758 89C2     		movl	%eax, %edx	# i, tmp98
+ 1242 075a 83E201   		andl	$1, %edx	#, tmp98
+ 1243 075d 89948300 		movl	%edx, ctrl1Frames@GOTOFF(%ebx,%eax,4)	# tmp98, MEM[symbol: ctrl1Frames, index: _37, offset: 0
+ 1243      000000
+ 379:main.c        ****     for (int i = 0; i < 64; i++)
+ 1244              		.loc 1 379 0 discriminator 2
+ 1245 0764 83C001   		addl	$1, %eax	#, i
+ 1246              	.LVL80:
+ 1247 0767 83F840   		cmpl	$64, %eax	#, i
+ 1248 076a 75EC     		jne	.L43	#,
+ 1249 076c 8D830000 		leal	ctrl1Frames@GOTOFF(%ebx), %eax	#, ivtmp.52
+ 1249      0000
+ 1250              	.LVL81:
+ 1251 0772 8DBB0001 		leal	256+ctrl1Frames@GOTOFF(%ebx), %edi	#, _26
+ 1251      0000
+ 1252 0778 8DAB0000 		leal	.LC4@GOTOFF(%ebx), %ebp	#, tmp101
+ 1252      0000
+ 1253 077e 8944240C 		movl	%eax, 12(%esp)	# ivtmp.52, %sfp
+ 1254              		.p2align 4,,10
+ 1255 0782 8DB60000 		.p2align 3
+ 1255      0000
+ 1256              	.L45:
+ 1257              	.LVL82:
+ 1258 0788 8B74240C 		movl	12(%esp), %esi	# %sfp, ivtmp.52
+ 1259              	.LVL83:
+ 1260 078c 8D742600 		.p2align 4,,10
+ 1261              		.p2align 3
+ 1262              	.L44:
+ 1263              	.LBE12:
+ 1264              	.LBB13:
+ 1265              	.LBB14:
+ 382:main.c        ****     }
+ 383:main.c        **** 
+ 384:main.c        ****     while (1)
+ 385:main.c        ****     {
+ 386:main.c        ****         for (int i = 0; i < 64; i++)
+ 387:main.c        ****         { //output the values read in.
+ 388:main.c        ****             digitalWrite(CtrlOut1, 0);
+ 1266              		.loc 1 388 0 discriminator 2
+ 1267 0790 83EC08   		subl	$8, %esp	#,
+ 1268              		.cfi_def_cfa_offset 56
+ 1269 0793 83C604   		addl	$4, %esi	#, ivtmp.52
+ 1270 0796 6A00     		pushl	$0	#
+ 1271              		.cfi_def_cfa_offset 60
+ 1272 0798 6A0E     		pushl	$14	#
+ 1273              		.cfi_def_cfa_offset 64
+ 1274 079a E8FCFFFF 		call	digitalWrite@PLT	#
+ 1274      FF
+ 1275              	.LVL84:
+ 389:main.c        ****             delayMicroseconds(1);
+ 1276              		.loc 1 389 0 discriminator 2
+ 1277 079f C7042401 		movl	$1, (%esp)	#,
+ 1277      000000
+ 1278 07a6 E8FCFFFF 		call	delayMicroseconds@PLT	#
+ 1278      FF
+ 1279              	.LVL85:
+ 390:main.c        ****             digitalWrite(CtrlOut1, ctrl1Frames[0][i]); //for now, no circle buffer
+ 1280              		.loc 1 390 0 discriminator 2
+ 1281 07ab 58       		popl	%eax	#
+ 1282              		.cfi_def_cfa_offset 60
+ 1283 07ac 5A       		popl	%edx	#
+ 1284              		.cfi_def_cfa_offset 56
+ 1285 07ad FF76FC   		pushl	-4(%esi)	# MEM[base: _3, offset: 0B]
+ 1286              		.cfi_def_cfa_offset 60
+ 1287 07b0 6A0E     		pushl	$14	#
+ 1288              		.cfi_def_cfa_offset 64
+ 1289 07b2 E8FCFFFF 		call	digitalWrite@PLT	#
+ 1289      FF
+ 1290              	.LVL86:
+ 391:main.c        ****             delayMicroseconds(1);
+ 1291              		.loc 1 391 0 discriminator 2
+ 1292 07b7 C7042401 		movl	$1, (%esp)	#,
+ 1292      000000
+ 1293 07be E8FCFFFF 		call	delayMicroseconds@PLT	#
+ 1293      FF
+ 1294              	.LVL87:
+ 392:main.c        ****             digitalWrite(CtrlOut1, ctrl1Frames[0][i]); // for now, no circle buffer.
+ 1295              		.loc 1 392 0 discriminator 2
+ 1296 07c3 59       		popl	%ecx	#
+ 1297              		.cfi_def_cfa_offset 60
+ 1298 07c4 58       		popl	%eax	#
+ 1299              		.cfi_def_cfa_offset 56
+ 1300 07c5 FF76FC   		pushl	-4(%esi)	# MEM[base: _3, offset: 0B]
+ 1301              		.cfi_def_cfa_offset 60
+ 1302 07c8 6A0E     		pushl	$14	#
+ 1303              		.cfi_def_cfa_offset 64
+ 1304 07ca E8FCFFFF 		call	digitalWrite@PLT	#
+ 1304      FF
+ 1305              	.LVL88:
+ 393:main.c        ****             delayMicroseconds(1);
+ 1306              		.loc 1 393 0 discriminator 2
+ 1307 07cf C7042401 		movl	$1, (%esp)	#,
+ 1307      000000
+ 1308 07d6 E8FCFFFF 		call	delayMicroseconds@PLT	#
+ 1308      FF
+ 1309              	.LVL89:
+ 394:main.c        ****             digitalWrite(CtrlOut1, 1);
+ 1310              		.loc 1 394 0 discriminator 2
+ 1311 07db 58       		popl	%eax	#
+ 1312              		.cfi_def_cfa_offset 60
+ 1313 07dc 5A       		popl	%edx	#
+ 1314              		.cfi_def_cfa_offset 56
+ 1315 07dd 6A01     		pushl	$1	#
+ 1316              		.cfi_def_cfa_offset 60
+ 1317 07df 6A0E     		pushl	$14	#
+ 1318              		.cfi_def_cfa_offset 64
+ 1319 07e1 E8FCFFFF 		call	digitalWrite@PLT	#
+ 1319      FF
+ 1320              	.LVL90:
+ 395:main.c        ****             delayMicroseconds(1);
+ 1321              		.loc 1 395 0 discriminator 2
+ 1322 07e6 C7042401 		movl	$1, (%esp)	#,
+ 1322      000000
+ 1323 07ed E8FCFFFF 		call	delayMicroseconds@PLT	#
+ 1323      FF
+ 1324              	.LVL91:
+ 386:main.c        ****         { //output the values read in.
+ 1325              		.loc 1 386 0 discriminator 2
+ 1326 07f2 83C410   		addl	$16, %esp	#,
+ 1327              		.cfi_def_cfa_offset 48
+ 1328 07f5 39F7     		cmpl	%esi, %edi	# ivtmp.52, _26
+ 1329 07f7 7597     		jne	.L44	#,
+ 1330              	.LBE14:
+ 396:main.c        ****         }
+ 397:main.c        ****         sleep(1);
+ 1331              		.loc 1 397 0
+ 1332 07f9 83EC0C   		subl	$12, %esp	#,
+ 1333              		.cfi_def_cfa_offset 60
+ 1334 07fc 6A01     		pushl	$1	#
+ 1335              		.cfi_def_cfa_offset 64
+ 1336 07fe E8FCFFFF 		call	sleep@PLT	#
+ 1336      FF
+ 1337              	.LVL92:
+ 398:main.c        ****         printf("Sending The output. \n");
+ 1338              		.loc 1 398 0
+ 1339 0803 892C24   		movl	%ebp, (%esp)	# tmp101,
+ 1340 0806 E8FCFFFF 		call	puts@PLT	#
+ 1340      FF
+ 1341              	.LVL93:
+ 1342              	.LBE13:
+ 399:main.c        ****     }
+ 1343              		.loc 1 399 0
+ 1344 080b 83C410   		addl	$16, %esp	#,
+ 1345              		.cfi_def_cfa_offset 48
+ 1346 080e E975FFFF 		jmp	.L45	#
+ 1346      FF
+ 1347              		.cfi_endproc
+ 1348              	.LFE19:
+ 1350              		.globl	first
+ 1351              		.data
+ 1352              		.align 4
+ 1355              	first:
+ 1356 0000 01000000 		.long	1
+ 1357              		.globl	ctrl1Frames
+ 1358              		.bss
+ 1359              		.align 32
+ 1362              	ctrl1Frames:
+ 1363 0000 00000000 		.zero	1600
+ 1363      00000000 
+ 1363      00000000 
+ 1363      00000000 
+ 1363      00000000 
+ 1364              		.section	.text.__x86.get_pc_thunk.ax,"axG",@progbits,__x86.get_pc_thunk.ax,comdat
+ 1365              		.globl	__x86.get_pc_thunk.ax
+ 1366              		.hidden	__x86.get_pc_thunk.ax
+ 1368              	__x86.get_pc_thunk.ax:
+ 1369              	.LFB21:
+ 1370              		.cfi_startproc
+ 1371 0000 8B0424   		movl	(%esp), %eax	#,
+ 1372 0003 C3       		ret
+ 1373              		.cfi_endproc
+ 1374              	.LFE21:
+ 1375              		.section	.text.__x86.get_pc_thunk.bx,"axG",@progbits,__x86.get_pc_thunk.bx,comdat
+ 1376              		.globl	__x86.get_pc_thunk.bx
+ 1377              		.hidden	__x86.get_pc_thunk.bx
+ 1379              	__x86.get_pc_thunk.bx:
+ 1380              	.LFB22:
+ 1381              		.cfi_startproc
+ 1382 0000 8B1C24   		movl	(%esp), %ebx	#,
+ 1383 0003 C3       		ret
+ 1384              		.cfi_endproc
+ 1385              	.LFE22:
+ 1386              		.text
+ 1387              	.Letext0:
+ 1388              		.file 2 "/usr/include/stdint.h"
+ 1389              		.file 3 "/usr/lib/gcc/i686-linux-gnu/6/include/stddef.h"
+ 1390              		.file 4 "/usr/include/i386-linux-gnu/bits/types.h"
+ 1391              		.file 5 "/usr/include/libio.h"
+ 1392              		.file 6 "/usr/include/stdio.h"
+ 1393              		.file 7 "/usr/include/i386-linux-gnu/bits/sys_errlist.h"
+ 1394              		.file 8 "/usr/local/include/wiringPi.h"
+ 1395              		.file 9 "/usr/include/unistd.h"
+ 1396              		.file 10 "/usr/include/getopt.h"
+ 1397              		.file 11 "/usr/include/i386-linux-gnu/bits/confname.h"

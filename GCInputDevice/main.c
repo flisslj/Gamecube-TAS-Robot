@@ -3,7 +3,8 @@
 #include <wiringPi.h>
 #include <unistd.h>
 
-#define testControllerPlayback 1
+#define testControllerPlayback 1 //THis value is if the controller playback is in testing more or not.
+#define wait 0                   //this value defines if the reset triggers should be waited for or not.
 
 void reset();
 void main();
@@ -19,19 +20,10 @@ void main()
     printf("Hello World\n");
     reset();
     //testOutput();
-
-    if (testControllerPlayback)
-    {
-        while (1)
-        {
-            playback();
-        }
-    }
 }
 
 #define InputDeviceType 1
 #define InputDeviceVersion 1
-#define wait 0
 #define DataPin00 2   // physical pins 3
 #define DataPin01 3   // physical pins 5
 #define DataPin02 4   // physical pins 7
@@ -200,7 +192,7 @@ void playback()
     //temporary
     while (1)
     {
-        printf("frame playback\n");
+        //printf("frame playback\n");
         testReset
         getFrame();
         testReset
@@ -307,10 +299,24 @@ int first = 1;
 void outputFrame()
 {
     printf("waiting for pull low\n");
+    int i = digitalRead(CtrlIn1);
+    digigalWrite(CtrlOut1, i);
+
     //read for controller input 1. if there isint one, test for reset. if reset, return.
     while (digitalRead(CtrlIn1))
     {
-        testReset
+        testReset;
+    }
+
+    uint32_t cycles = 0;
+    for (;;)
+    {
+        cycles++;
+        if (digitalRead(CtrlIn1))
+        {
+            break;
+        }
+        testReset;
     }
     /*
     int startSequence[24] = {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0};
@@ -348,7 +354,7 @@ void outputFrame()
     }
     else
     {
-        first = 0;
+        //first = 0;
     }
 
     //printf("outputting\n");
@@ -364,7 +370,7 @@ void outputFrame()
         delayMicroseconds(1);
     }
     digitalWrite(CtrlOut1, 0);
-    delayMicroseconds(1);
+    delayMicroseconds(2);
     digitalWrite(CtrlOut1, 1); //for now, no circle buffer
     printf("done outputting.");
 }
