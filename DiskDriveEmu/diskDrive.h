@@ -1,6 +1,25 @@
 #ifndef DISKDRIVE_H
 #define DISKDRIVE_H
 
+#include <boolean.h>
+#include <inttypes.h>
+
+//gpio pointers
+volatile *(uint32_t) GPIO_A = 0x40020000
+volatile *(uint32_t) GPIO_B = 0x40020400
+volatile *(uint32_t) GPIO_C = 0x40020800
+volatile *(uint32_t) GPIO_D = 0x40020C00
+volatile *(uint32_t) GPIO_E = 0x40021000
+volatile *(uint32_t) GPIO_F = 0x40021400
+
+#define MODER 0x0
+#define OTYPER 0x4
+#define OSPEEDR 0x8
+#define PUPDR 0xC
+#define IDR 0x10
+#define ODR 0x14
+#define BSRR 0x18
+
 //here lie the definitions of the pins
 //tread carefully, lest you get torn asunder
 //or something
@@ -21,14 +40,14 @@
 #define DIHSTRB
 #define DIDSTRB
 #define DIDIR
-#define DID0
-#define DID1
-#define DID2
-#define DID3
-#define DID4
-#define DID5
-#define DID6
-#define DID7
+#define DID0 0x10008
+#define DID1 0x10009
+#define DID2 0x1000A
+#define DID3 0x1000B
+#define DID4 0x1000C
+#define DID5 0x1000D
+#define DID6 0x1000E
+#define DID7 0x1000F
 
 //INTERRUPT PINS
 //DICOVER is the easiest - it tells whether is cover is open or not
@@ -95,5 +114,22 @@
 //debug enable
 //similar to above
 #define CMD_DEBUGEN 0xff000000
+
+
+
+
+//FUNCTIONS
+
+//reads a pin as specified by header info
+boolean readPin(int pinIdent);
+
+//reads the byte for DID
+char readData();
+
+//main loop function for running the disk drive
+void runDDEmu();
+
+//initializes the disk drive pins
+void DDInit();
 
 #endif
