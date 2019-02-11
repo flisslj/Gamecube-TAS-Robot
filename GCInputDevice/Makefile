@@ -30,13 +30,13 @@ CFLAGS = -Wall -O2 -ffreestanding -nostdlib -nostartfiles
 all: clean playback
 
 playback:
-        gcc main.c -lwiringPi
+		gcc main.c -lwiringPi -O0 -Wall
 
 clean:
-        rm *.lst *.out playback *.o  *.s >/dev/null 2>/dev/null || true
+		rm *.lst *.out playback *.o  *.s >/dev/null 2>/dev/null || true
 
 
 asm: clean
-        c++ -S -fverbose-asm -g -O2 main.c -o main.s
-        as -alhnd main.s > main.lst
+		gcc -S -Wall -fverbose-asm -g -O0 main.c -o main.s 
+		as -alhnd main.s > main.lst
 
