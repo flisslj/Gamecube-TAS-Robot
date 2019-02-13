@@ -317,7 +317,8 @@ int ID_Data[24] = {
 //poll for the controller data from the gamecube that signifies "next frame", than begin the
 void outputFrame()
 {
-	switch (readCommand())
+	uint16_t i = readCommand();
+	switch (i)
 	{
 	case CMD_ID: //report the controller id. In this case, if the controller has a rumble motor or not.
 		outputData(24, ID_Data, ((ReadLength/4)));
@@ -344,7 +345,7 @@ void outputFrame()
 		printf("RS\n");
 		break;
 	default:
-	printf("D\n");
+	printf("D:%x\n",i);
 	}
 }
 
@@ -447,7 +448,7 @@ int readCommand()
 		break;
 	case 2: //Time Length too long. Time to return the final value.
 		//printf("data: %d\nnumBits: %d\n",data,numBits);
-		return data >> (numBits - 8);
+		return (data >> (numBits - 8))&0xff;
 		break;
 	}
 	}
