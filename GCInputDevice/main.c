@@ -33,8 +33,8 @@ int main()
 {
 	printf("Initializing\n");
 
-	reset();
-	//testOutput();
+	//reset();
+	testOutput();
 }
 
 #define InputDeviceType 1
@@ -72,6 +72,10 @@ int main()
 
 #define frameValueSize 40
 #define frameBuffer 10
+#define noopCount 165
+
+
+
 int ctrl1Frames[frameBuffer][frameValueSize];
 int ctrlr1BufferIndex = 0;
 int ReadLength = 0;
@@ -497,4 +501,24 @@ int readBit()
 	}
 	//printf("1");
 	return 1;
+}
+
+
+void testOutput(){
+	wiringPiSetupGpio();
+	pinMode(CtrlOut1, OUTPUT);
+	while(1){
+
+		for( int i = 0; i <= noopCount; i++ ){
+			asm("nop");
+		}
+		digitalWrite(CtrlOut1, 1);
+
+		for( int i = 0; i <= noopCount; i++ ){
+			asm("nop");
+		}
+		digitalWrite(CtrlOut1, 0);
+	}
+
+
 }
