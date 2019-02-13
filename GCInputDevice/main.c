@@ -320,22 +320,31 @@ void outputFrame()
 	switch (readCommand())
 	{
 	case CMD_ID: //report the controller id. In this case, if the controller has a rumble motor or not.
-		outputData(24, ID_Data, ((5 * ReadLength) / 4));
+		outputData(24, ID_Data, ((ReadLength/4)));
+		printf("I\n");
 		break;
 	case CTRL_RESET: //reset was detected in bit read. Reset the playback.
 		return;
+		printf("CR\n");
 	case CMD_STATUS:
 		//outputData(64, ctrl1Frames[ctrlr1BufferIndex++ % frameBuffer], ((5 * ReadLength) / 4));
-		outputData(64, ctrl1Frames[0], ((5 * ReadLength) / 4));
+		outputData(64, ctrl1Frames[0], ((ReadLength/4)));
+		printf("S\n");
 		break;
 	case CMD_ORIGIN:
+		printf("CO\n");
 		break;
 	case CMD_RECELEBRATE: //do nothing.
+		printf("RC\n");
 		break;
 	case CMD_STATUS_LONG:
+		printf("SL\n");
 		break;
 	case CMD_RESET: //reset the "motor"
+		printf("RS\n");
 		break;
+	default:
+	printf("D\n");
 	}
 }
 
@@ -347,28 +356,32 @@ void outputFrame()
 void outputData(int bits, int *data, int loops)
 {
 	//for the number of bits to be output
+	if (digitalRead(CtrlIn1)){
+	printf("UP\n");
+	}
 	for (int i = 0; i < bits; i++)
 	{
+
 		//US1
-		digitalWrite(CtrlOut1, 0);
+		digitalWrite(CtrlOut1, 1);
 		for (int j = 0; j < loops; j++)
 		{
 			digitalRead(CtrlIn1);
 		}
 		//US2
-		digitalWrite(CtrlOut1, data[i]);
+		digitalWrite(CtrlOut1, !data[i]);
 		for (int j = 0; j < loops; j++)
 		{
 			digitalRead(CtrlIn1);
 		}
 		//US3
-		digitalWrite(CtrlOut1, data[i]);
+		digitalWrite(CtrlOut1, !data[i]);
 		for (int j = 0; j < loops; j++)
 		{
 			digitalRead(CtrlIn1);
 		}
 		//US4
-		digitalWrite(CtrlOut1, 1);
+		digitalWrite(CtrlOut1, 0);
 		for (int j = 0; j < loops; j++)
 		{
 			digitalRead(CtrlIn1);
@@ -377,25 +390,25 @@ void outputData(int bits, int *data, int loops)
 
 	//Final Bit Output. (is a 1)
 	//US1
-	digitalWrite(CtrlOut1, 0);
+	digitalWrite(CtrlOut1, 1);
 	for (int j = 0; j < loops; j++)
 	{
 		digitalRead(CtrlIn1);
 	}
 	//US2
-	digitalWrite(CtrlOut1, 1);
+	digitalWrite(CtrlOut1, 0);
 	for (int j = 0; j < loops; j++)
 	{
 		digitalRead(CtrlIn1);
 	}
 	//US3
-	digitalWrite(CtrlOut1, 1);
+	digitalWrite(CtrlOut1, 0);
 	for (int j = 0; j < loops; j++)
 	{
 		digitalRead(CtrlIn1);
 	}
 	//US4
-	digitalWrite(CtrlOut1, 1);
+	digitalWrite(CtrlOut1, 0);
 	for (int j = 0; j < loops; j++)
 	{
 		digitalRead(CtrlIn1);
@@ -408,9 +421,10 @@ void outputData(int bits, int *data, int loops)
 //readCommand expects the data line to be high when called.
 int readCommand()
 {
+	//printf("Reading command\n");
 	//wait for line level to be low, testing reset along the way.
 	//if reset, return 1 (REPLAY reset)
-	while (digitalRead(CtrlIn1))
+	while (!digitalRead(CtrlIn1))
 	{
 		//read the reset pin. If reset, rerturn the controller reset value.
 		if (!digitalRead(ResetPin))
@@ -418,8 +432,9 @@ int readCommand()
 			return CTRL_RESET;
 		}
 	}
-	uint32_t data = 0;
+	uint32_t data = 7;
 	int numBits = 0;
+	while (1){
 	switch (readBit())
 	{
 	case 0: //a zero has been read in.
@@ -431,11 +446,14 @@ int readCommand()
 		numBits++;
 		break;
 	case 2: //Time Length too long. Time to return the final value.
+		//printf("data: %d\nnumBits: %d\n",data,numBits);
 		return data >> (numBits - 8);
 		break;
 	}
-	//This value should be impossible. Return reset because an error has occured.
+	}
+//This value should be impossible. Return reset because an error has occured.
 	return CTRL_RESET;
+
 }
 
 //readBit reads a single bit from the input dataline.
@@ -443,17 +461,18 @@ int readCommand()
 int readBit()
 {
 	uint32_t cycles1 = 1; //set to 1 to account for extra cycles from function calls etc.
-	uint32_t cycles2 = 0;
-	for (;;)
+	uint32_t cycles2 = 1;
+	//printf("readingBit\n");
+	while(1)
 	{
 		cycles1++;
-		if (digitalRead(CtrlIn1))
+		if (!digitalRead(CtrlIn1))
 		{
 			break;
 		}
 	}
 
-	for (;;)
+	while(1)
 	{
 		cycles2++;
 		if (digitalRead(CtrlIn1))
@@ -461,18 +480,20 @@ int readBit()
 			break;
 		}
 		//the read has lasted longer than the total length of one bit. It is time to return a response.
-		if (cycles2 > ReadLength)
-		{
+		if (((cycles2 > (ReadLength)) && (cycles2 != 1) && (cycles1 != 1) && (ReadLength != 0))|| cycles2 > 200)
+		{	//printf("1:%d\n2:%d\n", cycles1, cycles2);
 			return 2;
 		}
 	}
 
 	//set ReadLength so that the
-	ReadLength = cycles1 + cycles2;
+	ReadLength = (cycles1 + cycles2);
 
 	if (cycles1 > cycles2)
 	{
+		//printf("0");
 		return 0;
 	}
+	//printf("1");
 	return 1;
 }
