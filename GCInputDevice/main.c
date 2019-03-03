@@ -92,7 +92,7 @@ int main()
 	digitalWrite(pin, 1); \
 	writeWait;            \
 	digitalWrite(pin, 0); \
-	writeWait
+	writeWait;
 
 #define write0(pin)       \
 	digitalWrite(pin, 1); \
@@ -102,7 +102,17 @@ int main()
 	digitalWrite(pin, 0); \
 	writeWait;            \
 	digitalWrite(pin, 0); \
-	writeWait
+	writeWait;
+
+#define writeBit(data, pin) \
+	if (data)               \
+	{                       \
+		write1(pin)         \
+	}                       \
+	else                    \
+	{                       \
+		write0(pin)         \
+	}
 
 #define frameValueSize 40
 #define frameBuffer 10
@@ -357,30 +367,30 @@ void outputFrame()
 	{
 	case CMD_ID: //report the controller id. In this case, if the controller has a rumble motor or not.
 		outputData(24, ID_Data, ((ReadLength / 4)));
-		printf("I\n");
+		printf("CMD_ID\n");
 		break;
 	case CTRL_RESET: //reset was detected in bit read. Reset the playback.
 		return;
-		printf("CR\n");
+		printf("CTRL_RESET\n");
 	case CMD_STATUS:
 		//outputData(64, ctrl1Frames[ctrlr1BufferIndex++ % frameBuffer], ((5 * ReadLength) / 4));
 		outputData(64, ctrl1Frames[0], ((ReadLength / 4)));
-		printf("S\n");
+		printf("CMD_STATE\n");
 		break;
 	case CMD_ORIGIN:
-		printf("CO\n");
+		printf("CMD_ORIGIN\n");
 		break;
 	case CMD_RECELEBRATE: //do nothing.
-		printf("RC\n");
+		printf("CMD_RECAL\n");
 		break;
 	case CMD_STATUS_LONG:
-		printf("SL\n");
+		printf("CMD_LONG\n");
 		break;
 	case CMD_RESET: //reset the "motor"
-		printf("RS\n");
+		printf("CMD_RESET\n");
 		break;
 	default:
-		printf("D:%x\n", i);
+		printf("DEFAULT:%x\n", i);
 	}
 }
 
@@ -392,64 +402,15 @@ void outputFrame()
 void outputData(int bits, int *data, int loops)
 {
 	//for the number of bits to be output
-	if (digitalRead(CtrlIn1))
-	{
-		printf("UP\n");
-	}
+	//if (digitalRead(CtrlIn1))
+	//{
+	//	printf("UP\n");
+	//}
 	for (int i = 0; i < bits; i++)
 	{
-
-		//US1
-		digitalWrite(CtrlOut1, 1);
-		for (int j = 0; j < loops; j++)
-		{
-			digitalRead(CtrlIn1);
-		}
-		//US2
-		digitalWrite(CtrlOut1, !data[i]);
-		for (int j = 0; j < loops; j++)
-		{
-			digitalRead(CtrlIn1);
-		}
-		//US3
-		digitalWrite(CtrlOut1, !data[i]);
-		for (int j = 0; j < loops; j++)
-		{
-			digitalRead(CtrlIn1);
-		}
-		//US4
-		digitalWrite(CtrlOut1, 0);
-		for (int j = 0; j < loops; j++)
-		{
-			digitalRead(CtrlIn1);
-		}
+		writeBit(!data[i], CtrlIn1)
 	}
-
-	//Final Bit Output. (is a 1)
-	//US1
-	digitalWrite(CtrlOut1, 1);
-	for (int j = 0; j < loops; j++)
-	{
-		digitalRead(CtrlIn1);
-	}
-	//US2
-	digitalWrite(CtrlOut1, 0);
-	for (int j = 0; j < loops; j++)
-	{
-		digitalRead(CtrlIn1);
-	}
-	//US3
-	digitalWrite(CtrlOut1, 0);
-	for (int j = 0; j < loops; j++)
-	{
-		digitalRead(CtrlIn1);
-	}
-	//US4
-	digitalWrite(CtrlOut1, 0);
-	for (int j = 0; j < loops; j++)
-	{
-		digitalRead(CtrlIn1);
-	}
+	writeBit(0, CtrlIn1)
 }
 
 //readCommand reads in the output command from the gamecube,
