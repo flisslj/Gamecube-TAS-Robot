@@ -70,11 +70,42 @@ int main()
 		return;                 \
 	};
 
+#define noopCount 165
+#define writeWait                        \
+	for (int i = 0; i <= noopCount; i++) \
+	{                                    \
+		asm("nop");                      \
+	}
+
+#define GCNoopCount 206
+#define readWait                           \
+	for (int i = 0; i <= GCNoopCount; i++) \
+	{                                      \
+		asm("nop");                        \
+	}
+
+#define write1(pin)       \
+	digitalWrite(pin, 1); \
+	writeWait;            \
+	digitalWrite(pin, 1); \
+	writeWait;            \
+	digitalWrite(pin, 1); \
+	writeWait;            \
+	digitalWrite(pin, 0); \
+	writeWait
+
+#define write0(pin)       \
+	digitalWrite(pin, 1); \
+	writeWait;            \
+	digitalWrite(pin, 0); \
+	writeWait;            \
+	digitalWrite(pin, 0); \
+	writeWait;            \
+	digitalWrite(pin, 0); \
+	writeWait
+
 #define frameValueSize 40
 #define frameBuffer 10
-#define noopCount 165
-
-
 
 int ctrl1Frames[frameBuffer][frameValueSize];
 int ctrlr1BufferIndex = 0;
@@ -174,14 +205,14 @@ void outputOnDataPins(uint8_t num)
 //read data from the datapins
 uint8_t inputOnDataPins()
 {
-	return (digitalRead(DataPin00) << 0) |
-		   (digitalRead(DataPin01) << 1) |
-		   (digitalRead(DataPin02) << 2) |
-		   (digitalRead(DataPin03) << 3) |
-		   (digitalRead(DataPin04) << 4) |
-		   (digitalRead(DataPin05) << 5) |
-		   (digitalRead(DataPin06) << 6) |
-		   (digitalRead(DataPin07) << 7);
+	return ((digitalRead(DataPin00) << 0) |
+			(digitalRead(DataPin01) << 1) |
+			(digitalRead(DataPin02) << 2) |
+			(digitalRead(DataPin03) << 3) |
+			(digitalRead(DataPin04) << 4) |
+			(digitalRead(DataPin05) << 5) |
+			(digitalRead(DataPin06) << 6) |
+			(digitalRead(DataPin07) << 7));
 }
 
 //begin main playback loop to read data from the controller and output to the gamecube.
@@ -325,7 +356,7 @@ void outputFrame()
 	switch (i)
 	{
 	case CMD_ID: //report the controller id. In this case, if the controller has a rumble motor or not.
-		outputData(24, ID_Data, ((ReadLength/4)));
+		outputData(24, ID_Data, ((ReadLength / 4)));
 		printf("I\n");
 		break;
 	case CTRL_RESET: //reset was detected in bit read. Reset the playback.
@@ -333,7 +364,7 @@ void outputFrame()
 		printf("CR\n");
 	case CMD_STATUS:
 		//outputData(64, ctrl1Frames[ctrlr1BufferIndex++ % frameBuffer], ((5 * ReadLength) / 4));
-		outputData(64, ctrl1Frames[0], ((ReadLength/4)));
+		outputData(64, ctrl1Frames[0], ((ReadLength / 4)));
 		printf("S\n");
 		break;
 	case CMD_ORIGIN:
@@ -349,7 +380,7 @@ void outputFrame()
 		printf("RS\n");
 		break;
 	default:
-	printf("D:%x\n",i);
+		printf("D:%x\n", i);
 	}
 }
 
@@ -361,8 +392,9 @@ void outputFrame()
 void outputData(int bits, int *data, int loops)
 {
 	//for the number of bits to be output
-	if (digitalRead(CtrlIn1)){
-	printf("UP\n");
+	if (digitalRead(CtrlIn1))
+	{
+		printf("UP\n");
 	}
 	for (int i = 0; i < bits; i++)
 	{
@@ -439,26 +471,26 @@ int readCommand()
 	}
 	uint32_t data = 7;
 	int numBits = 0;
-	while (1){
-	switch (readBit())
+	while (1)
 	{
-	case 0: //a zero has been read in.
-		data = data << 1;
-		numBits++;
-		break;
-	case 1: //a 1 has been read in from the data.
-		data = (data << 1) + 1;
-		numBits++;
-		break;
-	case 2: //Time Length too long. Time to return the final value.
-		//printf("data: %d\nnumBits: %d\n",data,numBits);
-		return (data >> (numBits - 8))&0xff;
-		break;
+		switch (readBit())
+		{
+		case 0: //a zero has been read in.
+			data = data << 1;
+			numBits++;
+			break;
+		case 1: //a 1 has been read in from the data.
+			data = (data << 1) + 1;
+			numBits++;
+			break;
+		case 2: //Time Length too long. Time to return the final value.
+			//printf("data: %d\nnumBits: %d\n",data,numBits);
+			return (data >> (numBits - 8)) & 0xff;
+			break;
+		}
 	}
-	}
-//This value should be impossible. Return reset because an error has occured.
+	//This value should be impossible. Return reset because an error has occured.
 	return CTRL_RESET;
-
 }
 
 //readBit reads a single bit from the input dataline.
@@ -468,7 +500,7 @@ int readBit()
 	uint32_t cycles1 = 1; //set to 1 to account for extra cycles from function calls etc.
 	uint32_t cycles2 = 1;
 	//printf("readingBit\n");
-	while(1)
+	while (1)
 	{
 		cycles1++;
 		if (!digitalRead(CtrlIn1))
@@ -477,7 +509,7 @@ int readBit()
 		}
 	}
 
-	while(1)
+	while (1)
 	{
 		cycles2++;
 		if (digitalRead(CtrlIn1))
@@ -485,8 +517,8 @@ int readBit()
 			break;
 		}
 		//the read has lasted longer than the total length of one bit. It is time to return a response.
-		if (((cycles2 > (ReadLength)) && (cycles2 != 1) && (cycles1 != 1) && (ReadLength != 0))|| cycles2 > 200)
-		{	//printf("1:%d\n2:%d\n", cycles1, cycles2);
+		if (((cycles2 > (ReadLength)) && (cycles2 != 1) && (cycles1 != 1) && (ReadLength != 0)) || cycles2 > 200)
+		{ //printf("1:%d\n2:%d\n", cycles1, cycles2);
 			return 2;
 		}
 	}
@@ -503,22 +535,23 @@ int readBit()
 	return 1;
 }
 
-
-void testOutput(){
+void testOutput()
+{
 	wiringPiSetupGpio();
 	pinMode(CtrlOut1, OUTPUT);
-	while(1){
+	while (1)
+	{
 
-		for( int i = 0; i <= noopCount; i++ ){
+		for (int i = 0; i <= noopCount; i++)
+		{
 			asm("nop");
 		}
 		digitalWrite(CtrlOut1, 1);
 
-		for( int i = 0; i <= noopCount; i++ ){
+		for (int i = 0; i <= noopCount; i++)
+		{
 			asm("nop");
 		}
 		digitalWrite(CtrlOut1, 0);
 	}
-
-
 }
