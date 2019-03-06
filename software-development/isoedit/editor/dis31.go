@@ -232,11 +232,46 @@ func dis31Start(num uint32, comm command) (uint32, command) {
 }
 
 func dis31StartCMP(num uint32, comm command) (uint32, command) {
+	if num == 0 {
 
-	return num, command{} //!!
+		output := uint32((comm.cmdSimple[0]) + (comm.cmdSimple[1] << 6) + (comm.cmdSimple[2] << 10) + (comm.cmdSimple[3] << 16))
+
+		return output, comm
+	}
+	D := getBits(6, 8, num)
+	L := getBits(10, 10, num)
+	A := getBits(11, 15, num)
+	SIMM := getBits(16, 31, num)
+	c := command{
+		cmdName:   "CMP",
+		cmdString: "CMP\tCRF" + strconv.Itoa(D) + ", " + strconv.Itoa(L) + ", R" + strconv.Itoa(A) + ", " + strconv.Itoa(SIMM),
+		cmdSimple: []int{31, D, A, SIMM},
+		asBytes:   num,
+	}
+
+	return num, c
 }
 func dis31StartTW(num uint32, comm command) (uint32, command) {
-	return num, command{} //!!
+	//Grab bits from 6-20, 11-15 adn 16-31 and place them in the command
+	//Add twl to the command name
+
+	if num == 0 {
+
+		output := uint32((comm.cmdSimple[0]) + (comm.cmdSimple[1] << 6) + (comm.cmdSimple[2] << 11) + (comm.cmdSimple[3] << 16))
+
+		return output, comm
+	}
+	TO := getBits(6, 10, num)
+	A := getBits(11, 15, num)
+	B := getBits(16, 20, num)
+	c := command{
+		cmdName:   "TW",
+		cmdString: "TW\t" + strconv.Itoa(TO) + ", R" + strconv.Itoa(A) + ", R" + strconv.Itoa(B),
+		cmdSimple: []int{31 TO, A, B, getBits(21, 31)},
+		asBytes:   num,
+	}
+
+	return num, c
 }
 func dis31StartSUBFCX(num uint32, comm command) (uint32, command) {
 	TYPE := getBits(21, 21, num)
@@ -257,7 +292,7 @@ func dis31StartSUBFCX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -281,7 +316,7 @@ func dis31StartADDCX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -300,7 +335,7 @@ func dis31StartMULHWUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -310,7 +345,7 @@ func dis31StartMFCR(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "MFCR",
 		cmdString: "MFCR\t" + "R" + strconv.Itoa(D),
-		cmdSimple: []int{4, D << 10, getBits(21, 31, num)},
+		cmdSimple: []int{31, D << 10, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -322,7 +357,7 @@ func dis31StartLWARX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LWARX",
 		cmdString: "LWARX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -334,7 +369,7 @@ func dis31StartLWZX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LWZX",
 		cmdString: "LWZX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -353,7 +388,7 @@ func dis31StartSLWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -371,7 +406,7 @@ func dis31StartCNTLZWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S),
-		cmdSimple: []int{4, S, A << 5, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A << 5, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -390,13 +425,30 @@ func dis31StartANDX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
 }
 func dis31StartCMPL(num uint32, comm command) (uint32, command) {
-	return num, command{} //!!
+	if num == 0 {
+
+		output := uint32((comm.cmdSimple[0]) + (comm.cmdSimple[1] << 6) + (comm.cmdSimple[2] << 10) + (comm.cmdSimple[3] << 16))
+
+		return output, comm
+	}
+	D := getBits(6, 8, num)
+	L := getBits(10, 10, num)
+	A := getBits(11, 15, num)
+	SIMM := getBits(16, 31, num)
+	c := command{
+		cmdName:   "CMPL",
+		cmdString: "CMPL\tCRF" + strconv.Itoa(D) + ", " + strconv.Itoa(L) + ", R" + strconv.Itoa(A) + ", " + strconv.Itoa(SIMM),
+		cmdSimple: []int{31, D, A, SIMM},
+		asBytes:   num,
+	}
+
+	return num, c
 }
 func dis31StartSUBFX(num uint32, comm command) (uint32, command) {
 	TYPE := getBits(21, 21, num)
@@ -417,7 +469,7 @@ func dis31StartSUBFX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -428,7 +480,7 @@ func dis31StartDCBST(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "DCBST",
 		cmdString: "DCBST\t" + "R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4 << 5, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31 << 5, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -440,7 +492,7 @@ func dis31StartLWZUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LWZUX",
 		cmdString: "LWZUX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -459,7 +511,7 @@ func dis31StartANDCX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -478,7 +530,7 @@ func dis31StartMULHWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -488,7 +540,7 @@ func dis31StartMFMSR(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "MFMSR",
 		cmdString: "MFMSR\t" + "R" + strconv.Itoa(D),
-		cmdSimple: []int{4, D << 10, getBits(21, 31, num)},
+		cmdSimple: []int{31, D << 10, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -499,7 +551,7 @@ func dis31StartDCBF(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "DCBF",
 		cmdString: "DCBF\t" + "R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4 << 5, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31 << 5, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -511,7 +563,7 @@ func dis31StartLBZX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LBZX",
 		cmdString: "LBZX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -534,7 +586,7 @@ func dis31StartNEGX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A),
-		cmdSimple: []int{4, D, A << 5, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A << 5, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -547,7 +599,7 @@ func dis31StartLBZUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LBZUX",
 		cmdString: "LBZUX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -566,7 +618,7 @@ func dis31StartNORX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -590,7 +642,7 @@ func dis31StartSUBFEX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -614,20 +666,35 @@ func dis31StartADDEX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
 }
 func dis31StartMTCRF(num uint32, comm command) (uint32, command) {
-	return num, command{} //!!
+	if num == 0 {
+
+		output := uint32((comm.cmdSimple[0]) + (comm.cmdSimple[1] << 6) + (comm.cmdSimple[2] << 10) + (comm.cmdSimple[3] << 16))
+
+		return output, comm
+	}
+	S := getBits(6, 10, num)
+	CRM := getBits(12, 19, num)
+	c := command{
+		cmdName:   "MTCRF",
+		cmdString: "MTCRF\t" + strconv.Itoa(CRM) + ", R" + strconv.Itoa(S),
+		cmdSimple: []int{31, S, 0, CRM, 0, getBits(21, 31)},
+		asBytes:   num,
+	}
+
+	return num, c
 }
 func dis31StartMTMSR(num uint32, comm command) (uint32, command) {
 	S := getBits(6, 10, num)
 	c := command{
 		cmdName:   "MTMSR",
 		cmdString: "MTMSR\t" + "R" + strconv.Itoa(S),
-		cmdSimple: []int{4, S << 10, getBits(21, 31, num)},
+		cmdSimple: []int{31, S << 10, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -639,7 +706,7 @@ func dis31StartSTWCXd(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "STWCX.",
 		cmdString: "STWCX.\t" + "R" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -651,7 +718,7 @@ func dis31StartSTWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "STWX",
 		cmdString: "STWX\t" + "R" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -663,7 +730,7 @@ func dis31StartSTWUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "STWUX",
 		cmdString: "STWUX\t" + "R" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -687,7 +754,7 @@ func dis31StartSUBFZEX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -711,7 +778,7 @@ func dis31StartADDZEX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -722,7 +789,7 @@ func dis31StartMTSR(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "MTSR",
 		cmdString: "MTSR\t" + strconv.Itoa(SR) + ",R" + strconv.Itoa(S),
-		cmdSimple: []int{4, S, 0, SR << 4, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, 0, SR << 4, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -734,7 +801,7 @@ func dis31StartSTBX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "STBX",
 		cmdString: "STBX\t" + "R" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -758,7 +825,7 @@ func dis31StartSUBFMEX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A),
-		cmdSimple: []int{4, D, A << 5, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A << 5, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -781,7 +848,7 @@ func dis31StartADDMEX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A),
-		cmdSimple: []int{4, D, A << 5, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A << 5, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -800,7 +867,7 @@ func dis31StartMULLWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -811,7 +878,7 @@ func dis31StartMTSRIN(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "MTSRIN",
 		cmdString: "MTSRIN\t" + "R" + strconv.Itoa(S) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S << 5, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S << 5, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -823,7 +890,7 @@ func dis31StartDCBTST(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "DCBTST",
 		cmdString: "DCBTST\t" + "R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4 << 5, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31 << 5, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -835,7 +902,7 @@ func dis31StartSTBUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "STBUX",
 		cmdString: "STBUX\t" + "R" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -859,7 +926,7 @@ func dis31StartADDX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -870,7 +937,7 @@ func dis31StartDCBT(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "DCBTST",
 		cmdString: "DCBTST\t" + "R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4 << 5, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31 << 5, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -882,7 +949,7 @@ func dis31StartLHZX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LHZX",
 		cmdString: "LHZX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -901,7 +968,7 @@ func dis31StartEQVX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -911,7 +978,7 @@ func dis31StartTLBIE(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "TLBIE",
 		cmdString: "TLBIE\t" + "R" + strconv.Itoa(B),
-		cmdSimple: []int{4 << 10, B, getBits(21, 31, num)},
+		cmdSimple: []int{31 << 10, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -923,7 +990,7 @@ func dis31StartECIWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "ECIWX",
 		cmdString: "ECIWX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -935,7 +1002,7 @@ func dis31StartLHZUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LHZUX",
 		cmdString: "LHZUX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -954,7 +1021,7 @@ func dis31StartXORX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -965,7 +1032,7 @@ func dis31StartMFSPR(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "MFSPR",
 		cmdString: "MFSPR\t" + "R" + strconv.Itoa(D) + "," + strconv.Itoa(SPR),
-		cmdSimple: []int{4, D, SPR, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, SPR, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -977,7 +1044,7 @@ func dis31StartLHAX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LHAX",
 		cmdString: "LHAX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -988,7 +1055,7 @@ func dis31StartMFTB(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "MFSPR",
 		cmdString: "MFSPR\t" + "R" + strconv.Itoa(D) + "," + strconv.Itoa(TBR),
-		cmdSimple: []int{4, D, TBR, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, TBR, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1000,7 +1067,7 @@ func dis31StartLHAUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LHAUX",
 		cmdString: "LHAUX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1012,7 +1079,7 @@ func dis31StartSTHX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "STHX",
 		cmdString: "STHX\t" + "R" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1031,7 +1098,7 @@ func dis31StartORCX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1050,7 +1117,7 @@ func dis31StartECOWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1062,7 +1129,7 @@ func dis31StartSTHUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "STHUX",
 		cmdString: "STHUX" + "\tR" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1081,7 +1148,7 @@ func dis31StartORX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1105,7 +1172,7 @@ func dis31StartDIVWUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1116,7 +1183,7 @@ func dis31StartMTSPR(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "MTSPR",
 		cmdString: "MTSPR\t" + "R" + strconv.Itoa(D) + "," + strconv.Itoa(SPR),
-		cmdSimple: []int{4, D, SPR, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, SPR, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1127,7 +1194,7 @@ func dis31StartDCBI(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "DCBI",
 		cmdString: "DCBI\t" + "R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4 << 5, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31 << 5, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1146,7 +1213,7 @@ func dis31StartNANDX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1170,7 +1237,7 @@ func dis31StartDIVWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1180,7 +1247,7 @@ func dis31StartMCRXR(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "MCRXR",
 		cmdString: "MCRXR\t" + "CRF" + strconv.Itoa(D),
-		cmdSimple: []int{4, D << 12, getBits(21, 31, num)},
+		cmdSimple: []int{31, D << 12, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1192,7 +1259,7 @@ func dis31StartLSWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LSWX",
 		cmdString: "LSWX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1204,7 +1271,7 @@ func dis31StartLWBRX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LWBRX",
 		cmdString: "LWBRX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1216,7 +1283,7 @@ func dis31StartLFSX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LSWX",
 		cmdString: "LSWX\t" + "FR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1235,13 +1302,20 @@ func dis31StartSRWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
 }
 func dis31StartTLBSYNC(num uint32, comm command) (uint32, command) {
-	return num, command{} //!!????
+	NAME:= "TLBSYNC";
+	c := command{
+		cmdName:   NAME,
+		cmdString: NAME,
+		cmdSimple: []int{31, getBits(6, 31, num)},
+		asBytes:   num,
+	}
+	return num, c
 }
 func dis31StartLFSUX(num uint32, comm command) (uint32, command) {
 	D := getBits(6, 10, num)
@@ -1250,7 +1324,7 @@ func dis31StartLFSUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LSUX",
 		cmdString: "LSUX\t" + "FR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1261,7 +1335,7 @@ func dis31StartMFSR(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "MFSR",
 		cmdString: "MFSR\t" + "R" + strconv.Itoa(D) + strconv.Itoa(SR) + "," + strconv.Itoa(D),
-		cmdSimple: []int{4, D, 0, SR << 4, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, 0, SR << 4, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1273,13 +1347,20 @@ func dis31StartLSWI(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LSWI",
 		cmdString: "LSWI\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(NB),
-		cmdSimple: []int{4, D, A, NB, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, NB, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
 }
 func dis31StartSYNC(num uint32, comm command) (uint32, command) {
-	return num, command{} //!!?????
+	NAME:= "SYNC";
+	c := command{
+		cmdName:   NAME,
+		cmdString: NAME,
+		cmdSimple: []int{31, getBits(6, 31, num)},
+		asBytes:   num,
+	}
+	return num, c
 }
 func dis31StartLFDX(num uint32, comm command) (uint32, command) {
 	D := getBits(6, 10, num)
@@ -1288,7 +1369,7 @@ func dis31StartLFDX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LFDX",
 		cmdString: "LFDX\t" + "FR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1300,7 +1381,7 @@ func dis31StartLFDUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LFDUX",
 		cmdString: "LFDUX\t" + "FR" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1311,7 +1392,7 @@ func dis31StartMFSRIN(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "MTSRIN",
 		cmdString: "MTSRIN\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D << 5, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D << 5, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1324,7 +1405,7 @@ func dis31StartSTSWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1337,7 +1418,7 @@ func dis31StartSTWBRX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1350,7 +1431,7 @@ func dis31StartSTFSX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tFR" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1363,7 +1444,7 @@ func dis31StartSTFSUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tFR" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1375,7 +1456,7 @@ func dis31StartSTSWI(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "STSWI",
 		cmdString: "STSWI\t" + "R" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(NB),
-		cmdSimple: []int{4, S, A, NB, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, NB, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1388,7 +1469,7 @@ func dis31StartSTFDX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tFR" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1401,7 +1482,7 @@ func dis31StartSTFDUX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tFR" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1413,7 +1494,7 @@ func dis31StartLHBRX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "LHBRX",
 		cmdString: "LHBRX\t" + "R" + strconv.Itoa(D) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, D, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, D, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1432,7 +1513,7 @@ func dis31StartSRAWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1451,13 +1532,20 @@ func dis31StartSRAWIX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S) + ",R" + strconv.Itoa(SH),
-		cmdSimple: []int{4, S, A, SH, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, SH, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
 }
 func dis31StartEIEIO(num uint32, comm command) (uint32, command) {
-	return num, command{} //!!!??????
+	NAME:= "EIEIO";
+	c := command{
+		cmdName:   NAME,
+		cmdString: NAME,
+		cmdSimple: []int{31, getBits(6, 31, num)},
+		asBytes:   num,
+	}
+	return num, c
 }
 func dis31StartSTHBRX(num uint32, comm command) (uint32, command) {
 	NAME := "STHBRX"
@@ -1467,7 +1555,7 @@ func dis31StartSTHBRX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1485,7 +1573,7 @@ func dis31StartEXTSHX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S),
-		cmdSimple: []int{4, S, A << 5, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A << 5, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1503,7 +1591,7 @@ func dis31StartEXTSBX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tR" + strconv.Itoa(A) + ",R" + strconv.Itoa(S),
-		cmdSimple: []int{4, S, A << 5, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A << 5, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1514,7 +1602,7 @@ func dis31StartICBI(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "ICBI",
 		cmdString: "ICBI\t" + "R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4 << 5, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31 << 5, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1527,7 +1615,7 @@ func dis31StartSTFIWX(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   NAME,
 		cmdString: NAME + "\tFR" + strconv.Itoa(S) + ",R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4, S, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31, S, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
@@ -1538,7 +1626,7 @@ func dis31StartDCBZ(num uint32, comm command) (uint32, command) {
 	c := command{
 		cmdName:   "DCBZ",
 		cmdString: "DCBZ\t" + "R" + strconv.Itoa(A) + ",R" + strconv.Itoa(B),
-		cmdSimple: []int{4 << 5, A, B, getBits(21, 31, num)},
+		cmdSimple: []int{31 << 5, A, B, getBits(21, 31, num)},
 		asBytes:   num,
 	}
 	return num, c
