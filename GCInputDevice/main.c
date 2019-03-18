@@ -18,23 +18,21 @@ void outputData(int bits, int *data, int loops);
 int readCommand();
 int readBit();
 
-enum //values of the first byte.
-{
-	CMD_ID = 0x00,			//0
-	CTRL_RESET = 0x01,		//1
-	CMD_STATUS = 0x40,		//64
-	CMD_ORIGIN = 0x41,		//65
-	CMD_RECELEBRATE = 0x42, //66
-	CMD_STATUS_LONG = 0x43, //67
-	CMD_RESET = 0xFF		//255
-};
+//values of the first byte.
+#define CMD_ID 0x00			 //0
+#define CTRL_RESET 0x01		 //1
+#define CMD_STATUS 0x40		 //64
+#define CMD_ORIGIN 0x41		 //65
+#define CMD_RECELEBRATE 0x42 //66
+#define CMD_STATUS_LONG 0x43 //67
+#define CMD_RESET 0xFF		 //255
 
 int main()
 {
 	printf("Initializing\n");
 
 	//reset();
-	testOutput();
+	testTiming();
 }
 
 #define InputDeviceType 1
@@ -75,13 +73,6 @@ int main()
 	for (int i = 0; i <= noopCount; i++) \
 	{                                    \
 		asm("nop");                      \
-	}
-
-#define GCNoopCount 206
-#define readWait                           \
-	for (int i = 0; i <= GCNoopCount; i++) \
-	{                                      \
-		asm("nop");                        \
 	}
 
 #define write1(pin)       \
@@ -514,5 +505,135 @@ void testOutput()
 			asm("nop");
 		}
 		digitalWrite(CtrlOut1, 0);
+	}
+}
+
+#define GCNoopCount 206
+#define readWait                           \
+	for (int i = 0; i <= GCNoopCount; i++) \
+	{                                      \
+		asm("nop");                        \
+	}
+
+//readCommand2 itterates through listening on the controller input pin,
+//reset is watched the entire time that the command is waited for.
+//if the reset is ever triggered, a specific reset signal is returned.
+//otherwise, the system waits for the controller pin to lower to ground.
+int readCommand2()
+{
+	//wait for line level to be low, testing reset along the way.
+	//if reset, return 1 (REPLAY reset)
+	while (!digitalRead(CtrlIn1))
+	{
+		//read the reset pin. If reset, rerturn the controller reset value.
+		if (!digitalRead(ResetPin))
+		{
+			return CTRL_RESET;
+		}
+	}
+
+	//GCNoopCount 6.25 us~~
+
+	//once the controller line pin is low, start the for loop.
+	uint64_t inputValue = 0;
+
+	int risingEdge = 0;
+	for (int i = 0; i < GCNoopCount; i++)
+	{
+		//once the pin is high, record the value of the
+		if (digitalRead(CtrlIn1))
+		{
+			if (risingEdge == 0)
+			{
+				risingEdge = 1;
+				//if I is more than half way, it is a 0.
+				if (i > (GCNoopCount / 2))
+				{
+					inputValue = (inputValue << 1) + 0;
+				}
+				else
+				{
+					inputValue = (inputValue << 1) + 1;
+				}
+			}
+			else
+			{
+				asm("nop");
+				asm("nop"); // /2
+				asm("nop"); // >
+
+				asm("nop"); // <<
+				asm("nop"); // +
+
+				//equal delay to above
+			}
+		}
+		else
+		{
+			if (risingEdge == 1)
+			{
+				//value fell. Reset to beginning
+				risingEdge = 0;
+				i = -1;
+			}
+			else
+			{
+				asm("nop");
+				asm("nop");
+
+				asm("nop"); // /2
+				asm("nop"); // >
+
+				asm("nop"); // <<
+				asm("nop"); // +
+			}
+		}
+	}
+	return inputValue;
+}
+
+int testTiming()
+{
+	printf("RESETTING\n");
+	//set up the datapins to use the GPIO.
+	wiringPiSetupGpio();
+
+	//set pin directions.
+	pinMode(CtrlOut1, OUTPUT);
+	pinMode(CtrlIn2, INPUT);
+
+	int i = 0;
+	while (1)
+	{
+		i ^= 1;
+		digitalWrite(CtrlOut1, i);
+		for (int i = 0; i < GCNoopCount; i++)
+		{
+
+			if (digitalRead(CtrlIn2))
+			{
+				asm("nop");
+				asm("nop");
+
+				asm("nop"); // /2
+				asm("nop"); // >
+
+				asm("nop"); // <<
+				asm("nop"); // +
+				asm("nop");
+			}
+			else
+			{
+				asm("nop");
+				asm("nop");
+
+				asm("nop"); // /2
+				asm("nop"); // >
+
+				asm("nop"); // <<
+				asm("nop"); // +
+				asm("nop");
+			}
+		}
 	}
 }
