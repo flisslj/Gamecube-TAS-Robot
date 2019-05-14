@@ -5,6 +5,7 @@
 *.o
 *.ko
 *.obj
+!GCInputDevice/armc-03/start.elf
 *.elf
 
 # Linker output
@@ -51,8 +52,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-
-# eclipse project settigns. 
+# eclipse project settigns.
 .cproject
 .project
 .settings/
@@ -63,4 +63,3 @@ dkms.conf
 #Node Modules
 node_modules/
 wit/
-
