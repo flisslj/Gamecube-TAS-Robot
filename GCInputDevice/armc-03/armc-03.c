@@ -135,6 +135,8 @@ volatile unsigned int tim;
 volatile int tim1;
 volatile unsigned int inputValue;
 volatile unsigned int risingEdge;
+volatile unsigned int j = 0;
+volatile unsigned int v1 = 0;
 
 /** Main function - we'll never return from here */
 int main(void) __attribute__((naked));
@@ -207,12 +209,55 @@ int main(void)
 
 		//output0();
 		testRead();
+
+		switch (v1)
+		{
+		case 1:
+			//id.type[0] = 0x29;
+			//id.type[1] = 0x00;
+			output0();
+			output0();
+			output1();
+			output0();
+
+			output1();
+			output0();
+			output0();
+			output1();
+
+			output0();
+			output0();
+			output0();
+			output0();
+
+			output0();
+			output0();
+			output0();
+			output0();
+
+			output1();
+
+		default:
+			j = 0;
+			while (j <= 8)
+			{
+
+				if ((v1 >> (8 - j)) & 0b1)
+				{
+					output1();
+				}
+				else
+				{
+					output0();
+				}
+
+				j = j + 1;
+			}
+		}
 	}
 }
 
 volatile int v2 = 0;
-volatile unsigned int j = 0;
-volatile unsigned int v1 = 0;
 void testRead()
 {
 
@@ -232,7 +277,7 @@ void testRead()
 	asm("bne 1b");
 	asm("pop {r1}");
 
-	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) + (v1 << 1);
+	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) >> CtrlIn1 + (v1 << 1);
 	gpio[LED_GPCLR] = (1 << 4);
 
 	asm("push {r1}");
@@ -240,177 +285,182 @@ void testRead()
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");
-
-	return;
+	gpio[LED_GPSET] = (1 << 4);
 
 	while ((gpio[GPIO_GPLEV0] & (1 << CtrlIn1)))
 	{
+		asm("nop");
 		//read the reset pin. If reset, rerturn the controller reset value.
 	}
-	gpio[LED_GPSET] = (1 << 4);
 
 	asm("push {r1}");
-	asm("movs  r1, #376");
+	asm("movs  r1, #300");
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");
-	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) + (v1 << 1);
-	asm("push {r1}");
-	asm("movs  r1, #125");
-	asm("1: subs  r1, r1, #1");
-	asm("bne 1b");
-	asm("pop {r1}");
+
+	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) >> CtrlIn1 + (v1 << 1);
 	gpio[LED_GPCLR] = (1 << 4);
+
+	asm("push {r1}");
+	asm("movs  r1, #110");
+	asm("1: subs  r1, r1, #1");
+	asm("bne 1b");
+	asm("pop {r1}");
+	gpio[LED_GPSET] = (1 << 4);
 
 	while ((gpio[GPIO_GPLEV0] & (1 << CtrlIn1)))
 	{
+		asm("nop");
 		//read the reset pin. If reset, rerturn the controller reset value.
 	}
-	gpio[LED_GPSET] = (1 << 4);
 
 	asm("push {r1}");
-	asm("movs  r1, #376");
+	asm("movs  r1, #300");
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");
-	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) + (v1 << 1);
-	asm("push {r1}");
-	asm("movs  r1, #125");
-	asm("1: subs  r1, r1, #1");
-	asm("bne 1b");
-	asm("pop {r1}");
+
+	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) >> CtrlIn1 + (v1 << 1);
 	gpio[LED_GPCLR] = (1 << 4);
+
+	asm("push {r1}");
+	asm("movs  r1, #110");
+	asm("1: subs  r1, r1, #1");
+	asm("bne 1b");
+	asm("pop {r1}");
+	gpio[LED_GPSET] = (1 << 4);
 
 	while ((gpio[GPIO_GPLEV0] & (1 << CtrlIn1)))
 	{
+		asm("nop");
 		//read the reset pin. If reset, rerturn the controller reset value.
 	}
-	gpio[LED_GPSET] = (1 << 4);
 
 	asm("push {r1}");
-	asm("movs  r1, #376");
+	asm("movs  r1, #300");
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");
-	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) + (v1 << 1);
-	asm("push {r1}");
-	asm("movs  r1, #125");
-	asm("1: subs  r1, r1, #1");
-	asm("bne 1b");
-	asm("pop {r1}");
+
+	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) >> CtrlIn1 + (v1 << 1);
 	gpio[LED_GPCLR] = (1 << 4);
+
+	asm("push {r1}");
+	asm("movs  r1, #110");
+	asm("1: subs  r1, r1, #1");
+	asm("bne 1b");
+	asm("pop {r1}");
+	gpio[LED_GPSET] = (1 << 4);
 
 	while ((gpio[GPIO_GPLEV0] & (1 << CtrlIn1)))
 	{
+		asm("nop");
 		//read the reset pin. If reset, rerturn the controller reset value.
 	}
-	gpio[LED_GPSET] = (1 << 4);
 
 	asm("push {r1}");
-	asm("movs  r1, #376");
+	asm("movs  r1, #300");
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");
-	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) + (v1 << 1);
-	asm("push {r1}");
-	asm("movs  r1, #125");
-	asm("1: subs  r1, r1, #1");
-	asm("bne 1b");
-	asm("pop {r1}");
+
+	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) >> CtrlIn1 + (v1 << 1);
 	gpio[LED_GPCLR] = (1 << 4);
+
+	asm("push {r1}");
+	asm("movs  r1, #110");
+	asm("1: subs  r1, r1, #1");
+	asm("bne 1b");
+	asm("pop {r1}");
+	gpio[LED_GPSET] = (1 << 4);
 
 	while ((gpio[GPIO_GPLEV0] & (1 << CtrlIn1)))
 	{
+		asm("nop");
 		//read the reset pin. If reset, rerturn the controller reset value.
 	}
-	gpio[LED_GPSET] = (1 << 4);
 
 	asm("push {r1}");
-	asm("movs  r1, #376");
+	asm("movs  r1, #300");
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");
-	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) + (v1 << 1);
-	asm("push {r1}");
-	asm("movs  r1, #125");
-	asm("1: subs  r1, r1, #1");
-	asm("bne 1b");
-	asm("pop {r1}");
+
+	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) >> CtrlIn1 + (v1 << 1);
 	gpio[LED_GPCLR] = (1 << 4);
+
+	asm("push {r1}");
+	asm("movs  r1, #110");
+	asm("1: subs  r1, r1, #1");
+	asm("bne 1b");
+	asm("pop {r1}");
+	gpio[LED_GPSET] = (1 << 4);
 
 	while ((gpio[GPIO_GPLEV0] & (1 << CtrlIn1)))
 	{
+		asm("nop");
 		//read the reset pin. If reset, rerturn the controller reset value.
 	}
-	gpio[LED_GPSET] = (1 << 4);
 
 	asm("push {r1}");
-	asm("movs  r1, #376");
+	asm("movs  r1, #300");
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");
-	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) + (v1 << 1);
-	asm("push {r1}");
-	asm("movs  r1, #125");
-	asm("1: subs  r1, r1, #1");
-	asm("bne 1b");
-	asm("pop {r1}");
+
+	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) >> CtrlIn1 + (v1 << 1);
 	gpio[LED_GPCLR] = (1 << 4);
+
+	asm("push {r1}");
+	asm("movs  r1, #110");
+	asm("1: subs  r1, r1, #1");
+	asm("bne 1b");
+	asm("pop {r1}");
+	gpio[LED_GPSET] = (1 << 4);
 
 	while ((gpio[GPIO_GPLEV0] & (1 << CtrlIn1)))
 	{
+		asm("nop");
 		//read the reset pin. If reset, rerturn the controller reset value.
 	}
-	gpio[LED_GPSET] = (1 << 4);
 
 	asm("push {r1}");
-	asm("movs  r1, #376");
+	asm("movs  r1, #300");
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");
-	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) + (v1 << 1);
-	asm("push {r1}");
-	asm("movs  r1, #125");
-	asm("1: subs  r1, r1, #1");
-	asm("bne 1b");
-	asm("pop {r1}");
+
+	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) >> CtrlIn1 + (v1 << 1);
 	gpio[LED_GPCLR] = (1 << 4);
+
+	asm("push {r1}");
+	asm("movs  r1, #110");
+	asm("1: subs  r1, r1, #1");
+	asm("bne 1b");
+	asm("pop {r1}");
+	gpio[LED_GPSET] = (1 << 4);
 
 	while ((gpio[GPIO_GPLEV0] & (1 << CtrlIn1)))
 	{
+		asm("nop");
 		//read the reset pin. If reset, rerturn the controller reset value.
 	}
-	gpio[LED_GPSET] = (1 << 4);
 
 	asm("push {r1}");
-	asm("movs  r1, #376");
+	asm("movs  r1, #300");
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");
-	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) + (v1 << 1);
-	asm("push {r1}");
-	asm("movs  r1, #125");
-	asm("1: subs  r1, r1, #1");
-	asm("bne 1b");
-	asm("pop {r1}");
+
+	v1 = (gpio[GPIO_GPLEV0] & (1 << CtrlIn1)) >> CtrlIn1 + (v1 << 1);
 	gpio[LED_GPCLR] = (1 << 4);
 
-	//gpio[LED_GPCLR] = (1 << 4);
-	/*
-	j = 0;
-	while (j <= 8)
-	{
-		if ((v1 >> j) & 0b1)
-		{
-			output1();
-		}
-		else
-		{
-			output0();
-		}
-		j = j + 1;
-	}
-	gpio[LED_GPCLR] = (1 << 4);*/
+	asm("push {r1}");
+	asm("movs  r1, #110");
+	asm("1: subs  r1, r1, #1");
+	asm("bne 1b");
+	asm("pop {r1}");
 }
 
 void output1()
@@ -457,7 +507,7 @@ void output1()
 	noop10;*/
 
 	asm("push {r1}");
-	asm("movs  r1, #352");
+	asm("movs  r1, #300");
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");
@@ -483,7 +533,7 @@ void output0()
 	noop10;*/
 
 	asm("push {r1}");
-	asm("movs  r1, #356");
+	asm("movs  r1, #312");
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");
@@ -502,7 +552,7 @@ void output0()
 	noop10;
 	noop10;*/
 	asm("push {r1}");
-	asm("movs  r1, #104");
+	asm("movs  r1, #80");
 	asm("1: subs  r1, r1, #1");
 	asm("bne 1b");
 	asm("pop {r1}");

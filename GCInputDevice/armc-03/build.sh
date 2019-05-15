@@ -88,3 +88,6 @@ fi
 
 printf "%s\n" "${toolchain}objcopy ${kernel_elf} -O binary ${kernel_img}"
 ${toolchain}objcopy ${kernel_elf} -O binary ${kernel_img}
+
+echo copying file
+cp kernel.img /d/ -f
